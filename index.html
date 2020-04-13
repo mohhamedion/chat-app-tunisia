@@ -56,18 +56,13 @@ a{
 	<div class="container">
 			
 				<div>
-					<h1 class="text-center">welcome to chat with stranger</h1>
-					<div class="text-justify">
+					<div class="text-center">
+						<img src="/logo2.png" class="col-4" alt="">
+					</div>
+					<h2 class="text-center">welcome to chat with stranger</h2>
+					<div class="text-justify text-center">
 					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
-					 	Left aligned text on viewports sized SM (small) or wider.
- 
+				 
 					</div>
 				
 						<div class="text-center">
@@ -83,6 +78,15 @@ a{
 				</div>
 
 	</div>
+
+
+
+	<footer class="page-footer font-small blue sticky-buttom">
+
+ 		<div class="footer-copyright text-center py-3">© 2020 all rights reserved  
+ 		</div>
+ 	  
+	  </footer>
 
 </section>
 
@@ -142,21 +146,21 @@ a{
 		<div class="row  pt-2 " > 			
 			     <!-- INPUT SEND -->
 
-				<div class=" col-10 ">
+				<div class=" col-8 col-xs-10 ">
 						<div class="form-group">
 							<input id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
 						</div>
 				</div>
 				<!-- BUTTON SEND -->
-				<div class="  col-1  ">
+				<div class="  col-2 col-xs-1  ">
 					<div class="form-group ">
-						<a href="#" id="sendMessage" type=""  class="form-control btn primary text-white w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 26%;"></i></a>
+						<a href="#" id="sendMessage" type=""  class="form-control btn primary text-white w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></a>
 
 					</div>
 				</div>	
-				<div class="  col-1  ">
+				<div class="  col-2  col-xs-1 ">
 					<div class="form-group  ">
-						<a href="#" id="sendPhoto" type=""   class="form-control btn btn-secondary text-whitew w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 26%;"></i>						</a>
+						<a href="#" id="sendPhoto" type=""   class="form-control btn btn-secondary text-whitew w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i>						</a>
 
 					</div>
 				</div>
@@ -245,6 +249,7 @@ a{
 			}
 		
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 
 		})
 
@@ -254,6 +259,7 @@ a{
  			stranger_name='';
 			room='';
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 
 		})
 
