@@ -19,11 +19,18 @@
 	html, body
 {
     height: 100%;
-    background-color: #FFF7EE
+    background-color: #e3e3e3
 }
 
 .mainWeb {
 background-color: #c63f41;
+}
+
+.primary{
+	background-color: #c63f41;
+}
+a{
+	color:white;
 }
 </style>
 </head>
@@ -33,12 +40,12 @@ background-color: #c63f41;
 
 <section>
 <nav class="navbar sticky-top navbar-light  mainWeb"  >
-  <a class="navbar-brand text-primary" href="#">
-  	<img src="https://pngimage.net/wp-content/uploads/2018/06/logo-chat-png-3.png" style="width: 60px">
+  <a class="navbar-brand  " href="">
+  	<img src="/logo4.png" style="width: 50px">
   </a>
+  <a class="navbar-brand text-white   " ><strong> Chat with random people</strong></a>
 
-  <a class="navbar-brand text-white   " ><strong> 3000 now online</strong></a>
-
+ 
  </nav>
 
 </section>
@@ -69,7 +76,7 @@ background-color: #c63f41;
 	 					</div>
 
 	 						<div class="text-center m-1">
-							<a class="btn btn-primary text-white"  onClick="startChating()">START CHAT WITH STRANGER</a>
+							<a class="btn primary text-white"  onClick="startChating()">START CHAT WITH STRANGER</a>
 
  					</div>
 
@@ -79,22 +86,22 @@ background-color: #c63f41;
 
 </section>
 
-<div id="chat_section" class="container" style="height: 80%;background-color: #fff;display: none;">
+<div id="chat_section" class="container" style="display: none;height: 90%; ">
 
 
-<section >
-	
+<section  style="background-color: #f5f5f5;height: 89%;">
+	<div class="row mt-1 ">
+		<div class="col-6 text-left "> <a href="" class="btn primary " style=""  ><i class="fas fa-backward  "></i> </a></div>
+ 
+		<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
+	</div>
 
 	<div class="m-4 p-2"  >
 	
 
-		<div class="row">
-			<div class="col-6 text-left"> <a href=""class="btn btn-primary"  ><i class="fas fa-backward"></i> </a></div>
-	 
-			<div class="col-6 text-right"><a href="#" class="btn btn-primary startAgain" ><i class="fas fa-arrow-circle-right"></i> </a> </div>
-		</div>
 
-			<div class="chat  " style=" height: 90%; "  style="background-color: #fff" >
+
+			<div class="chat  " style=" height: 90%; "  style="background-color: #f5f5f5" >
 				
 				<div class="mt-1">
 						<p id='connection_message'><em>looking for someone to chat with</em></p>
@@ -102,7 +109,7 @@ background-color: #c63f41;
 				</div>
 	
 	 
-					<div id="chat_component_p"  style="background-color: #fff;max-height:450px;overflow: auto;">
+					<div id="chat_component_p"  style="background-color: #f5f5f5;max-height:440px;overflow: auto;">
 
 						<div id="chat_component">
 
@@ -110,7 +117,7 @@ background-color: #c63f41;
 					
 						<div id="" style="display: none;" class="tryAgain">
 							<p><em>This stranger has disconected</em></p>
-							<button   class="btn btn-primary startAgain">
+							<button   class="btn primary startAgain">
 								Start Again
 							</button>
 						</div>
@@ -130,9 +137,9 @@ background-color: #c63f41;
 </section>
 <section>
 	
-	<div class="fixed-bottom  " style="background-color: #FFF7EE;">
+	<div class="fixed-bottom container mt-1"  >
  
-		<div class="row  pt-2"> 			
+		<div class="row  pt-2 " > 			
 			     <!-- INPUT SEND -->
 
 				<div class=" col-10 ">
@@ -141,14 +148,19 @@ background-color: #c63f41;
 						</div>
 				</div>
 				<!-- BUTTON SEND -->
-				<div class="  col-2">
-					<div class="form-group">
-						<a href="#" id="sendMessage" type="" name="msg" class="form-control btn btn-primary text-white" style="height: 50px"  >Send</a>
+				<div class="  col-1  ">
+					<div class="form-group ">
+						<a href="#" id="sendMessage" type=""  class="form-control btn primary text-white w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 26%;"></i></a>
 
 					</div>
-
 				</div>	
+				<div class="  col-1  ">
+					<div class="form-group  ">
+						<a href="#" id="sendPhoto" type=""   class="form-control btn btn-secondary text-whitew w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 26%;"></i>						</a>
 
+					</div>
+				</div>
+				 
 		 </div>
 
 				
@@ -159,24 +171,7 @@ background-color: #c63f41;
 
 
 
-
-<!-- <section>
-	
-	<div class="fixed-bottom">
-	 
-		<footer>
-			<div class="card text-center">
-  <h5 class="card-header">Featured</h5>
-  <div class="card-body">
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-
-  </div>
-</div>
-		</footer>
-
-	</div>
-</section> -->
-
+ 
 
 
 <script>
@@ -209,6 +204,8 @@ background-color: #c63f41;
 
 		socket.on("connected",()=>{
 			console.log("both are connected");
+			$(".tryAgain").hide();
+
 			$("#connection_message").html("you are chatting now with a stranger, say hi to "+stranger_name);
 			
 
@@ -263,17 +260,40 @@ background-color: #c63f41;
 	 
 
 		$(".startAgain").click(function(){
+ 		 
+				$("#connection_message").html("looking for someone to chat with");
+				$(".tryAgain").hide();
+				$("#chat_component").html('');
+				console.log('start again');
 
-			$("#connection_message").html("looking for someone to chat with");
-			$(".tryAgain").hide();
-			$("#chat_component").html('');
-			console.log('start again');
+				console.log(name);
+				console.log(socket.id);
 
-			console.log(name);
-			console.log(socket.id);
-			socket.emit("queue",{name:name,id:socket.id});
+				socket.emit("queue",{name:name,id:socket.id});
+			 
+		
 
 		})
+
+		
+		$(".next").click(function(){
+			var answer=confirm('are you sure you want to close this chat and start again?');
+			if(answer){
+				$("#connection_message").html("looking for someone to chat with");
+				$(".tryAgain").hide();
+				$("#chat_component").html('');
+				console.log('start again');
+
+				console.log(name);
+				console.log(socket.id);
+				socket.emit("otherPeerDisconected");
+				room='';
+				socket.emit("queue",{name:name,id:socket.id});
+			}
+		
+
+		})
+
 
 
 

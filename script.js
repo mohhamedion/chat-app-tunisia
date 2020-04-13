@@ -1,16 +1,19 @@
 const express  = require("express");
 const app  = express();
 const port = process.env.PORT||8000 ;
+const path = require('path')
+
 const server = app.listen(port,()=>{
     console.log('working on '+port)
 })
 const io = require("socket.io")(server);
+
 let queue = [];
 let inChat = [];
  
 
 
-
+app.use(express.static(path.join(__dirname+'/public')));
 
 
 io.on('connection',(socket)=>{
@@ -24,12 +27,15 @@ io.on('connection',(socket)=>{
             console.log(queue);
 
             if(queue.length>=1){
-                io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
-                io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});
-                   inChat[data.id] = queue[0].id+data.id;
-                  inChat[queue[0].id] = queue[0].id+data.id;
-
-                   GetUserFromQuere(queue[0].id);
+                if(data.id!==queue[0].id){
+                    io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
+                    io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});
+                       inChat[data.id] = queue[0].id+data.id;
+                      inChat[queue[0].id] = queue[0].id+data.id;
+    
+                       GetUserFromQuere(queue[0].id);
+                }
+               
                 
             }else{
                 queue.push({name:data.name,id:data.id});
@@ -86,6 +92,38 @@ try{
 
 })
 
+
+
+socket.on('otherPeerDisconected',()=>{
+
+
+    console.log('current room')
+
+    let ChatRoom=inChat[socket.id];
+
+  
+  console.log(inChat);
+// let ChatRoom= Object.entries(io.sockets.adapter.rooms);
+
+try{
+  
+   socket.to(ChatRoom).emit("getOut");
+   delete inChat[socket.id];
+  console.log(inChat)
+  io.sockets.clients(ChatRoom).forEach(function(s){
+      s.leave(ChatRoom);
+  });
+
+}catch(e){
+
+}
+
+  GetUserFromQuere(socket.id);
+  console.log('the queie now is')
+  console.log(queue);
+
+
+})
 
 })
 
