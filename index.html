@@ -94,7 +94,7 @@ background-color: #c63f41;
 			<div class="col-6 text-right"><a href="#" class="btn btn-primary startAgain" ><i class="fas fa-arrow-circle-right"></i> </a> </div>
 		</div>
 
-			<div class="chat  " style=" height: 90%; " >
+			<div class="chat  " style=" height: 90%; "  style="background-color: #fff" >
 				
 				<div class="mt-1">
 						<p id='connection_message'><em>looking for someone to chat with</em></p>
@@ -102,16 +102,21 @@ background-color: #c63f41;
 				</div>
 	
 	 
-					<div id="chat_component" style="max-height:450px;overflow: auto;"  >
+					<div id="chat_component_p"  style="background-color: #fff;max-height:450px;overflow: auto;">
 
+						<div id="chat_component">
+
+						</div>
+					
+						<div id="" style="display: none;" class="tryAgain">
+							<p><em>This stranger has disconected</em></p>
+							<button   class="btn btn-primary startAgain">
+								Start Again
+							</button>
+						</div>
 					</div>
 			
-					<div id="tryAgain" style="display: none;">
-						<p><em>This stranger has disconected</em></p>
-						<button   class="btn btn-primary startAgain">
-							Start Again
-						</button>
-					</div>
+				
 		
 
 			</div>
@@ -126,8 +131,7 @@ background-color: #c63f41;
 <section>
 	
 	<div class="fixed-bottom  " style="background-color: #FFF7EE;">
-	 <form>
-
+ 
 		<div class="row  pt-2"> 			
 			     <!-- INPUT SEND -->
 
@@ -139,7 +143,7 @@ background-color: #c63f41;
 				<!-- BUTTON SEND -->
 				<div class="  col-2">
 					<div class="form-group">
-						<a id="sendMessage" type="" name="msg" class="form-control btn btn-primary text-white" style="height: 50px"  >Send</a>
+						<a href="#" id="sendMessage" type="" name="msg" class="form-control btn btn-primary text-white" style="height: 50px"  >Send</a>
 
 					</div>
 
@@ -148,8 +152,7 @@ background-color: #c63f41;
 		 </div>
 
 				
-	 </form>
-	</div>
+ 	</div>
 </section>
 
 </div>
@@ -244,16 +247,17 @@ background-color: #c63f41;
 				hisMessage(data.message,stranger_name);
 			}
 		
-			$('#chat_component').scrollTop($('#chat_component')[0].scrollHeight);
+			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
 
 		})
 
 
 		socket.on("getOut",(data)=>{
-			$("#tryAgain").show();
-			stranger_name='';
+		 $(".tryAgain").show();
+ 			stranger_name='';
 			room='';
-			
+			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+
 		})
 
 	 
@@ -261,7 +265,7 @@ background-color: #c63f41;
 		$(".startAgain").click(function(){
 
 			$("#connection_message").html("looking for someone to chat with");
-			$("#tryAgain").hide();
+			$(".tryAgain").hide();
 			$("#chat_component").html('');
 			console.log('start again');
 
