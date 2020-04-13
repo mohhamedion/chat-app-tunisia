@@ -1,0 +1,110 @@
+const express  = require("express");
+const app  = express();
+const port = 8000 || process.env.PORT;
+const server = app.listen(port,()=>{
+    console.log('working on '+port)
+})
+const io = require("socket.io")(server);
+let queue = [];
+let inChat = [];
+ 
+
+
+
+
+
+io.on('connection',(socket)=>{
+    socket.join(socket.id);
+
+    console.log(socket.id+" joind socket")
+
+        socket.on("queue",(data)=>{
+
+            console.log(`the queue before `)
+            console.log(queue);
+
+            if(queue.length>=1){
+                io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
+                io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});
+                   inChat[data.id] = queue[0].id+data.id;
+                  inChat[queue[0].id] = queue[0].id+data.id;
+
+                   GetUserFromQuere(queue[0].id);
+                
+            }else{
+                queue.push({name:data.name,id:data.id});
+                console.log(`user ${data.name} standing in the queue of id of ${data.id}`);
+
+            }
+            console.log(`the queue now `)
+            console.log(queue);
+
+        })
+
+
+
+    socket.on("joinChatRoom",(data)=>{
+        socket.join(data.room);
+        io.to(data.room).emit('connected')
+    })
+
+
+
+    socket.on("messageToServer",(data)=>{
+         io.to(data.room).emit("messageToClient",data);
+    })
+
+
+
+ socket.on("disconnect",()=>{
+    console.log('disconnect')
+ 
+    console.log('current room')
+
+      let ChatRoom=inChat[socket.id];
+
+    
+    console.log(inChat);
+// let ChatRoom= Object.entries(io.sockets.adapter.rooms);
+ 
+try{
+    
+     io.to(ChatRoom).emit("getOut");
+     delete inChat[socket.id];
+    console.log(inChat)
+    io.sockets.clients(ChatRoom).forEach(function(s){
+        s.leave(ChatRoom);
+    });
+
+}catch(e){
+
+ }
+  
+    GetUserFromQuere(socket.id);
+    console.log('the queie now is')
+    console.log(queue);
+
+})
+
+
+})
+
+
+
+const  GetUserFromQuere=(SocketId)=>{
+    queue.forEach((Element,i) =>{
+        if(Element.id==SocketId){
+            queue.splice(i,1);
+            console.log(Element.name+" has left");
+        }
+    })
+}
+
+
+app.get('/',(req,res)=>{
+     res.sendFile(__dirname + '/index.html');
+
+});
+
+
+ 

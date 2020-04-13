@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style type="text/css">
+	html, body
+{
+    height: 100%;
+    background-color: #FFF7EE
+}
+</style>
+</head>
+<body>
+
+
+
+<section>
+<nav class="navbar sticky-top navbar-light bg-light">
+  <a class="navbar-brand text-primary" href="#">
+    	<img src="https://pngimage.net/wp-content/uploads/2018/06/logo-chat-png-3.png" style="width: 60px">
+</a>
+
+  <a class="navbar-brand text-primary   " ><strong> 3000 now online</strong></a>
+</nav>
+
+</section>
+
+
+<section class=" " style="height: 80%;background-color: #fff" >
+	<div class=" m-4 p-2   " style="height: 100%" >
+	 
+			<div class="chat"  style="  max-height: 90%;overflow: auto;">
+				<div>
+						<p>You're now chatting with a random stranger</p>
+
+				</div>
+				 <!-- YOUR CHAT -->
+
+				 <div>
+				 	<span class=" "> <span style="color: red">you</span>: stranger</span>	
+				 </div>
+
+				  <!-- YOUR CHAT ENDS -->
+	
+				 <!-- STRANGER CHAT -->
+				 <div>
+			         <span class=" "> <span style="color: blue">stranger</span>: stranger</span>	
+
+				 </div>
+				 <!-- STRANGER CHAT END -->
+
+	 
+	
+				 
+
+				<p><em>This stranger has disconected</em></p>
+			<button class="btn btn-primary">
+				Start Again
+			</button>
+
+			</div>
+
+
+
+	</div>
+
+
+
+</section>
+<section>
+	
+	<div class="fixed-bottom">
+	 <form>
+
+		<div class="row"> 			
+			     <!-- INPUT SEND -->
+
+				<div class=" col-10 ">
+						<div class="form-group">
+							<input type="text" name="msg" class="form-control" style="height: 50px">
+						</div>
+				</div>
+				<!-- BUTTON SEND -->
+				<div class="  col-2">
+					<div class="form-group">
+						<input type="" name="msg" class="form-control btn btn-success" style="height: 50px" value="Send">
+					</div>
+
+				</div>	
+
+		 </div>
+
+				
+	 </form>
+	</div>
+</section>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	  var socket = io.connect();
+ 
+
+</script>
+</body>
+</html>
