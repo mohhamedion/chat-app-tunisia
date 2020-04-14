@@ -33,96 +33,6 @@ background-color: #c63f41;
 a{
 	color:white;
 }
- 
- 
-
-
- 
-@media (min-width: 1281px) {
-  
-	.chat_section{
-		height: 88%;
-	}
-  
-	#chat_component_p{
-		max-height: 440px;
-	}
-}
-
-/* 
-  ##Device = Laptops, Desktops
-  ##Screen = B/w 1025px to 1280px
-*/
-
-@media (min-width: 1025px) and (max-width: 1280px) {
-  
-	.chat_section{
-		height: 87%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
-}
-
-/* 
-  ##Device = Tablets, Ipads (portrait)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) {
-	.chat_section{
-		height: 74%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
-  
-}
-
-/* 
-  ##Device = Tablets, Ipads (landscape)
-  ##Screen = B/w 768px to 1024px
-*/
-
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-	.chat_section{
-		height: 86%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
-}
-
-/* 
-  ##Device = Low Resolution Tablets, Mobiles (Landscape)
-  ##Screen = B/w 481px to 767px
-*/
-
-@media (min-width: 481px) and (max-width: 767px) {
-  
-	.chat_section{
-		height: 86%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
-}
-
-/* 
-  ##Device = Most of the Smartphones Mobiles (Portrait)
-  ##Screen = B/w 320px to 479px
-*/
-
-@media (min-width: 320px) and (max-width: 480px) {
-  
-	.chat_section{
-		height: 80%;
-	}
-  
-	#chat_component_p{
-		max-height: 219px;
-	}
-}
 </style>
 </head>
 <body>
@@ -181,10 +91,10 @@ a{
 
 </section>
 
-<div id="chat_section" class="container chat_section" style="display: none">
+<div id="chat_section" class="container" style="display: none;height: 90%; ">
 
 
-<section class="chat_section"  style="background-color: #f5f5f5;">
+<section  style="background-color: #f5f5f5;height: 89%;">
 	<div class="row mt-1 ">
 		<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
  
@@ -196,7 +106,7 @@ a{
 
 
 
-			<div class="chat  " style=" height: 88%; "  style="background-color: #f5f5f5" >
+			<div class="chat  " style=" height: 90%; "  style="background-color: #f5f5f5" >
 				
 				<div class="mt-1">
 						<p id='connection_message'><em>looking for someone to chat with</em></p>
@@ -204,7 +114,7 @@ a{
 				</div>
 	
 	 
-					<div id="chat_component_p"  style="background-color: #f5f5f5;overflow: auto;">
+					<div id="chat_component_p"  style="background-color: #f5f5f5;max-height:440px;overflow: auto;">
 
 						<div id="chat_component">
 
@@ -244,19 +154,19 @@ a{
 		<div class="row  pt-2 " > 			
 			     <!-- INPUT SEND -->
 
-				<div class=" col-6 col-md-8 ">
+				<div class=" col-8 col-xs-10 ">
 						<div class="form-group">
 							<input  readonly id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
 						</div>
 				</div>
 				<!-- BUTTON SEND -->
-				<div class="  col-3 col-md-2  ">
+				<div class="  col-2 col-xs-1  ">
 					<div class="form-group ">
 						<button  id="sendMessage"  disabled  class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
 
 					</div>
 				</div>	
-				<div class="  col-3  col-md-2 ">
+				<div class="  col-2  col-xs-1 ">
 					<div class="form-group  ">
 						<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
 						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
