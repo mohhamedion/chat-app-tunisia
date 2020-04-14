@@ -552,6 +552,8 @@ function	setSendMessageToDisable(){
 				receivedFileSize = data.filesize;
 				displaySignalMessage("websockets says the file on it's way is " + receivedFileName + " (" + receivedFileSize + ")");
 				fileSending(0,name,receivedFileName);
+				$("#fileProgress").attr('max',receivedFileSize);
+				 
 			});
 			
 			function startSignaling() {
