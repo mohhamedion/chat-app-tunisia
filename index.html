@@ -96,7 +96,7 @@ a{
 
 <section  style="background-color: #f5f5f5;height: 89%;">
 	<div class="row mt-1 ">
-		<div class="col-6 text-left "> <a href="" class="btn primary "   ><i class="fas fa-backward  "></i> </a></div>
+		<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
  
 		<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
 	</div>
@@ -120,10 +120,7 @@ a{
 
 						</div>
 						
-						<div style="display: none;" >
-							<progress id="fileProgress" value=“1” max="100"></progress>
-							<a id="receivedFileLink"></a>
-						</div>
+					
 
 
 						<div id="userTyping"  style="display: none;">
@@ -159,24 +156,24 @@ a{
 
 				<div class=" col-8 col-xs-10 ">
 						<div class="form-group">
-							<input id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
+							<input  readonly id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
 						</div>
 				</div>
 				<!-- BUTTON SEND -->
 				<div class="  col-2 col-xs-1  ">
 					<div class="form-group ">
-						<button  id="sendMessage"    class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
+						<button  id="sendMessage"  disabled  class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
 
 					</div>
 				</div>	
 				<div class="  col-2  col-xs-1 ">
 					<div class="form-group  ">
-						<button   id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
-						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload" >
+						<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
+						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
 
 					</div>
 				</div>
-				 
+							 
 		 </div>
 
 				
@@ -210,13 +207,51 @@ a{
 		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
+
+	function fileSending(x,name=null,id){
+	$("#fileProgress").parent().parent().remove();
+		if(x==1){
+			myMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`);
+		}else{
+			hisMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`,name);
+		}
+	}
+
+function	setSendFileToClickble(){
+	
+					
+		$("#fileUpload").attr('disabled',false);
+	}
+
+function	setSendMessageToClickble(){
+		 
+				 $("#sendMessage").attr('disabled',false);
+				 $("#messageContent").attr('readonly',false);
+				 
+
+	}
+	
+	function	setSendFileToDisable(){
+	
+					
+	$("#fileUpload").attr('disabled',true);
+}
+
+function	setSendMessageToDisable(){
+	 
+			 $("#sendMessage").attr('disabled',true);
+			 $("#messageContent").attr('readonly',true);
+			 
+
+}
+
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
 	  var socket = io.connect();
 	  let stranger_name;
 	  let room;
-	  let name;
+	  let name=null;
 	  let timeout;
 	  socket.on('connect',()=>{
 		  console.log(socket.id)
@@ -258,6 +293,7 @@ a{
 
 		socket.on("connected",()=>{
 			console.log("both are connected");
+			setSendMessageToClickble();
 			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();
 
@@ -330,17 +366,16 @@ a{
 
 
 		socket.on("getOut",(data)=>{
-		 $(".tryAgain").show();
-		 
- 
+			$(".tryAgain").show();
 
- 				 rtcPeerConn.close();
-				dataChannel.close();
+			setSendFileToDisable();
+			setSendMessageToDisable();
+			rtcPeerConn.close();
+			dataChannel.close();
 
-				fileSize=0;
-				receivedFileName = 0;
-				receivedFileSize = 0;
-				fileBuffer = [];
+			fileSize=0;
+
+			fileBuffer = [];
 
  			stranger_name='';
 			room='';
@@ -361,8 +396,7 @@ a{
 				rtcPeerConn=null;
 
 				fileSize=0;
-				receivedFileName = 0;
-				receivedFileSize = 0;
+			 
 				fileBuffer = [];
 				socket.emit("queue",{name:name,id:socket.id});
 			 
@@ -380,22 +414,45 @@ a{
 		 
 
 		$(".next").click(function(){
-			var answer=confirm('are you sure you want to close this chat and start again?');
-			if(answer){
-				$("#connection_message").html("looking for someone to chat with");
-				$(".tryAgain").hide();
-				$("#chat_component").html('');
-				console.log('start again');
-				rtcPeerConn.close();
-				dataChannel.close();
-				rtcPeerConn=null;
-				dataChannel=null;
+			if(stranger_name!=null){
+				var answer=confirm('are you sure you want to close this chat and start again?');
+					if(answer){
+							
+						$("#connection_message").html("<em>looking for someone to chat with</em>");
+										$(".tryAgain").hide();
+										$("#chat_component").html('');
+										console.log('start again');
+										rtcPeerConn.close();
+										dataChannel.close();
+										rtcPeerConn=null;
+										dataChannel=null;
 
-				console.log(name);
-				console.log(socket.id);
-				socket.emit("otherPeerDisconected");
-				room='';
-				socket.emit("queue",{name:name,id:socket.id});
+										console.log(name);
+										console.log(socket.id);
+										socket.emit("otherPeerDisconected");
+										room='';
+										socket.emit("queue",{name:name,id:socket.id});
+										setSendMessageToDisable();
+										setSendFileToDisable();
+						}
+
+			}else{
+				$("#connection_message").html("<em>looking for someone to chat with</em>");
+										$(".tryAgain").hide();
+										$("#chat_component").html('');
+										console.log('start again');
+										rtcPeerConn.close();
+										dataChannel.close();
+										rtcPeerConn=null;
+										dataChannel=null;
+
+										console.log(name);
+										console.log(socket.id);
+										socket.emit("otherPeerDisconected");
+										room='';
+										socket.emit("queue",{name:name,id:socket.id});
+										setSendMessageToDisable();
+										setSendFileToDisable();
 			}
 		
 
@@ -407,14 +464,13 @@ a{
 				function startChating(){
 							
 					name =  $("#myName").val();
-
+ 
 					if(name==""){
 						alert('enter your name');
 						return false;
 					} 
 
-					
-					$("#index_section").hide();
+ 					$("#index_section").hide();
 					$("#chat_section").animate({width:'toggle'},500);
 
 					socket.emit("queue",{name:name,id:socket.id});
@@ -444,8 +500,7 @@ a{
     var reader = new FileReader();
     
     reader.onload = function(e) {
-    //  $('#blah').attr('src', e.target.result);
-	  myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
+ 	  myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
     }
     
     reader.readAsDataURL(input.files[0]); // convert to base64 string
@@ -454,9 +509,7 @@ a{
 
 
 
-$("#sendFile").change(function() {
-  readURL(this);
-});
+ 
 </script>
 
 
@@ -498,6 +551,7 @@ $("#sendFile").change(function() {
 				receivedFileName = data.filename;
 				receivedFileSize = data.filesize;
 				displaySignalMessage("websockets says the file on it's way is " + receivedFileName + " (" + receivedFileSize + ")");
+				fileSending(0,name,receivedFileName);
 			});
 			
 			function startSignaling() {
@@ -529,6 +583,9 @@ $("#sendFile").change(function() {
 			
 			function dataChannelStateChanged() {
 				if (dataChannel.readyState === 'open') {
+
+					setSendFileToClickble();
+
 					displaySignalMessage("Data Channel open");
 					dataChannel.onmessage = receiveDataChannelMessage;
 				}
@@ -549,17 +606,17 @@ $("#sendFile").change(function() {
 				//This is where we process incoming files
 				fileBuffer.push(event.data);
 				fileSize += event.data.byteLength;
-				fileProgress.value = fileSize;
-				
+			
+				console.log('before change '+receivedFileName);
+				$("#fileProgress").val(fileSize);
+			 
 				//Provide link to downloadable file when complete
 				console.log(fileSize+"  should be equal   "+ receivedFileSize);
 				if (fileSize === receivedFileSize) {
 					var received = new window.Blob(fileBuffer);
 					fileBuffer = [];
 					fileSize=0;
-					// downloadLink.download = receivedFileName;
-					//  let xFileName = document.createTextNode(receivedFileName + "(" + fileSize + ") bytes");
-					//    hisMessage(`<a download='${receivedFileName}' href='${URL.createObjectURL(received)}'>image</a>`,name)
+			 
 					console.log("   OUT PUT MESSAGE " )
 					console.log(received);
 				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
@@ -587,11 +644,12 @@ $("#sendFile").change(function() {
 			}
 			sendFile.addEventListener('change', function(ev){
 				var file = sendFile.files[0];
-
+				readURL(this);
+				fileSending(1,null,file.name);
   				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
 				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
 				
-				fileProgress.max = file.size;
+ 				//$("progress#fileProgress_"+file.name).max = file.size;
 				var chunkSize = 16384;
 				var sliceFile = function(offset) {
 					var reader = new window.FileReader();
@@ -601,8 +659,8 @@ $("#sendFile").change(function() {
 							if (file.size > offset + e.target.result.byteLength) {
 								window.setTimeout(sliceFile, 0, offset + chunkSize);
 								}
-							fileProgress.value = offset + e.target.result.byteLength;
-						};
+							$(`#fileProgress`).val(offset + e.target.result.byteLength)   ;
+ 						};
 					})(file);
 					var slice = file.slice(offset, offset + chunkSize);
 					reader.readAsArrayBuffer(slice);

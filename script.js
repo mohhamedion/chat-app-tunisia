@@ -37,7 +37,6 @@ io.on('connection',(socket)=>{
     
                        GetUserFromQuere(queue[0].id);
                 }
-               
                 
             }else{
                 queue.push({name:data.name,id:data.id});
