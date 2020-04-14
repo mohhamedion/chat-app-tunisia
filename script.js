@@ -28,10 +28,12 @@ io.on('connection',(socket)=>{
 
             if(queue.length>=1){
                 if(data.id!==queue[0].id){
-                    io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
-                    io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});
-                       inChat[data.id] = queue[0].id+data.id;
-                      inChat[queue[0].id] = queue[0].id+data.id;
+
+                   
+                        io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
+                        io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});
+                        inChat[data.id] = queue[0].id+data.id;
+                        inChat[queue[0].id] = queue[0].id+data.id;
     
                        GetUserFromQuere(queue[0].id);
                 }
@@ -125,7 +127,58 @@ try{
 
 })
 
+
+
+////
+
+socket.on("typing",(data)=>{
+    socket.to(data.room).emit("typing");
+    
 })
+
+
+
+
+////DATA FILE SHARE
+
+
+// socket.on('send', function(req) {
+//     socket.to(req.data.room).emit('message', {
+//         message: req.data.message,
+// 		author: req.data.author
+//     });
+// })
+
+socket.on('signal', (req)=>{
+    //Note the use of req here for emiting so only the sender doesn't receive their own messages
+    console.log(req);
+	socket.to(req.room).emit('signaling_message', {
+        type: req.type,
+		message: req.message
+    });
+})
+
+socket.on('files', (req)=> {
+	socket.to(req.room).emit('files', {
+		filename: req.filename,
+		filesize: req.filesize
+	});
+})
+
+
+
+
+
+
+
+})
+
+
+
+
+
+
+
 
 
 

@@ -27,6 +27,7 @@ background-color: #c63f41;
 }
 
 .primary{
+	color: #fff;
 	background-color: #c63f41;
 }
 a{
@@ -95,7 +96,7 @@ a{
 
 <section  style="background-color: #f5f5f5;height: 89%;">
 	<div class="row mt-1 ">
-		<div class="col-6 text-left "> <a href="" class="btn primary " style=""  ><i class="fas fa-backward  "></i> </a></div>
+		<div class="col-6 text-left "> <a href="" class="btn primary "   ><i class="fas fa-backward  "></i> </a></div>
  
 		<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
 	</div>
@@ -118,7 +119,17 @@ a{
 						<div id="chat_component">
 
 						</div>
-					
+						
+						<div style="display: none;" >
+							<progress id="fileProgress" value=“1” max="100"></progress>
+							<a id="receivedFileLink"></a>
+						</div>
+
+
+						<div id="userTyping"  style="display: none;">
+							<p><em>user is typing....</em></p>
+						</div>
+
 						<div id="" style="display: none;" class="tryAgain">
 							<p><em>This stranger has disconected</em></p>
 							<button   class="btn primary startAgain">
@@ -154,13 +165,14 @@ a{
 				<!-- BUTTON SEND -->
 				<div class="  col-2 col-xs-1  ">
 					<div class="form-group ">
-						<a href="#" id="sendMessage" type=""  class="form-control btn primary text-white w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></a>
+						<button  id="sendMessage"    class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
 
 					</div>
 				</div>	
 				<div class="  col-2  col-xs-1 ">
 					<div class="form-group  ">
-						<a href="#" id="sendPhoto" type=""   class="form-control btn btn-secondary text-whitew w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i>						</a>
+						<button   id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
+						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload" >
 
 					</div>
 				</div>
@@ -175,8 +187,16 @@ a{
 
 
 
- 
+<audio id="newUserSound"  class="hide">
+	<source src="/sound/new-user.ogg" type="audio/ogg">
+   Your browser does not support the audio element.
+  </audio>
 
+
+  <audio id="newMessageSound"  class="hide">
+	<source src="/sound/new-message.ogg" type="audio/ogg">
+   Your browser does not support the audio element.
+  </audio>
 
 <script>
 	function myMessage(msg){
@@ -185,6 +205,8 @@ a{
 	}
 
 	function hisMessage(msg,name){
+		$("#newMessageSound")[0].pause();
+		$("#newMessageSound")[0].play();
 		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
@@ -195,6 +217,7 @@ a{
 	  let stranger_name;
 	  let room;
 	  let name;
+	  let timeout;
 	  socket.on('connect',()=>{
 		  console.log(socket.id)
 	  })
@@ -203,17 +226,51 @@ a{
 			stranger_name = data.name;
 			room = data.room;
 			socket.emit("joinChatRoom",{room:data.room});
+
+
 		});
+
+	// var signalingArea = document.querySelector("#signalingArea");
+			let sendFile = document.querySelector("input#sendFile");
+			let fileProgress = document.querySelector("progress#fileProgress");
+			let downloadLink = document.querySelector('a#receivedFileLink');
+	 
+			let keyUp=true;
+			let configuration = {
+				'iceServers': [{
+					'url': 'stun:stun.l.google.com:19302'
+				}]
+			};
+			let rtcPeerConn;
+			let dataChannelOptions = {
+				ordered: false, //no guaranteed delivery, unreliable but faster 
+				maxRetransmitTime: 1000, //milliseconds
+			};
+			let dataChannel;
+
+			let receivedFileName;
+			let receivedFileSize;
+			let fileBuffer = [];
+			let fileSize = 0;
+
+
 
 
 		socket.on("connected",()=>{
 			console.log("both are connected");
+			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();
 
 			$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
 			
-
-
+		 
+			if(room.substring(0,20)==socket.id){
+	 				socket.emit('signal',{"type":"user_here", "message":"Are you ready for a call?", "room":room});
+					console.log('am calling the other peer')
+					console.log(room);
+			 }
+			 
+		
 
 			$("#messageContent").keypress(function(event){
 				
@@ -223,16 +280,29 @@ a{
 				if($("#messageContent").val()!==""){
 					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
 				$("#messageContent").val('');
+					keyUp=true;
 				}
 				
-			}
+			} 
 
 			});
+
+
+			$("#messageContent").on("input",function(){
+
+				 if(keyUp){
+					console.log('typing')
+					socket.emit("typing",{room:room});
+					keyUp=false;
+				 }
+			})
 
 			$("#sendMessage").click(function(){
 				if($("#messageContent").val()!==""){
 					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
 				$("#messageContent").val('');
+				keyUp=true;
+			
 				}
 			
 			})
@@ -240,14 +310,19 @@ a{
 		})
 	
 
+	
+		
+
+
 		socket.on("messageToClient",(data)=>{
 
 			if(data.id==socket.id){
 				myMessage(data.message);
 			}else{
 				hisMessage(data.message,stranger_name);
+				$("#userTyping").hide();
+
 			}
-		
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
 			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 
@@ -256,6 +331,17 @@ a{
 
 		socket.on("getOut",(data)=>{
 		 $(".tryAgain").show();
+		 
+ 
+
+ 				 rtcPeerConn.close();
+				dataChannel.close();
+
+				fileSize=0;
+				receivedFileName = 0;
+				receivedFileSize = 0;
+				fileBuffer = [];
+
  			stranger_name='';
 			room='';
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
@@ -270,18 +356,29 @@ a{
 				$("#connection_message").html("looking for someone to chat with");
 				$(".tryAgain").hide();
 				$("#chat_component").html('');
-				console.log('start again');
+ 				rtcPeerConn.close();
+				dataChannel.close();
+				rtcPeerConn=null;
 
-				console.log(name);
-				console.log(socket.id);
-
+				fileSize=0;
+				receivedFileName = 0;
+				receivedFileSize = 0;
+				fileBuffer = [];
 				socket.emit("queue",{name:name,id:socket.id});
 			 
 		
 
 		})
 
-		
+		socket.on("typing",()=>{
+			$("#userTyping").show();
+			$("#userTyping").delay(3000).hide(0);
+			 console.log('he is typing');
+			 
+		})
+
+		 
+
 		$(".next").click(function(){
 			var answer=confirm('are you sure you want to close this chat and start again?');
 			if(answer){
@@ -289,6 +386,10 @@ a{
 				$(".tryAgain").hide();
 				$("#chat_component").html('');
 				console.log('start again');
+				rtcPeerConn.close();
+				dataChannel.close();
+				rtcPeerConn=null;
+				dataChannel=null;
 
 				console.log(name);
 				console.log(socket.id);
@@ -303,28 +404,28 @@ a{
 
 
 
-	function startChating(){
+				function startChating(){
+							
+					name =  $("#myName").val();
+
+					if(name==""){
+						alert('enter your name');
+						return false;
+					} 
+
+					
+					$("#index_section").hide();
+					$("#chat_section").animate({width:'toggle'},500);
+
+					socket.emit("queue",{name:name,id:socket.id});
+					console.log(name);
+					console.log(socket.id)
+
 				
-				 name =  $("#myName").val();
-
-				if(name==""){
-					alert('enter your name');
-					return false;
-				} 
-	
-				
-				$("#index_section").hide();
-				$("#chat_section").animate({width:'toggle'},500);
-
-				socket.emit("queue",{name:name,id:socket.id});
-				console.log(name);
-				console.log(socket.id)
-
-	
-	}
+				}
 
 
-	$("#myName").keypress(function(event){
+				$("#myName").keypress(function(event){
 				
 				var keycode = (event.keyCode ? event.keyCode : event.which);
 				if(keycode == '13'){
@@ -334,6 +435,187 @@ a{
 				}
 	
 				});
+
+
+ 
+
+ function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+    //  $('#blah').attr('src', e.target.result);
+	  myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+
+
+$("#sendFile").change(function() {
+  readURL(this);
+});
+</script>
+
+
+
+<!-- FILE SHARE  -->
+<script>
+ 		
+
+		 
+ 			
+		 
+			socket.on('signaling_message', function(data) {
+				displaySignalMessage("Signal received: " + data.type);
+				 console.log(rtcPeerConn);
+				//Setup the RTC Peer Connection object
+				if (!rtcPeerConn){
+					startSignaling();
+				}
+					
+					
+				if (data.type != "user_here") {
+					var message = JSON.parse(data.message);
+					if (message.sdp) {
+						rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
+							// if we received an offer, we need to answer
+							if (rtcPeerConn.remoteDescription.type == 'offer') {
+								rtcPeerConn.createAnswer(sendLocalDesc, logError);
+							}
+						}, logError);
+					}
+					else {
+						rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate));
+					}
+				}
+				
+			});
+		
+			socket.on('files', function(data) {
+				receivedFileName = data.filename;
+				receivedFileSize = data.filesize;
+				displaySignalMessage("websockets says the file on it's way is " + receivedFileName + " (" + receivedFileSize + ")");
+			});
+			
+			function startSignaling() {
+				displaySignalMessage("starting signaling...");
+				
+				rtcPeerConn = new  RTCPeerConnection(configuration, null);
+				dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
+				
+				dataChannel.onopen = dataChannelStateChanged;
+				rtcPeerConn.ondatachannel = receiveDataChannel;
+				
+				// send any ice candidates to the other peer
+				rtcPeerConn.onicecandidate = function (evt) {
+					if (evt.candidate)
+						socket.emit('signal',{"type":"ice candidate", "message": JSON.stringify({ 'candidate': evt.candidate }), "room":room});
+					displaySignalMessage("completed that ice candidate...");
+				};
+				
+				// let the 'negotiationneeded' event trigger offer generation
+				rtcPeerConn.onnegotiationneeded = function () {
+					displaySignalMessage("on negotiation called");
+					rtcPeerConn.createOffer(sendLocalDesc, logError);
+				}
+				
+ 			 
+			 
+			  
+			}
+			
+			function dataChannelStateChanged() {
+				if (dataChannel.readyState === 'open') {
+					displaySignalMessage("Data Channel open");
+					dataChannel.onmessage = receiveDataChannelMessage;
+				}
+			}
+			
+			function receiveDataChannel(event) {
+				displaySignalMessage("Receiving a data channel");
+				dataChannel = event.channel;
+				dataChannel.onmessage = receiveDataChannelMessage;
+			}
+			
+			function receiveDataChannelMessage(event) {
+				displaySignalMessage("Incoming Message");
+				console.log(fileSize)
+				displayMessage("From DataChannel: " );
+				console.log(event.data)
+				
+				//This is where we process incoming files
+				fileBuffer.push(event.data);
+				fileSize += event.data.byteLength;
+				fileProgress.value = fileSize;
+				
+				//Provide link to downloadable file when complete
+				console.log(fileSize+"  should be equal   "+ receivedFileSize);
+				if (fileSize === receivedFileSize) {
+					var received = new window.Blob(fileBuffer);
+					fileBuffer = [];
+					fileSize=0;
+					// downloadLink.download = receivedFileName;
+					//  let xFileName = document.createTextNode(receivedFileName + "(" + fileSize + ") bytes");
+					//    hisMessage(`<a download='${receivedFileName}' href='${URL.createObjectURL(received)}'>image</a>`,name)
+					console.log("   OUT PUT MESSAGE " )
+					console.log(received);
+				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
+				}
+				
+			}
+			
+			function sendLocalDesc(desc) {
+				rtcPeerConn.setLocalDescription(desc, function () {
+					displaySignalMessage("sending local description");
+					socket.emit('signal',{"type":"SDP", "message": JSON.stringify({ 'sdp': rtcPeerConn.localDescription }), "room":room});
+				}, logError);
+			}
+			
+			function logError(error) {
+				displaySignalMessage(error.name + ': ' + error.message);
+			}
+			
+		 
+			
+ 
+		 
+			function displaySignalMessage(message) {
+ 				console.log(message)
+			}
+			sendFile.addEventListener('change', function(ev){
+				var file = sendFile.files[0];
+
+  				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
+				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
+				
+				fileProgress.max = file.size;
+				var chunkSize = 16384;
+				var sliceFile = function(offset) {
+					var reader = new window.FileReader();
+					reader.onload = (function() {
+						return function(e) {
+							dataChannel.send(e.target.result);
+							if (file.size > offset + e.target.result.byteLength) {
+								window.setTimeout(sliceFile, 0, offset + chunkSize);
+								}
+							fileProgress.value = offset + e.target.result.byteLength;
+						};
+					})(file);
+					var slice = file.slice(offset, offset + chunkSize);
+					reader.readAsArrayBuffer(slice);
+				};
+				sliceFile(0);		
+			
+			}, false);
+
+			function displayMessage (msg){
+				console.log(msg)
+			}
+
+
 </script>
 </body>
 </html>
