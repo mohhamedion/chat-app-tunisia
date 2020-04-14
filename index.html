@@ -649,7 +649,9 @@ function	setSendMessageToDisable(){
   				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
 				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
 				
- 				$("#fileProgress").attr('max',file.size);
+				 $("#fileProgress").attr('max',file.size);
+				 $("#fileProgress").max = file.size;
+				 
 				var chunkSize = 16384;
 				var sliceFile = function(offset) {
 					var reader = new window.FileReader();
