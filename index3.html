@@ -288,13 +288,13 @@ a{
 
 	function hisMessage(msg,name){
 		var color="blue";
-		if(name=='admin'||name=='moderator'){
+		if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
 			 color="green";
 		
 		}
 		$("#newMessageSound")[0].pause();
 		$("#newMessageSound")[0].play();
-		$("#chat_component").append("<div> <span class=''> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
+		$("#chat_component").append("<div> <span class=''  style='color: "+color+"'> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
 

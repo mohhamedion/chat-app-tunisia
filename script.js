@@ -205,7 +205,7 @@ app.get('/',(req,res)=>{
 
  
 app.get('/tearms',(req,res)=>{
-    res.sendFile(__dirname + '/index3.html');
+    res.sendFile(__dirname + '/tearms.html');
 
 });
 
