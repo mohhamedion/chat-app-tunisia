@@ -33,6 +33,53 @@ background-color: #c63f41;
 a{
 	color:white;
 }
+
+@media (min-width: 1281px) {
+  
+	#chat_component_father{
+	  height: 98%;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+	#chat_component_father{
+	  height: 98%;
+  }
+  
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+	#chat_component_father{
+	  height: 98%;
+  }
+  
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+	#chat_component_father{
+	  height: 98%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  
+  
+  #chat_component_father{
+	  height: 91%;
+  }
+}
+
+/* 
+##Device = Most of the Smartphones Mobiles (Portrait)
+##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+	#chat_component_father{
+	  height: 89%;
+  }
+}
 </style>
 </head>
 <body>
@@ -52,7 +99,7 @@ a{
 </section>
 
  
-<section id="index_section"  >
+<section id="index_section"   >
 	
 	<div class="container">
 			
@@ -91,22 +138,22 @@ a{
 
 </section>
 
-<div id="chat_section" class="container" style="display: none;height: 90%; ">
+<div id="chat_section" class="container" style="display: none ;height:100%; ">
 
 
-<section  style="background-color: #f5f5f5;height: 89%;">
+<section  style="background-color: #f5f5f5;height:80%; " class="">
 	<div class="row mt-1 ">
 		<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
  
 		<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
 	</div>
 
-	<div class="m-4 p-2"  >
+	<div class="m-4 p-2" style="  height: 90%; " >
 	
 
 
 
-			<div class="chat  " style=" height: 90%; "  style="background-color: #f5f5f5" >
+			<div class="chat  " style="  height: 90%; "  style="background-color: #f5f5f5" >
 				
 				<div class="mt-1">
 						<p id='connection_message'><em>looking for someone to chat with</em></p>
@@ -114,25 +161,32 @@ a{
 				</div>
 	
 	 
-					<div id="chat_component_p"  style="background-color: #f5f5f5;max-height:440px;overflow: auto;">
+					<div id="chat_component_father"  style="background-color: #f5f5f5;  ;">
 
-						<div id="chat_component">
+						<div id="chat_component_p" style="background-color: #f5f5f5; max-height:95%;overflow: auto;">
 
+
+								<div  id="chat_component">
+
+								</div>
+								<div id="userTyping"  style="display: none;">
+									<p><em>user is typing....</em></p>
+								</div>
+
+								<div id="" style="display: none;" class="tryAgain">
+									<p><em>This stranger has disconected</em></p>
+									<button   class="btn primary startAgain">
+										Start Again
+									</button>
+								</div>
 						</div>
 						
 					
 
 
-						<div id="userTyping"  style="display: none;">
-							<p><em>user is typing....</em></p>
-						</div>
+						
 
-						<div id="" style="display: none;" class="tryAgain">
-							<p><em>This stranger has disconected</em></p>
-							<button   class="btn primary startAgain">
-								Start Again
-							</button>
-						</div>
+						
 					</div>
 			
 				
@@ -147,11 +201,11 @@ a{
 
 
 </section>
-<section>
+<section class="mt-2" >
 	
-	<div class="fixed-bottom container mt-1"  >
+	<div class="mt-1   " style=" bottom: 0;"  >
  
-		<div class="row  pt-2 " > 			
+		<div class="row    " > 			
 			     <!-- INPUT SEND -->
 
 				<div class=" col-8 col-xs-10 ">
@@ -162,13 +216,13 @@ a{
 				<!-- BUTTON SEND -->
 				<div class="  col-2 col-xs-1  ">
 					<div class="form-group ">
-						<button  id="sendMessage"  disabled  class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
+						<button  id="sendMessage"  disabled  class="form-control btn  primary   " style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
 
 					</div>
 				</div>	
 				<div class="  col-2  col-xs-1 ">
 					<div class="form-group  ">
-						<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
+						<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   " style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
 						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
 
 					</div>
@@ -207,7 +261,9 @@ a{
 		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
-
+	function userDisconnect(){
+		$("#chat_component").append("<div id='' style='display: none;' class='tryAgain'> <p><em>This stranger has disconected</em></p> <button   class='btn primary startAgain'> Start Again </button> </div>");
+	}
 	function fileSending(x,name=null,id){
 	$("#fileProgress").parent().parent().remove();
 		if(x==1){
@@ -360,7 +416,7 @@ function	setSendMessageToDisable(){
 
 			}
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
-			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+			// $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 
 		})
 
