@@ -157,6 +157,7 @@ a{
 		</p>
 	</div>
 	
+	<br>
 
 <div  class=" mt-4 ">
 
@@ -292,8 +293,9 @@ a{
 
 	function hisMessage(msg,name){
 		var color="blue";
+	 
 		if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
-			 color="green";
+			color="green";
 		
 		}
 		$("#newMessageSound")[0].pause();
@@ -397,7 +399,7 @@ function	setSendMessageToDisable(){
 			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();
 
- 			if(stranger_name=="admin"||stranger_name=="moderator"){
+ 			if(stranger_name=="Admin"||stranger_name=="Moderator"){
 				$("#connection_message").html(" <b>You are now chatting with the owner of the website... say Hi  to  "+stranger_name+"</b>");
 
 			} else{
