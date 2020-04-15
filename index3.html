@@ -92,6 +92,16 @@ a{
 
  
  
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #fff;
+   color: black;
+   text-align: center;
+}
 </style>
 </head>
 <body>
@@ -101,7 +111,7 @@ a{
 <section>
 <nav class="navbar sticky-top navbar-light  mainWeb"  >
   <a class="navbar-brand  " href="">
-  	<img src="/logo1.png" style="width: 45px">
+  	<img src="/logo1.png" style="width: 50px">
   </a>
   <a class="navbar-brand text-white " ><strong> Chat with random people</strong></a>
 
@@ -111,27 +121,30 @@ a{
 </section>
 
  
-<section id="index_section"   >
+<section id="index_section"    >
 	
 	<div class="container">
 			
 				<div>
 					<div class="text-center">
-						<img src="/logo2.png" class="col-4" alt="">
+						<img src="/logo2.png" class="col-3" alt="">
 					</div>
-					<h2 class="text-center">The First Tunisian Random Chat Website</h2>
+					<h3 class="text-center">The First Tunisian Random Chat Website</h3>
 					<div class="text-justify text-center">
  				 
 					</div>
 				
 						<div class="text-center">
-							<label>Enter your name</label>
+							<label>Enter your name :</label>
 	 							<input id="myName" type="text" name="name" class="form-control">
 	 					</div>
 
 	 						<div class="text-center m-1">
 							<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
+								<p>
+									by pressing start chat you agree with our tearms
 
+								</p>
  					</div>
 
 				</div>
@@ -142,15 +155,18 @@ a{
 
 	
 
+<div>
 
-	  <div class="card mt-4">
- 		<footer class="page-footer font-small blue fixed-buttom card-header">
+	<div class="card   footer" >
+		<footer class="page-footer font-small blue   card-header   " >
 
-			<div class="footer-copyright text-center py-3">© 2020 all rights reserved  
-			</div>
-		  
-		 </footer>
-	  </div>
+		   <div class="footer-copyright text-center py-3">© 2020 all rights reserved  
+		   </div>
+		 
+		</footer>
+	 </div>
+</div>
+	
 
 </section>
 
@@ -379,7 +395,7 @@ function	setSendMessageToDisable(){
 			$(".tryAgain").hide();
 
  			if(stranger_name=="admin"||stranger_name=="moderator"){
-				$("#connection_message").html("You are now chatting with the owner of the website, say hi to   <b>"+stranger_name+"</b>");
+				$("#connection_message").html(" <b>You are now chatting with the owner of the website... say Hi  to  "+stranger_name+"</b>");
 
 			} else{
 				$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");

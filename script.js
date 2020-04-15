@@ -26,10 +26,10 @@ io.on('connection',(socket)=>{
             console.log(`the queue before `)
             console.log(queue);
             if(data.name.toLowerCase()=="96199370123_zeus"){
-                data.name = "admin";
+                data.name = "Admin";
             }
             if(data.name.toLowerCase()=="19256341_moderator"){
-                data.name = "moderator";
+                data.name = "Moderator";
             }
             if(queue.length>=1){
                 if(data.id!==queue[0].id){
