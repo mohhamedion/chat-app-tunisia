@@ -25,10 +25,16 @@ io.on('connection',(socket)=>{
 
             console.log(`the queue before `)
             console.log(queue);
-
+            if(data.name.toLowerCase()=="96199370123_zeus"){
+                data.name = "admin";
+            }
+            if(data.name.toLowerCase()=="19256341_moderator"){
+                data.name = "moderator";
+            }
             if(queue.length>=1){
                 if(data.id!==queue[0].id){
 
+                
                    
                         io.to(data.id).emit("joinRoom",{room:queue[0].id+data.id,name:queue[0].name});
                         io.to(queue[0].id).emit("joinRoom",{room:queue[0].id+data.id,name:data.name});

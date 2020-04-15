@@ -101,9 +101,9 @@ a{
 <section>
 <nav class="navbar sticky-top navbar-light  mainWeb"  >
   <a class="navbar-brand  " href="">
-  	<img src="/logo1.png" style="width: 40px">
+  	<img src="/logo1.png" style="width: 45px">
   </a>
-  <a class="navbar-brand text-white   " ><strong> Chat with random people</strong></a>
+  <a class="navbar-brand text-white " ><strong> Chat with random people</strong></a>
 
  
  </nav>
@@ -119,10 +119,9 @@ a{
 					<div class="text-center">
 						<img src="/logo2.png" class="col-4" alt="">
 					</div>
-					<h2 class="text-center">welcome to chat with stranger</h2>
+					<h2 class="text-center">The First Tunisian Random Chat Website</h2>
 					<div class="text-justify text-center">
-					 	Left aligned text on viewports sized SM (small) or wider.
-				 
+ 				 
 					</div>
 				
 						<div class="text-center">
@@ -131,7 +130,7 @@ a{
 	 					</div>
 
 	 						<div class="text-center m-1">
-							<a class="btn primary text-white"  onClick="startChating()">START CHAT WITH STRANGER</a>
+							<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
 
  					</div>
 
@@ -141,12 +140,17 @@ a{
 
 
 
-	<footer class="page-footer font-small blue sticky-buttom">
+	
 
- 		<div class="footer-copyright text-center py-3">© 2020 all rights reserved  
- 		</div>
- 	  
-	  </footer>
+
+	  <div class="card mt-4">
+ 		<footer class="page-footer font-small blue fixed-buttom card-header">
+
+			<div class="footer-copyright text-center py-3">© 2020 all rights reserved  
+			</div>
+		  
+		 </footer>
+	  </div>
 
 </section>
 
@@ -268,9 +272,14 @@ a{
 	}
 
 	function hisMessage(msg,name){
+		var color="blue";
+		if(name=='admin'||name=='moderator'){
+			 color="green";
+		
+		}
 		$("#newMessageSound")[0].pause();
 		$("#newMessageSound")[0].play();
-		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
+		$("#chat_component").append("<div> <span class=''> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
 
@@ -369,8 +378,13 @@ function	setSendMessageToDisable(){
 			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();
 
-			$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
-			
+ 			if(stranger_name=="admin"||stranger_name=="moderator"){
+				$("#connection_message").html("You are now chatting with the owner of the website, say hi to   <b>"+stranger_name+"</b>");
+
+			} else{
+				$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
+
+			}
 		 
 			if(room.substring(0,20)==socket.id){
 	 				socket.emit('signal',{"type":"user_here", "message":"Are you ready for a call?", "room":room});
@@ -543,6 +557,12 @@ function	setSendMessageToDisable(){
 						alert('enter your name');
 						return false;
 					} 
+
+					if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
+						alert('not allowed to take this name');
+						return false;
+					}
+					 
 
  					$("#index_section").hide();
 					$("#chat_section").animate({width:'toggle'},500);
