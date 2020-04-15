@@ -273,9 +273,13 @@ a{
 		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
-	function userDisconnect(){
-		$("#chat_component").append("<div id='' style='display: none;' class='tryAgain'> <p><em>This stranger has disconected</em></p> <button   class='btn primary startAgain'> Start Again </button> </div>");
-	}
+
+
+	// function userDisconnect(){
+	// 	$("#chat_component").append("<div id='' style='display: none;' class='tryAgain'> <p><em>This stranger has disconected</em></p> <button   class='btn primary startAgain'> Start Again </button> </div>");
+	// }
+
+
 	function fileSending(x,name=null,id){
 	$("#fileProgress").parent().parent().remove();
 		if(x==1){
@@ -475,6 +479,8 @@ function	setSendMessageToDisable(){
 		socket.on("typing",()=>{
 			$("#userTyping").show();
 			$("#userTyping").delay(3000).hide(0);
+			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+
 			 console.log('he is typing');
 			 
 		})
@@ -689,7 +695,11 @@ function	setSendMessageToDisable(){
 			 
 					console.log("   OUT PUT MESSAGE " )
 					console.log(received);
+
 				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
+				   $('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+				   $("#fileProgress").parent().parent().remove();
+
 				}
 				
 			}
@@ -730,6 +740,7 @@ function	setSendMessageToDisable(){
 							dataChannel.send(e.target.result);
 							if (file.size > offset + e.target.result.byteLength) {
 								window.setTimeout(sliceFile, 0, offset + chunkSize);
+								$("#fileProgress").parent().parent().remove();
 								}
 							$(`#fileProgress`).val(offset + e.target.result.byteLength)   ;
  						};
