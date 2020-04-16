@@ -590,7 +590,8 @@ function	setSendMessageToDisable(){
 					}
 					 
 
- 					$("#index_section").hide();
+					 $("#index_section").hide();
+					 $(".footer").parent().hide();
 					$("#chat_section").animate({width:'toggle'},500);
 
 					socket.emit("queue",{name:name,id:socket.id});
