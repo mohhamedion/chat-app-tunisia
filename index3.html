@@ -298,14 +298,14 @@ a{
 
 	function hisMessage(msg,name){
 		var color="blue";
-	 
+		var cColor;
 		if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
+			cColor="green";
 			color="green";
-		
 		}
 		$("#newMessageSound")[0].pause();
 		$("#newMessageSound")[0].play();
-		$("#chat_component").append("<div> <span class=''  style='color: "+color+"'> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
+		$("#chat_component").append("<div> <span class=''  style='color: "+cColor+"'> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
 
 	}
 
@@ -592,6 +592,7 @@ function	setSendMessageToDisable(){
 
 					 $("#index_section").hide();
 					 $(".footer").parent().hide();
+					 $("html,body").css("height","95%")
 					$("#chat_section").animate({width:'toggle'},500);
 
 					socket.emit("queue",{name:name,id:socket.id});
