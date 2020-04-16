@@ -30,245 +30,322 @@ background-color: #c63f41;
 	color: #fff;
 	background-color: #c63f41;
 }
-a{
+a.noStyleAtag{
 	color:white;
 }
- 
- 
 
-
- 
 @media (min-width: 1281px) {
   
-	.chat_section{
-		height: 88%;
-	}
-  
-	#chat_component_p{
-		max-height: 350px;
-	}
+	#chat_component_father{
+	  height: 98%;
+  }
 }
-
-/* 
-  ##Device = Laptops, Desktops
-  ##Screen = B/w 1025px to 1280px
-*/
 
 @media (min-width: 1025px) and (max-width: 1280px) {
+	#chat_component_father{
+	  height: 98%;
+  }
   
-	.chat_section{
-		height: 87%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
 }
-
-/* 
-  ##Device = Tablets, Ipads (portrait)
-  ##Screen = B/w 768px to 1024px
-*/
 
 @media (min-width: 768px) and (max-width: 1024px) {
-	.chat_section{
-		height: 74%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
+	#chat_component_father{
+	  height: 98%;
+  }
   
 }
-
-/* 
-  ##Device = Tablets, Ipads (landscape)
-  ##Screen = B/w 768px to 1024px
-*/
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-	.chat_section{
-		height: 86%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
+	#chat_component_father{
+	  height: 98%;
+  }
 }
-
-/* 
-  ##Device = Low Resolution Tablets, Mobiles (Landscape)
-  ##Screen = B/w 481px to 767px
-*/
 
 @media (min-width: 481px) and (max-width: 767px) {
+	.titleAbout {
+	font-size: 20px;
+ }
   
-	.chat_section{
-		height: 86%;
-	}
-	#chat_component_p{
-		max-height: 350px;
-	}
+  #chat_component_father{
+	  height: 91%;
+  }
 }
-
-/* 
-  ##Device = Most of the Smartphones Mobiles (Portrait)
-  ##Screen = B/w 320px to 479px
+ /* 
+##Device = Most of the Smartphones Mobiles (Portrait)
+##Screen = B/w 320px to 479px
 */
 
 @media (min-width: 320px) and (max-width: 480px) {
-  
-	.chat_section{
-		height: 80%;
-	}
-  
-	#chat_component_p{
-		max-height: 219px;
-	}
+	.titleAbout {
+		font-size: 17px;
+
+ }
+	#chat_component_father{
+	  height: 89%;
+  }
 }
+
+
+
+@media   (max-height: 640px)  {
+
+#chat_component_father{
+  height:64%;
+}
+}
+
+ 
+
+
+.footer {
+   position: static; 
+   width: 100%;
+   background-color: #fff;
+   color: black;
+   text-align: center;
+}
+ 
 </style>
 </head>
 <body>
 
-
-
+ 
 <section>
 <nav class="navbar sticky-top navbar-light  mainWeb"  >
-  <a class="navbar-brand  " href="">
-  	<img src="/logo1.png" style="width: 40px">
+  <a class="navbar-brand noStyleAtag " href="">
+  	<img src="/logo1.png" style="width: 50px">
   </a>
-  <a class="navbar-brand text-white   " ><strong> Chat with random people</strong></a>
+  <a class="navbar-brand text-white noStyleAtag" ><strong> Chat with random people</strong></a>
 
- 
- </nav>
+</nav>
 
 </section>
 
- 
-<section id="index_section"  >
+ <!-- OLD ONE 200PX -->
+<section id="index_section" class="tg"  style="min-height: calc(100% - 170px);"  >
 	
 	<div class="container">
 			
-				<div>
-					<div class="text-center">
-						<img src="/logo2.png" class="col-4" alt="">
-					</div>
-					<h2 class="text-center">welcome to chat with stranger</h2>
-					<div class="text-justify text-center">
-					 	Left aligned text on viewports sized SM (small) or wider.
-				 
-					</div>
-				
+					<div>
 						<div class="text-center">
-							<label>Enter your name</label>
-	 							<input id="myName" type="text" name="name" class="form-control">
-	 					</div>
-
-	 						<div class="text-center m-1">
-							<a class="btn primary text-white"  onClick="startChating()">START CHAT WITH STRANGER</a>
-
- 					</div>
-
-				</div>
-
-	</div>
-
-
-
-	<footer class="page-footer font-small blue sticky-buttom">
-
- 		<div class="footer-copyright text-center py-3">© 2020 all rights reserved  
- 		</div>
- 	  
-	  </footer>
-
-</section>
-
-<div id="chat_section" class="container chat_section" style="display: none">
-
-
-<section class="chat_section"  style="background-color: #f5f5f5;">
-	<div class="row mt-1 ">
-		<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
- 
-		<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
-	</div>
-
-	<div class="m-4 p-2"  >
-	
-
-
-
-			<div class="chat  " style=" height: 88%; "  style="background-color: #f5f5f5" >
-				
-				<div class="mt-1">
-						<p id='connection_message'><em>looking for someone to chat with</em></p>
-
-				</div>
-	
-	 
-					<div id="chat_component_p"  style="background-color: #f5f5f5;overflow: auto;">
-
-						<div id="chat_component">
-
-						</div>
-						
-					
-
-
-						<div id="userTyping"  style="display: none;">
-							<p><em>user is typing....</em></p>
-						</div>
-
-						<div id="" style="display: none;" class="tryAgain">
-							<p><em>This stranger has disconected</em></p>
-							<button   class="btn primary startAgain">
-								Start Again
-							</button>
-						</div>
+							<img src="/logo2.png" class="col-6 col-md-3" alt="">
+							</div>
+							<h3 class="text-center titleAbout">The First Tunisian Random Chat Website</h3>
+		 						<div class="text-justify text-center">
+ 				 
 					</div>
-			
 				
+						<div class="text-center ">
+							<label>Enter your name :</label>
+							<div class="row justify-content-md-center">
+								<input id="myName" type="text" name="name" class="form-control col-12 col-md-6 ">
+							</div>
+ 	 					</div>
+
+	 						<div class="text-center m-2">
+								<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
+ 	 		
+							</div>
+
+				</div>
+
+	</div>
+
+
+	<div class="text-center ">
+		<p class=" ">
+			By pressing "Start Chat" you agree with our  <br>
+			<span>
+				<a href="/terms" style="text-decoration-line: underline;">Terms of service</a> 
+			</span>
+
+		</p>
+	</div>
+	
+ 
+
+
+   
+	<div class="footer-copyright text-center  StartChattingHide " style="bottom: 0px;position: static;"> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
+
+</section> 
+
+<!-- the OLD ONE WAS HERE -->
+<!-- 	<div class="footer-copyright text-center  StartChattingHide " style="bottom: 0px;position: static;"> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
+ -->
+<!--  -->
+ 	<div  class=" mt-4 StartChattingHide ">
+
+		<div class="footer "  >
+			<footer class="page-footer font-small blue " >
+				<div class=" ">
+					<div class="footer-copyright text-center py-3">© 2020 all rights reserved </div>
+
+				</div>
+ 
+			</footer>
+		 </div>
+	</div>
+		
+ 
+
+
+
+	<!-- MODAL -->
+ 
+	  
+	  <!-- Modal -->
+	  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content " style="width: 97%;">
+			<div class="modal-header primary">
+			  <h5 class="modal-title" id="exampleModalLabel">Contacts</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+				<p>Email: Support@unicaly.com </p>
+ 	
+			
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+ 			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <!-- MODAL -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<div id="chat_section" class="container" style="display: none ;height:100%; ">
+
+
+	<section  style="background-color: #f5f5f5;height:80%; " class="">
+		<div class="row mt-1 ">
+			<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
+	
+			<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
+		</div>
+
+		<div class="m-4 p-2" style="  height: 90%; " >
 		
 
+
+			 
+				<div class="chat  " style="  height: 90%; "  style="background-color: #f5f5f5" >
+					
+					<div class="mt-1">
+							<p id='connection_message'><em>looking for someone to chat with</em></p>
+
+					</div>
+		
+		
+						<div id="chat_component_father"  style="background-color: #f5f5f5;  ;">
+
+							<div id="chat_component_p" style="background-color: #f5f5f5; max-height:95%;overflow: auto;">
+
+
+									<div  id="chat_component">
+
+									</div>
+									<div id="userTyping"  style="display: none;">
+										<p><em>user is typing....</em></p>
+									</div>
+
+									<div id="" style="display: none;" class="tryAgain">
+										<p><em>This stranger has disconected</em></p>
+										<button   class="btn primary startAgain">
+											Start Again
+										</button>
+									</div>
+							</div>
+							
+						
+
+
+							
+
+							
+						</div>
+				
+					
+			
+
+				</div>
+
+
+
+		</div>
+
+
+
+	</section>
+	<section class="mt-2" >
+		
+		<div class="mt-1" style=" bottom: 0;"  >
+	
+			<div class="row" > 			
+					<!-- INPUT SEND -->
+
+					<div class=" col-6 col-md-8  ">
+							<div class="form-group">
+								<input  readonly id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
+							</div>
+					</div>
+					<!-- BUTTON SEND -->
+					<div class="  col-3 col-md-2 ">
+						<div class="form-group ">
+							<button  id="sendMessage"  disabled  class="form-control btn  primary   " style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
+
+						</div>
+					</div>	
+					<div class="  col-3  col-md-2 ">
+						<div class="form-group  ">
+							<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   " style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
+							<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
+
+						</div>
+					</div>
+								
 			</div>
 
-
-
-	</div>
-
-
-
-</section>
-<section>
-	
-	<div class="fixed-bottom container mt-1"  >
- 
-		<div class="row  pt-2 " > 			
-			     <!-- INPUT SEND -->
-
-				<div class=" col-6 col-md-8 ">
-						<div class="form-group">
-							<input  readonly id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
-						</div>
-				</div>
-				<!-- BUTTON SEND -->
-				<div class="  col-3 col-md-2  ">
-					<div class="form-group ">
-						<button  id="sendMessage"  disabled  class="form-control btn  primary   w-100" style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
-
-					</div>
-				</div>	
-				<div class="  col-3  col-md-2 ">
-					<div class="form-group  ">
-						<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   w-100" style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
-						<input href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
-
-					</div>
-				</div>
-							 
-		 </div>
-
-				
- 	</div>
-</section>
+					
+		</div>
+	</section>
 
 </div>
 
@@ -285,57 +362,7 @@ a{
    Your browser does not support the audio element.
   </audio>
 
-<script>
-	function myMessage(msg){
-		$("#chat_component").append("<div><span class=''> <span style='color: red'>you</span>: "+msg+"</span></div>");
-
-	}
-
-	function hisMessage(msg,name){
-		$("#newMessageSound")[0].pause();
-		$("#newMessageSound")[0].play();
-		$("#chat_component").append("<div> <span class=''> <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
-
-	}
-
-	function fileSending(x,name=null,id){
-	$("#fileProgress").parent().parent().remove();
-		if(x==1){
-			myMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`);
-		}else{
-			hisMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`,name);
-		}
-	}
-
-function	setSendFileToClickble(){
-	
-					
-		$("#fileUpload").attr('disabled',false);
-	}
-
-function	setSendMessageToClickble(){
-		 
-				 $("#sendMessage").attr('disabled',false);
-				 $("#messageContent").attr('readonly',false);
-				 
-
-	}
-	
-	function	setSendFileToDisable(){
-	
-					
-	$("#fileUpload").attr('disabled',true);
-}
-
-function	setSendMessageToDisable(){
-	 
-			 $("#sendMessage").attr('disabled',true);
-			 $("#messageContent").attr('readonly',true);
-			 
-
-}
-
-</script>
+<script src="/scripts/functions.js" > </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
 	  var socket = io.connect();
@@ -381,394 +408,13 @@ function	setSendMessageToDisable(){
 
 
 
-		socket.on("connected",()=>{
-			console.log("both are connected");
-			setSendMessageToClickble();
-			$("#newUserSound")[0].play();
-			$(".tryAgain").hide();
-
-			$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
-			
-		 
-			if(room.substring(0,20)==socket.id){
-	 				socket.emit('signal',{"type":"user_here", "message":"Are you ready for a call?", "room":room});
-					console.log('am calling the other peer')
-					console.log(room);
-			 }
-			 
-		
-
-			$("#messageContent").keypress(function(event){
-				
-			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if(keycode == '13'){
-				
-				if($("#messageContent").val()!==""){
-					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
-				$("#messageContent").val('');
-					keyUp=true;
-				}
-				
-			} 
-
-			});
-
-
-			$("#messageContent").on("input",function(){
-
-				 if(keyUp){
-					console.log('typing')
-					socket.emit("typing",{room:room});
-					keyUp=false;
-				 }
-			})
-
-			$("#sendMessage").click(function(){
-				if($("#messageContent").val()!==""){
-					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
-				$("#messageContent").val('');
-				keyUp=true;
-			
-				}
-			
-			})
-		
-		})
-	
-
-	
-		
-
-
-		socket.on("messageToClient",(data)=>{
-
-			if(data.id==socket.id){
-				myMessage(data.message);
-			}else{
-				hisMessage(data.message,stranger_name);
-				$("#userTyping").hide();
-
-			}
-			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
-			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
-
-		})
-
-
-		socket.on("getOut",(data)=>{
-			$(".tryAgain").show();
-
-			setSendFileToDisable();
-			setSendMessageToDisable();
-			rtcPeerConn.close();
-			dataChannel.close();
-
-			fileSize=0;
-
-			fileBuffer = [];
-
- 			stranger_name='';
-			room='';
-			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
-			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
-
-		})
-
-	 
-
-		$(".startAgain").click(function(){
- 		 
-				$("#connection_message").html("looking for someone to chat with");
-				$(".tryAgain").hide();
-				$("#chat_component").html('');
- 				rtcPeerConn.close();
-				dataChannel.close();
-				rtcPeerConn=null;
-
-				fileSize=0;
-			 
-				fileBuffer = [];
-				socket.emit("queue",{name:name,id:socket.id});
-			 
-		
-
-		})
-
-		socket.on("typing",()=>{
-			$("#userTyping").show();
-			$("#userTyping").delay(3000).hide(0);
-			 console.log('he is typing');
-			 
-		})
-
-		 
-
-		$(".next").click(function(){
-			if(stranger_name!=null){
-				var answer=confirm('are you sure you want to close this chat and start again?');
-					if(answer){
-							
-						$("#connection_message").html("<em>looking for someone to chat with</em>");
-										$(".tryAgain").hide();
-										$("#chat_component").html('');
-										console.log('start again');
-										rtcPeerConn.close();
-										dataChannel.close();
-										rtcPeerConn=null;
-										dataChannel=null;
-
-										console.log(name);
-										console.log(socket.id);
-										socket.emit("otherPeerDisconected");
-										room='';
-										socket.emit("queue",{name:name,id:socket.id});
-										setSendMessageToDisable();
-										setSendFileToDisable();
-						}
-
-			}else{
-				$("#connection_message").html("<em>looking for someone to chat with</em>");
-										$(".tryAgain").hide();
-										$("#chat_component").html('');
-										console.log('start again');
-										rtcPeerConn.close();
-										dataChannel.close();
-										rtcPeerConn=null;
-										dataChannel=null;
-
-										console.log(name);
-										console.log(socket.id);
-										socket.emit("otherPeerDisconected");
-										room='';
-										socket.emit("queue",{name:name,id:socket.id});
-										setSendMessageToDisable();
-										setSendFileToDisable();
-			}
-		
-
-		})
-
-
-
-
-				function startChating(){
-							
-					name =  $("#myName").val();
- 
-					if(name==""){
-						alert('enter your name');
-						return false;
-					} 
-
- 					$("#index_section").hide();
-					$("#chat_section").animate({width:'toggle'},500);
-
-					socket.emit("queue",{name:name,id:socket.id});
-					console.log(name);
-					console.log(socket.id)
-
-				
-				}
-
-
-				$("#myName").keypress(function(event){
-				
-				var keycode = (event.keyCode ? event.keyCode : event.which);
-				if(keycode == '13'){
-					
-					startChating();
-					
-				}
-	
-				});
-
-
- 
-
- function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    
-    reader.onload = function(e) {
- 	  myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
-    }
-    
-    reader.readAsDataURL(input.files[0]); // convert to base64 string
-  }
-}
-
-
-
  
 </script>
 
-
+<script src="/scripts/messages.js"></script>
 
 <!-- FILE SHARE  -->
-<script>
- 		
-
-		 
- 			
-		 
-			socket.on('signaling_message', function(data) {
-				displaySignalMessage("Signal received: " + data.type);
-				 console.log(rtcPeerConn);
-				//Setup the RTC Peer Connection object
-				if (!rtcPeerConn){
-					startSignaling();
-				}
-					
-					
-				if (data.type != "user_here") {
-					var message = JSON.parse(data.message);
-					if (message.sdp) {
-						rtcPeerConn.setRemoteDescription(new RTCSessionDescription(message.sdp), function () {
-							// if we received an offer, we need to answer
-							if (rtcPeerConn.remoteDescription.type == 'offer') {
-								rtcPeerConn.createAnswer(sendLocalDesc, logError);
-							}
-						}, logError);
-					}
-					else {
-						rtcPeerConn.addIceCandidate(new RTCIceCandidate(message.candidate));
-					}
-				}
-				
-			});
-		
-			socket.on('files', function(data) {
-				receivedFileName = data.filename;
-				receivedFileSize = data.filesize;
-				displaySignalMessage("websockets says the file on it's way is " + receivedFileName + " (" + receivedFileSize + ")");
-				fileSending(0,name,receivedFileName);
-				$("#fileProgress").attr('max',receivedFileSize);
-				 
-			});
-			
-			function startSignaling() {
-				displaySignalMessage("starting signaling...");
-				
-				rtcPeerConn = new  RTCPeerConnection(configuration, null);
-				dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
-				
-				dataChannel.onopen = dataChannelStateChanged;
-				rtcPeerConn.ondatachannel = receiveDataChannel;
-				
-				// send any ice candidates to the other peer
-				rtcPeerConn.onicecandidate = function (evt) {
-					if (evt.candidate)
-						socket.emit('signal',{"type":"ice candidate", "message": JSON.stringify({ 'candidate': evt.candidate }), "room":room});
-					displaySignalMessage("completed that ice candidate...");
-				};
-				
-				// let the 'negotiationneeded' event trigger offer generation
-				rtcPeerConn.onnegotiationneeded = function () {
-					displaySignalMessage("on negotiation called");
-					rtcPeerConn.createOffer(sendLocalDesc, logError);
-				}
-				
- 			 
-			 
-			  
-			}
-			
-			function dataChannelStateChanged() {
-				if (dataChannel.readyState === 'open') {
-
-					setSendFileToClickble();
-
-					displaySignalMessage("Data Channel open");
-					dataChannel.onmessage = receiveDataChannelMessage;
-				}
-			}
-			
-			function receiveDataChannel(event) {
-				displaySignalMessage("Receiving a data channel");
-				dataChannel = event.channel;
-				dataChannel.onmessage = receiveDataChannelMessage;
-			}
-			
-			function receiveDataChannelMessage(event) {
-				displaySignalMessage("Incoming Message");
-				console.log(fileSize)
-				displayMessage("From DataChannel: " );
-				console.log(event.data)
-				
-				//This is where we process incoming files
-				fileBuffer.push(event.data);
-				fileSize += event.data.byteLength;
-			
-				console.log('before change '+receivedFileName);
-				$("#fileProgress").val(fileSize);
-			 
-				//Provide link to downloadable file when complete
-				console.log(fileSize+"  should be equal   "+ receivedFileSize);
-				if (fileSize === receivedFileSize) {
-					var received = new window.Blob(fileBuffer);
-					fileBuffer = [];
-					fileSize=0;
-			 
-					console.log("   OUT PUT MESSAGE " )
-					console.log(received);
-				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
-				}
-				
-			}
-			
-			function sendLocalDesc(desc) {
-				rtcPeerConn.setLocalDescription(desc, function () {
-					displaySignalMessage("sending local description");
-					socket.emit('signal',{"type":"SDP", "message": JSON.stringify({ 'sdp': rtcPeerConn.localDescription }), "room":room});
-				}, logError);
-			}
-			
-			function logError(error) {
-				displaySignalMessage(error.name + ': ' + error.message);
-			}
-			
-		 
-			
- 
-		 
-			function displaySignalMessage(message) {
- 				console.log(message)
-			}
-			sendFile.addEventListener('change', function(ev){
-				var file = sendFile.files[0];
-				readURL(this);
-				fileSending(1,null,file.name);
-  				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
-				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
-				
-				 $("#fileProgress").attr('max',file.size);
-				 $("#fileProgress").max = file.size;
-				 
-				var chunkSize = 16384;
-				var sliceFile = function(offset) {
-					var reader = new window.FileReader();
-					reader.onload = (function() {
-						return function(e) {
-							dataChannel.send(e.target.result);
-							if (file.size > offset + e.target.result.byteLength) {
-								window.setTimeout(sliceFile, 0, offset + chunkSize);
-								}
-							$(`#fileProgress`).val(offset + e.target.result.byteLength)   ;
- 						};
-					})(file);
-					var slice = file.slice(offset, offset + chunkSize);
-					reader.readAsArrayBuffer(slice);
-				};
-				sliceFile(0);		
-			
-			}, false);
-
-			function displayMessage (msg){
-				console.log(msg)
-			}
-
-
-</script>
+<script src="/scripts/files-sender.js"> </script>
 </body>
 </html>
 <!-- BY MOHAMAD AL ASALY -->

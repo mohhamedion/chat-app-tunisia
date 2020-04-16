@@ -25,7 +25,7 @@ function hisMessage(msg,name){
 // }
 
 
-function fileSending(x,name=null,id){
+function fileSending(x,name=null){
 $("#fileProgress").parent().parent().remove();
     if(x==1){
         myMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`);

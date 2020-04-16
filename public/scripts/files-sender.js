@@ -32,7 +32,7 @@
 				receivedFileName = data.filename;
 				receivedFileSize = data.filesize;
 				displaySignalMessage("websockets says the file on it's way is " + receivedFileName + " (" + receivedFileSize + ")");
-				fileSending(0,name,receivedFileName);
+				fileSending(0,stranger_name);
 				$("#fileProgress").attr('max',receivedFileSize);
 				 
 			});
@@ -132,7 +132,7 @@
 			sendFile.addEventListener('change', function(ev){
 				var file = sendFile.files[0];
 				readURL(this);
-				fileSending(1,null,file.name);
+				fileSending(1,null);
   				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
 				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
 				
