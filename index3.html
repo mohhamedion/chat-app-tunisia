@@ -30,7 +30,7 @@ background-color: #c63f41;
 	color: #fff;
 	background-color: #c63f41;
 }
-a{
+a.noStyleAtag{
 	color:white;
 }
 
@@ -62,7 +62,9 @@ a{
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
-  
+	.titleAbout {
+	font-size: 20px;
+ }
   
   #chat_component_father{
 	  height: 91%;
@@ -74,7 +76,9 @@ a{
 */
 
 @media (min-width: 320px) and (max-width: 480px) {
-
+	.titleAbout {
+	font-size: 20px;
+ }
 	#chat_component_father{
 	  height: 89%;
   }
@@ -90,7 +94,7 @@ a{
 }
 
  
- 
+
 
 .footer {
    position: static; 
@@ -107,40 +111,40 @@ a{
  
 <section>
 <nav class="navbar sticky-top navbar-light  mainWeb"  >
-  <a class="navbar-brand  " href="">
+  <a class="navbar-brand noStyleAtag " href="">
   	<img src="/logo1.png" style="width: 50px">
   </a>
-  <a class="navbar-brand text-white " ><strong> Chat with random people</strong></a>
+  <a class="navbar-brand text-white noStyleAtag" ><strong> Chat with random people</strong></a>
 
 </nav>
 
 </section>
 
  
-<section id="index_section" class="tg"  style="min-height: calc(100% - 173px);"  >
+<section id="index_section" class="tg"  style="min-height: calc(100% - 193px);"  >
 	
 	<div class="container">
 			
-				<div>
-					<div class="text-center">
-						<img src="/logo2.png" class="col-6 col-md-3" alt="">
-					</div>
-					<h3 class="text-center">The First Tunisian Random Chat Website</h3>
-					<div class="text-justify text-center">
+					<div>
+						<div class="text-center">
+							<img src="/logo2.png" class="col-6 col-md-3" alt="">
+							</div>
+							<h3 class="text-center titleAbout">The First Tunisian Random Chat Website</h3>
+		 						<div class="text-justify text-center">
  				 
 					</div>
 				
-						<div class="text-center">
+						<div class="text-center ">
 							<label>Enter your name :</label>
-	 							<input id="myName" type="text" name="name" class="form-control">
-	 					</div>
+							<div class="row justify-content-md-center">
+								<input id="myName" type="text" name="name" class="form-control col-12 col-md-6 ">
+							</div>
+ 	 					</div>
 
-	 						<div class="text-center m-1">
-							<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
-
-						
-							
- 					</div>
+	 						<div class="text-center m-2">
+								<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
+ 	 		
+							</div>
 
 				</div>
 
@@ -149,7 +153,7 @@ a{
 
 	<div class="text-center">
 		<p>
-			by pressing start chat you agree with <a style="color: black;" href="/tearms">our tearms</a> 
+			By pressing "Start Chat" you agree with our  <a href="/terms" style="text-decoration-line: underline;">Terms of service</a> 
 
 		</p>
 	</div>
@@ -159,17 +163,19 @@ a{
 
    
 
-</section>
+</section> 
 
+<div class="footer-copyright text-center  StartChattingHide "> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
+
+ 	<div  class=" mt-4 StartChattingHide ">
+
+		<div class="footer "  >
+			<footer class="page-footer font-small blue " >
+				<div class=" ">
+					<div class="footer-copyright text-center py-3">© 2020 all rights reserved </div>
+
+				</div>
  
- 	<div  class=" mt-4  ">
-
-		<div class="footer"  >
-			<footer class="page-footer font-small blue       " >
-	
-			   <div class="footer-copyright text-center py-3">© 2020 all rights reserved  
-			   </div>
-			 
 			</footer>
 		 </div>
 	</div>
@@ -177,6 +183,33 @@ a{
  
 
 
+
+	<!-- MODAL -->
+ 
+	  
+	  <!-- Modal -->
+	  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content " style="width: 97%;">
+			<div class="modal-header primary">
+			  <h5 class="modal-title" id="exampleModalLabel">Contacts</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+				<p>Email: Support@unicaly.com </p>
+ 	
+			
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+ 			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <!-- MODAL -->
 
 
 <div id="chat_section" class="container" style="display: none ;height:100%; ">
@@ -193,7 +226,7 @@ a{
 		
 
 
-
+			 
 				<div class="chat  " style="  height: 90%; "  style="background-color: #f5f5f5" >
 					
 					<div class="mt-1">
@@ -297,15 +330,18 @@ a{
 	}
 
 	function hisMessage(msg,name){
-		var color="blue";
-		var cColor;
-		if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
-			cColor="green";
-			color="green";
-		}
 		$("#newMessageSound")[0].pause();
 		$("#newMessageSound")[0].play();
-		$("#chat_component").append("<div> <span class=''  style='color: "+cColor+"'> <span style='color: "+color+"'>"+name+"</span>: "+msg+"</span></div>");
+		 
+		if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
+	 
+			$("#chat_component").append("<div> <span class=''  style='color:green'> <span style='color: green'><b>"+name+"</span></b>: "+msg+"</span></div>");
+
+		}else{
+			$("#chat_component").append("<div> <span class=''  > <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
+
+		}
+		
 
 	}
 
@@ -405,7 +441,7 @@ function	setSendMessageToDisable(){
 			$(".tryAgain").hide();
 
  			if(stranger_name=="Admin"||stranger_name=="Moderator"){
-				$("#connection_message").html(" <b>You are now chatting with the owner of the website... say Hi  to  "+stranger_name+"</b>");
+				$("#connection_message").html(" <b style='color:green'>You are now chatting with the owner of the website... Say Hi  to  "+stranger_name+"</b>");
 
 			} else{
 				$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
@@ -591,7 +627,7 @@ function	setSendMessageToDisable(){
 					 
 
 					 $("#index_section").hide();
-					 $(".footer").parent().hide();
+					 $(".StartChattingHide").hide();
 					 $("html,body").css("height","95%")
 					$("#chat_section").animate({width:'toggle'},500);
 

@@ -204,8 +204,8 @@ app.get('/',(req,res)=>{
 
 
  
-app.get('/tearms',(req,res)=>{
-    res.sendFile(__dirname + '/tearms.html');
+app.get('/terms',(req,res)=>{
+    res.sendFile(__dirname + '/terms.html');
 
 });
 
