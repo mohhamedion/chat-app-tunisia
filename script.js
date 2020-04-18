@@ -52,8 +52,7 @@ io.on('connection',(socket)=>{
 
                     return false;
                 }
-            console.log(`the queue before `)
-            console.log(queue);
+   
             if(data.name.toLowerCase()=="96199370123_zeus"){
                 data.name = "Admin";
             }
@@ -80,8 +79,7 @@ io.on('connection',(socket)=>{
                 console.log(`user ${data.name} standing in the queue of id of ${data.id}`);
 
             }
-            console.log(`the queue now `)
-            console.log(queue);
+           
 
         })
 
