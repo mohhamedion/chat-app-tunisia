@@ -4,7 +4,7 @@
 		 
 			socket.on('signaling_message', function(data) {
 				displaySignalMessage("Signal received: " + data.type);
-				 console.log(rtcPeerConn);
+				//  console.log(rtcPeerConn);
 				//Setup the RTC Peer Connection object
 				if (!rtcPeerConn){
 					startSignaling();
@@ -82,9 +82,9 @@
 			
 			function receiveDataChannelMessage(event) {
 				displaySignalMessage("Incoming Message");
-				console.log(fileSize)
+				// console.log(fileSize)
 				displayMessage("From DataChannel: " );
-				console.log(event.data)
+				// console.log(event.data)
 				
 				//This is where we process incoming files
 				fileBuffer.push(event.data);
@@ -94,14 +94,14 @@
 				$("#fileProgress").val(fileSize);
 			 
 				//Provide link to downloadable file when complete
-				console.log(fileSize+"  should be equal   "+ receivedFileSize);
+				// console.log(fileSize+"  should be equal   "+ receivedFileSize);
 				if (fileSize === receivedFileSize) {
 					var received = new window.Blob(fileBuffer);
 					fileBuffer = [];
 					fileSize=0;
 			 
-					console.log("   OUT PUT MESSAGE " )
-					console.log(received);
+					// console.log("   OUT PUT MESSAGE " )
+					// console.log(received);
 
 				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
 				   $('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
@@ -127,39 +127,47 @@
  
 		 
 			function displaySignalMessage(message) {
- 				console.log(message)
+ 				// console.log(message)
 			}
 			sendFile.addEventListener('change', function(ev){
+
+
 				var file = sendFile.files[0];
-				readURL(this);
-				fileSending(1,null);
-  				displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
-				socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
-				
-				 $("#fileProgress").attr('max',file.size);
-				 $("#fileProgress").max = file.size;
-				 
-				var chunkSize = 16384;
-				var sliceFile = function(offset) {
-					var reader = new window.FileReader();
-					reader.onload = (function() {
-						return function(e) {
-							dataChannel.send(e.target.result);
-							if (file.size > offset + e.target.result.byteLength) {
-								window.setTimeout(sliceFile, 0, offset + chunkSize);
-								$("#fileProgress").parent().parent().remove();
-								}
-							$(`#fileProgress`).val(offset + e.target.result.byteLength)   ;
- 						};
-					})(file);
-					var slice = file.slice(offset, offset + chunkSize);
-					reader.readAsArrayBuffer(slice);
-				};
-				sliceFile(0);		
-			
+				console.log(file);
+					if(file.type=="image/jpeg"){
+						readURL(this);
+						fileSending(1,null);
+						  displaySignalMessage("sending file " + file.name + " (" + file.size + ") ...");
+						socket.emit('files',{"filename":file.name, "filesize":file.size, "room":room});
+						
+						 $("#fileProgress").attr('max',file.size);
+						 $("#fileProgress").max = file.size;
+						 
+						var chunkSize = 16384;
+						var sliceFile = function(offset) {
+							var reader = new window.FileReader();
+							reader.onload = (function() {
+								return function(e) {
+									dataChannel.send(e.target.result);
+									if (file.size > offset + e.target.result.byteLength) {
+										window.setTimeout(sliceFile, 0, offset + chunkSize);
+										$("#fileProgress").parent().parent().remove();
+										}
+									$(`#fileProgress`).val(offset + e.target.result.byteLength)   ;
+								 };
+							})(file);
+							var slice = file.slice(offset, offset + chunkSize);
+							reader.readAsArrayBuffer(slice);
+						};
+						sliceFile(0);		
+					
+					}else{
+						alert('this file type is not allowed')
+					}
+	
 			}, false);
 
 			function displayMessage (msg){
-				console.log(msg)
+				// console.log(msg)
 			}
 

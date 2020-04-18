@@ -16,7 +16,7 @@
 			if(room.substring(0,20)==socket.id){
 	 				socket.emit('signal',{"type":"user_here", "message":"Are you ready for a call?", "room":room});
 					console.log('am calling the other peer')
-					console.log(room);
+				     console.log(room);
 			 }
 			 
 		
@@ -24,15 +24,15 @@
 			$("#messageContent").keypress(function(event){
 				
 			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if(keycode == '13'){
-				
-				if($("#messageContent").val()!==""){
-					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
-				$("#messageContent").val('');
-					keyUp=true;
-				}
-				
-			} 
+				if(keycode == '13'){
+					if(room.length>0){
+						if($("#messageContent").val()!==""){
+							socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
+						$("#messageContent").val('');
+							keyUp=true;
+						}
+					}
+				} 
 
 			});
 
@@ -49,8 +49,8 @@
 			$("#sendMessage").click(function(){
 				if($("#messageContent").val()!==""){
 					socket.emit("messageToServer",{message:$("#messageContent").val(),room:room,id:socket.id});
-				$("#messageContent").val('');
-				keyUp=true;
+					$("#messageContent").val('');
+					keyUp=true;
 			
 				}
 			
@@ -64,16 +64,18 @@
 
 
 		socket.on("messageToClient",(data)=>{
-
-			if(data.id==socket.id){
-				myMessage(data.message);
-			}else{
-				hisMessage(data.message,stranger_name);
-				$("#userTyping").hide();
-
-			}
+			if(room.length>0){
+				if(data.id==socket.id){
+					myMessage(data.message);
+				}else{
+					if(stranger_name.length>0){
+						hisMessage(data.message,stranger_name);
+					}
+					$("#userTyping").hide();
+				}
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
-			// $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+ 
+			}
 
 		})
 
@@ -83,9 +85,8 @@
 
 			setSendFileToDisable();
 			setSendMessageToDisable();
-			rtcPeerConn.close();
-			dataChannel.close();
-
+		 
+			disconnectingWebRTC()
 			fileSize=0;
 
 			fileBuffer = [];
@@ -104,10 +105,10 @@
 				$("#connection_message").html("looking for someone to chat with");
 				$(".tryAgain").hide();
 				$("#chat_component").html('');
- 				rtcPeerConn.close();
-				dataChannel.close();
-				rtcPeerConn=null;
-
+ 				// rtcPeerConn.close();
+				// dataChannel.close();
+				// rtcPeerConn=null;
+				disconnectingWebRTC();
 				fileSize=0;
 			 
 				fileBuffer = [];
@@ -118,6 +119,7 @@
 		})
 
 		socket.on("typing",()=>{
+			
 			$("#userTyping").show();
 			$("#userTyping").delay(3000).hide(0);
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
@@ -136,11 +138,15 @@
 						$("#connection_message").html("<em>looking for someone to chat with</em>");
 										$(".tryAgain").hide();
 										$("#chat_component").html('');
+										$("#userTyping").hide();
+
 										console.log('start again');
-										rtcPeerConn.close();
-										dataChannel.close();
-										rtcPeerConn=null;
-										dataChannel=null;
+										// rtcPeerConn.close();
+										// dataChannel.close();
+										// rtcPeerConn=null;
+										// dataChannel=null;
+										stranger_name=null;
+										disconnectingWebRTC();
 
 										console.log(name);
 										console.log(socket.id);
@@ -155,11 +161,11 @@
 				$("#connection_message").html("<em>looking for someone to chat with</em>");
 										$(".tryAgain").hide();
 										$("#chat_component").html('');
+										$("#userTyping").hide();
+
 										console.log('start again');
-										rtcPeerConn.close();
-										dataChannel.close();
-										rtcPeerConn=null;
-										dataChannel=null;
+									
+										disconnectingWebRTC();
 
 										console.log(name);
 										console.log(socket.id);
@@ -177,7 +183,9 @@
 
 
 				function startChating(){
-							
+					let x=0;
+					let forbidden = ['a','d','m','i','n'];
+
 					name =  $("#myName").val();
  
 					if(name==""){
@@ -187,6 +195,25 @@
 
 					if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
 						alert('not allowed to take this name');
+						return false;
+					}
+
+			 
+					for (let i = 0; i < name.length; i++) {
+						const element = name.charAt(i).toLowerCase();
+						 
+						
+						for (let y = 0; y < forbidden.length; y++) {
+							const forbiddenElement = forbidden[y];
+							if(element==forbiddenElement){
+								x++;
+								forbidden.splice(y,1)
+							}
+						}
+					}
+					if(x>=5){
+
+						alert("error u can't use that name")
 						return false;
 					}
 					 
@@ -231,3 +258,17 @@
 }
 
 
+
+
+function disconnectingWebRTC(){
+
+try{
+	rtcPeerConn.close();
+	dataChannel.close();
+	rtcPeerConn=null;
+	dataChannel=null;
+}catch(e){
+console.log(e)
+}
+
+}
