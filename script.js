@@ -2,8 +2,7 @@ const express  = require("express");
 const app  = express();
 const port = process.env.PORT||8000 ;
 const path = require('path')
-const escapeStringRegexp = require('escape-string-regexp');
- 
+  
 const server = app.listen(port,()=>{
     console.log('working on '+port)
 })
@@ -11,7 +10,8 @@ const io = require("socket.io")(server);
 
 let queue = [];
 let inChat = [];
-let badwords = ['Asba',
+let badwords = [
+'Asba',
 '3asba',
 'Nik',
 'zebi',
@@ -37,24 +37,27 @@ let badwords = ['Asba',
 
 
 app.use(express.static(path.join(__dirname+'/public')));
+// io.use(function(socket,next){
+// console.log(socket.data)
 
+// next();
+
+
+// })
 
 io.on('connection',(socket)=>{
  
-     socket.join(socket.id);
+    socket.join(socket.id);
 
     console.log('clients online');
     console.log(Object.keys(io.sockets.sockets).length);
 
-
- 
         socket.on("queue",(data)=>{
-            data.name = data.name.replace(/\\/g, "\\\\")
-            .replace(/\$/g, "\\$")
-            .replace(/'/g, "\\'")
-            .replace(/"/g, "\\\"");
-
-                if(!preperingName(data.name)){
+            
+            
+          
+            data.name=escapeHTML(data.name);
+                 if(!preperingName(data.name)){
                     return false;
                 }
 
@@ -98,9 +101,10 @@ io.on('connection',(socket)=>{
 
 
     socket.on("messageToServer",(data)=>{
-        
+        console.log(data.message)
         data.message = escapeHTML(data.message);
- 
+        console.log(data.message)
+
          io.to(data.room).emit("messageToClient",data);
     })
 
@@ -205,8 +209,11 @@ socket.on('signal', (req)=>{
 })
 
 socket.on('files', (req)=> {
+    // req.filename= escapeHTML(req.filename);
+    // req.filesize = escapeHTML(req.filesize);
+
 	socket.to(req.room).emit('files', {
-		filename: req.filename,
+		filename:req.filename ,
 		filesize: req.filesize
 	});
 })
@@ -301,5 +308,10 @@ const preperingName =(name)=>{
 
 
 const escapeHTML =(msg) =>{
-    return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+    try{
+        return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    }catch(e){
+            console.log(e)
+    }
+ }
