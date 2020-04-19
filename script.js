@@ -98,11 +98,8 @@ io.on('connection',(socket)=>{
 
 
     socket.on("messageToServer",(data)=>{
-        data.message=data.message.replace(/\\/g, "\\\\")
-        .replace(/\$/g, "\\$")
-        .replace(/'/g, "\\'")
-        .replace(/"/g, "\\\"");
-
+        
+        data.message = escapeHTML(data.message);
  
          io.to(data.room).emit("messageToClient",data);
     })
@@ -300,4 +297,9 @@ const preperingName =(name)=>{
        }
 
        return true;
+}
+
+
+const escapeHTML =() =>{
+    return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
