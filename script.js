@@ -300,6 +300,6 @@ const preperingName =(name)=>{
 }
 
 
-const escapeHTML =() =>{
-    return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escapeHTML =(msg) =>{
+    return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
