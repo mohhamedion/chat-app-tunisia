@@ -1,6 +1,28 @@
-
+let badwords = ['Asba',
+'3asba',
+'Nik',
+'zebi',
+'Zeby' ,
+'Zeb',
+'Sorm',
+'Terma',
+'Zok',
+'3os',
+'God',
+'Allah',
+'Labour',
+'Omek',
+'امك',
+'عصبة' ,
+'زب',
+'زبي',
+'زبور' ,
+'زك',
+'نيك',
+'ترمة',
+'الله'];
 		socket.on("connected",()=>{
-			console.log("both are connected");
+		//console.log("both are connected");
 			setSendMessageToClickble();
 			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();
@@ -15,8 +37,8 @@
 		 
 			if(room.substring(0,20)==socket.id){
 	 				socket.emit('signal',{"type":"user_here", "message":"Are you ready for a call?", "room":room});
-					console.log('am calling the other peer')
-				     console.log(room);
+				//	console.log('am calling the other peer')
+				 //    console.log(room);
 			 }
 			 
 		
@@ -40,7 +62,7 @@
 			$("#messageContent").on("input",function(){
 
 				 if(keyUp){
-					console.log('typing')
+				//	console.log('typing')
 					socket.emit("typing",{room:room});
 					keyUp=false;
 				 }
@@ -124,7 +146,7 @@
 			$("#userTyping").delay(3000).hide(0);
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
 
-			 console.log('he is typing');
+		//	 console.log('he is typing');
 			 
 		})
 
@@ -140,7 +162,7 @@
 										$("#chat_component").html('');
 										$("#userTyping").hide();
 
-										console.log('start again');
+								//		console.log('start again');
 										// rtcPeerConn.close();
 										// dataChannel.close();
 										// rtcPeerConn=null;
@@ -148,8 +170,8 @@
 										stranger_name=null;
 										disconnectingWebRTC();
 
-										console.log(name);
-										console.log(socket.id);
+									//	console.log(name);
+									//	console.log(socket.id);
 										socket.emit("otherPeerDisconected");
 										room='';
 										socket.emit("queue",{name:name,id:socket.id});
@@ -163,12 +185,12 @@
 										$("#chat_component").html('');
 										$("#userTyping").hide();
 
-										console.log('start again');
+										//console.log('start again');
 									
 										disconnectingWebRTC();
 
-										console.log(name);
-										console.log(socket.id);
+									//	console.log(name);
+										//console.log(socket.id);
 										socket.emit("otherPeerDisconected");
 										room='';
 										socket.emit("queue",{name:name,id:socket.id});
@@ -183,40 +205,13 @@
 
 
 				function startChating(){
-					let x=0;
-					let forbidden = ['a','d','m','i','n'];
+		
 
 					name =  $("#myName").val();
  
-					if(name==""){
-						alert('enter your name');
+					if(!preperingName(name)){
 						return false;
 					} 
-
-					if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
-						alert('not allowed to take this name');
-						return false;
-					}
-
-			 
-					for (let i = 0; i < name.length; i++) {
-						const element = name.charAt(i).toLowerCase();
-						 
-						
-						for (let y = 0; y < forbidden.length; y++) {
-							const forbiddenElement = forbidden[y];
-							if(element==forbiddenElement){
-								x++;
-								forbidden.splice(y,1)
-							}
-						}
-					}
-					if(x>=5){
-
-						alert("error u can't use that name")
-						return false;
-					}
-					 
 
 					 $("#index_section").hide();
 					 $(".StartChattingHide").hide();
@@ -224,8 +219,7 @@
 					$("#chat_section").animate({width:'toggle'},500);
 
 					socket.emit("queue",{name:name,id:socket.id});
-					console.log(name);
-					console.log(socket.id)
+			 
 
 				
 				}

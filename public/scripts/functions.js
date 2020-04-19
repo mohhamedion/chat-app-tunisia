@@ -61,3 +61,58 @@ function	setSendMessageToDisable(){
          
 
 }
+
+function preperingName(name){
+    	
+    var x=0;
+    var forbidden = ['a','d','m','i','n'];
+    name = name.trim();
+    if(name==""){
+        alert('enter your name');
+        return false;
+    } 
+    if(name.length>20){
+        alert('name is to long');
+        return false;
+
+    }
+
+    if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
+        alert('not allowed to take this name');
+        return false;
+    }
+
+
+
+    for (let i = 0; i < name.length; i++) {
+        const element = name.charAt(i).toLowerCase();
+         
+        
+        for (let y = 0; y < forbidden.length; y++) {
+            const forbiddenElement = forbidden[y];
+            if(element==forbiddenElement){
+                x++;
+                forbidden.splice(y,1)
+            }
+        }
+    }
+    if(x>=5){
+
+        alert("error u can't use that name")
+        return false;
+    }
+     
+
+
+
+    for (let i = 0; i < badwords.length; i++) {
+         if(name==badwords[i]){
+            alert('you cant use that name');
+            return false;
+          }
+ 
+
+    }
+
+    return true;
+}

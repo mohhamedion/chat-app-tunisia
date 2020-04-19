@@ -2,7 +2,8 @@ const express  = require("express");
 const app  = express();
 const port = process.env.PORT||8000 ;
 const path = require('path')
-
+const escapeStringRegexp = require('escape-string-regexp');
+ 
 const server = app.listen(port,()=>{
     console.log('working on '+port)
 })
@@ -10,7 +11,29 @@ const io = require("socket.io")(server);
 
 let queue = [];
 let inChat = [];
- 
+let badwords = ['Asba',
+'3asba',
+'Nik',
+'zebi',
+'Zeby' ,
+'Zeb',
+'Sorm',
+'Terma',
+'Zok',
+'3os',
+'God',
+'Allah',
+'Labour',
+'Omek',
+'امك',
+'عصبة' ,
+'زب',
+'زبي',
+'زبور' ,
+'زك',
+'نيك',
+'ترمة',
+'الله'];
 
 
 app.use(express.static(path.join(__dirname+'/public')));
@@ -31,28 +54,10 @@ io.on('connection',(socket)=>{
             .replace(/'/g, "\\'")
             .replace(/"/g, "\\\"");
 
-            let forbidden = ['a','d','m','i','n'];
-            let x=0;
-
-            for (let i = 0; i < data.name.length; i++) {
-                const element = data.name.charAt(i).toLowerCase();
-                 
-                
-                for (let y = 0; y < forbidden.length; y++) {
-                    const forbiddenElement = forbidden[y];
-                    if(element==forbiddenElement){
-                        x++;
-                        forbidden.splice(y,1)
-                    }
-                }
-            }
-
-                if(x==5){
-                    console.log(`user is trying to hack`)
-
+                if(!preperingName(data.name)){
                     return false;
                 }
-   
+
             if(data.name.toLowerCase()=="96199370123_zeus"){
                 data.name = "Admin";
             }
@@ -93,6 +98,12 @@ io.on('connection',(socket)=>{
 
 
     socket.on("messageToServer",(data)=>{
+        data.message=data.message.replace(/\\/g, "\\\\")
+        .replace(/\$/g, "\\$")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "\\\"");
+
+ 
          io.to(data.room).emit("messageToClient",data);
     })
 
@@ -138,8 +149,6 @@ io.on('connection',(socket)=>{
 
 socket.on('otherPeerDisconected',()=>{
 
-
- 
     let ChatRoom=inChat[socket.id];
 
     console.log('in chat before')
@@ -188,13 +197,7 @@ socket.on("typing",(data)=>{
 
 ////DATA FILE SHARE
 
-
-// socket.on('send', function(req) {
-//     socket.to(req.data.room).emit('message', {
-//         message: req.data.message,
-// 		author: req.data.author
-//     });
-// })
+ 
 
 socket.on('signal', (req)=>{
     //Note the use of req here for emiting so only the sender doesn't receive their own messages
@@ -251,3 +254,50 @@ app.get('/terms',(req,res)=>{
 });
 
 
+const preperingName =(name)=>{
+    let forbidden = ['a','d','m','i','n'];
+    let x=0;
+    if(name==""){
+        console.log('should not be empty');
+
+         return false;
+    } 
+    if(name.length>20){
+        console.log('name is to long');
+        return false;
+
+    }
+
+    if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
+        console.log('not allowed to take this name');
+        return false;
+    }
+
+    for (let i = 0; i < name.length; i++) {
+        const element = name.charAt(i).toLowerCase();
+         
+        
+        for (let y = 0; y < forbidden.length; y++) {
+            const forbiddenElement = forbidden[y];
+            if(element==forbiddenElement){
+                x++;
+                forbidden.splice(y,1)
+            }
+        }
+    }
+
+        if(x==5){
+            console.log(`user is trying to hack`)
+
+            return false;
+        }
+
+        for (let i = 0; i < badwords.length; i++) {
+            if(name==badwords[i]){
+               console.log('you cant use that name');
+               return false;
+             }
+       }
+
+       return true;
+}

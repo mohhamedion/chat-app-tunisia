@@ -90,7 +90,7 @@
 				fileBuffer.push(event.data);
 				fileSize += event.data.byteLength;
 			
-				console.log('before change '+receivedFileName);
+			//console.log('before change '+receivedFileName);
 				$("#fileProgress").val(fileSize);
 			 
 				//Provide link to downloadable file when complete
@@ -103,7 +103,7 @@
 					// console.log("   OUT PUT MESSAGE " )
 					// console.log(received);
 
-				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,name);
+				   hisMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${URL.createObjectURL(received)}' />`,stranger_name);
 				   $('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
 				   $("#fileProgress").parent().parent().remove();
 
@@ -133,7 +133,7 @@
 
 
 				var file = sendFile.files[0];
-				console.log(file);
+				//console.log(file);
 					if(file.type=="image/jpeg"){
 						readURL(this);
 						fileSending(1,null);

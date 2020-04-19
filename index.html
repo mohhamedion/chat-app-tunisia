@@ -371,10 +371,9 @@ a.noStyleAtag{
 	  let name=null;
 	  let timeout;
 	  socket.on('connect',()=>{
-		  console.log(socket.id)
-	  })
+ 	  })
 		socket.on("joinRoom",(data)=>{
-			console.log(data.room);
+ 
 			stranger_name = data.name;
 			room = data.room;
 			socket.emit("joinChatRoom",{room:data.room});
