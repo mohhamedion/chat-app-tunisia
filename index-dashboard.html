@@ -115,7 +115,7 @@ a.noStyleAtag{
   <a class="navbar-brand noStyleAtag " href="">
   	<img src="/logo1.png" style="width: 50px">
   </a>
-  <a class="navbar-brand text-white noStyleAtag" ><strong> Chat with random people</strong></a>
+  <a class="navbar-brand text-white noStyleAtag" ><strong> Admin Dashboard</strong></a>
 
 </nav>
 
@@ -124,50 +124,35 @@ a.noStyleAtag{
  <!-- OLD ONE 200PX -->
 <section id="index_section" class="tg"  style="min-height: calc(100% - 170px);"  >
 	
-	<div class="container">
+	        <div class="container">
 			
-					<div>
-						<div class="text-center">
-							<img src="/logo2.png" class="col-6 col-md-3" alt="">
-							</div>
-							<h3 class="text-center titleAbout">The First Tunisian Random Chat Website</h3>
-		 						<div class="text-justify text-center">
- 				 
-					</div>
-				
-						<div class="text-center ">
-							<label>Enter your name :</label>
-							<div class="row justify-content-md-center">
-								<input id="myName" type="text" name="name" class="form-control col-12 col-md-6 " >
-							</div>
- 	 					</div>
+				<table   class="table table-striped">
+					<thead>
+					  <tr>
+						<th>#</th>
+						<th>name</th>
+						<th>option</th>
+					  </tr>
+					</thead>
+					<tbody class="allUsers">
+					
+				 
+					</tbody>
+				  </table>
+                    
 
-	 						<div class="text-center m-2">
-								<a class="btn primary text-white"  onClick="startChating()">START CHAT</a>
- 	 		
-							</div>
 
 				</div>
 
 	</div>
 
-
-	<div class="text-center ">
-		<p class=" ">
-			By pressing "Start Chat" you agree with our  <br>
-			<span>
-				<a href="/terms" style="text-decoration-line: underline;">Terms of service</a> 
-			</span>
-
-		</p>
-	</div>
+ 
 	
  
 
 
    
-	<div class="footer-copyright text-center  StartChattingHide " style="bottom: 0px;position: static;"> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
-
+ 
 </section> 
 
 <!-- the OLD ONE WAS HERE -->
@@ -248,120 +233,7 @@ a.noStyleAtag{
 
 
 
-
-
-
-	<div id="chat_section" class="container" style="display: none ;height:100%; ">
-
-
-	<section  style="background-color: #f5f5f5;height:80%; " class="">
-		<div class="row mt-1 ">
-			<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
-				 
-			<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
-		</div>
-
-		<div class="m-4 p-2" style="  height: 90%; " >
-		
-
-
-			 
-				<div class="chat  " style="  height: 90%; "  style="background-color: #f5f5f5" >
-					
-					<div class="mt-1">
-							<p id='connection_message'><em>looking for someone to chat with</em></p>
-
-					</div>
-		
-		
-						<div id="chat_component_father"  style="background-color: #f5f5f5;  ;">
-
-							<div id="chat_component_p" style="background-color: #f5f5f5; max-height:95%;overflow: auto;">
-
-
-									<div  id="chat_component">
-
-									</div>
-									<div id="userTyping"  style="display: none;">
-										<p><em>user is typing....</em></p>
-									</div>
-
-									<div id="" style="display: none;" class="tryAgain">
-										<p><em>This stranger has disconected</em></p>
-										<button   class="btn primary startAgain">
-											Start Again
-										</button>
-									</div>
-							</div>
-							
-						
-
-
-							
-
-							
-						</div>
-				
-					
-			
-
-				</div>
-
-
-
-		</div>
-
-
-
-	</section>
-	<section class="mt-2" >
-		
-		<div class="mt-1" style=" bottom: 0;"  >
-	
-			<div class="row" > 			
-					<!-- INPUT SEND -->
-
-					<div class=" col-6 col-md-8  ">
-							<div class="form-group">
-								<input  readonly id="messageContent" type="text" name="msg" class="form-control" style="height: 50px">
-							</div>
-					</div>
-					<!-- BUTTON SEND -->
-					<div class="  col-3 col-md-2 ">
-						<div class="form-group ">
-							<button  id="sendMessage"  disabled  class="form-control btn  primary   " style="height: 50px"  ><i class="fas fa-paper-plane" style="padding-top: 10px;"></i></button>
-
-						</div>
-					</div>	
-					<div class="  col-3  col-md-2 ">
-						<div class="form-group  ">
-							<button disabled  id="fileUpload" onClick="$('#sendFile').trigger( 'click' )"  class="form-control btn   btn-secondary   " style="height: 50px"  ><i class="fas fa-camera" style="padding-top: 10px;"></i></button>
-							<input accept=".jpg" href="" id="sendFile" type="file"   class=" hide " style="height: 50px;  display: none;"  value="Upload"  >
-
-						</div>
-					</div>
-								
-			</div>
-
-					
-		</div>
-	</section>
-
-</div>
-
-
-
-<audio id="newUserSound"  class="hide">
-	<source src="/sound/new-user.ogg" type="audio/ogg">
-   Your browser does not support the audio element.
-  </audio>
-
-
-  <audio id="newMessageSound"  class="hide">
-	<source src="/sound/new-message.ogg" type="audio/ogg">
-   Your browser does not support the audio element.
-  </audio>
-
+ 
 <script src="/scripts/functions.js" > </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -371,7 +243,31 @@ a.noStyleAtag{
 	  let name=null;
 	  let timeout;
 	  socket.on('connect',()=>{
- 	  })
+
+            socket.emit("allUsers");
+
+
+
+
+       });
+       
+
+	   
+       socket.on("allUsers",(users)=>{
+        console.log('users');
+        console.log(users)
+          
+		users.forEach(element => {
+	 
+			console.log(element[1].name)
+	 
+
+			$(".allUsers").append(`<tr> <td>#</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>kick</button></td> </tr>`)
+
+
+		});
+ 
+       })
 		socket.on("joinRoom",(data)=>{
  
 			stranger_name = data.name;
@@ -381,8 +277,11 @@ a.noStyleAtag{
 
 		});
 
-	// var signalingArea = document.querySelector("#signalingArea");
-			let sendFile = document.querySelector("input#sendFile");
+function kickUser(user){
+ 	socket.emit("kick",{id:user});
+}
+
+ 			let sendFile = document.querySelector("input#sendFile");
 			let fileProgress = document.querySelector("progress#fileProgress");
 			let downloadLink = document.querySelector('a#receivedFileLink');
 	 
@@ -408,6 +307,8 @@ a.noStyleAtag{
 
 
  
+                
+
 </script>
 
 <script src="/scripts/messages.js"></script>

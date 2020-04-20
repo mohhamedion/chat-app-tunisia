@@ -230,27 +230,6 @@ a.noStyleAtag{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<div id="chat_section" class="container" style="display: none ;height:100%; ">
 
 
@@ -258,7 +237,12 @@ a.noStyleAtag{
 		<div class="row mt-1 ">
 			<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
 				 
-			<div class="col-6 text-right"><a href="#" class="btn primary next" ><i class="fas fa-arrow-circle-right   p-1" ></i> </a> </div>
+			<div class="col-6 text-right"><a href="#" class="" >  
+                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;"> <span  class="badge bg-secondary ">Admin is online</span>  </a>
+                <a class="btn primary next"> <i class="fas fa-arrow-circle-right text-light  p-1" ></i> </a> 
+            </div>
+
+            
 		</div>
 
 		<div class="m-4 p-2" style="  height: 90%; " >
@@ -417,3 +401,22 @@ a.noStyleAtag{
 </body>
 </html>
 <!-- BY MOHAMAD AL ASALY -->
+
+
+<script>
+    $("#chatWithAdmin").click(function(){
+		var chatWithAdmin = confirm("do you want to chat with the admin?");
+		if(chatWithAdmin){
+			socket.emit("joinAdminQueue",{name:name});
+			$("#connection_message").html("you are standing on the line to chat with the admin, please wait");
+		}
+	 })
+	 
+	 socket.on("adminJoin",()=>{
+			$(".badge").removeClass("bg-secondary").addClass("bg-success");
+	 });
+	 socket.on("adminOut",()=>{
+			$(".badge").removeClass("bg-success").addClass("bg-secondary");
+	 });
+	 
+</script>
