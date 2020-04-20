@@ -23,6 +23,7 @@ let badwords = ['Asba',
 'الله'];
 		socket.on("connected",()=>{
 		//console.log("both are connected");
+		$("#chat_component").html("");
 			setSendMessageToClickble();
 			$("#newUserSound")[0].play();
 			$(".tryAgain").hide();

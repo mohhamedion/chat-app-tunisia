@@ -238,7 +238,7 @@ a.noStyleAtag{
 			<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
 				 
 			<div class="col-6 text-right"><a href="#" class="" >  
-                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;"> <span  class="badge bg-secondary ">Admin is online</span>  </a>
+                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;cursor:default"> <span  class="badge bg-secondary ">Admin is online</span>  </a>
                 <a class="btn primary next"> <i class="fas fa-arrow-circle-right text-light  p-1" ></i> </a> 
             </div>
 
@@ -387,6 +387,7 @@ a.noStyleAtag{
 			let receivedFileSize;
 			let fileBuffer = [];
 			let fileSize = 0;
+			let adminOnline=false;
 
 
 
@@ -405,18 +406,23 @@ a.noStyleAtag{
 
 <script>
     $("#chatWithAdmin").click(function(){
-		var chatWithAdmin = confirm("do you want to chat with the admin?");
+		if(adminOnline){
+			var chatWithAdmin = confirm("do you want to chat with the admin?");
 		if(chatWithAdmin){
 			socket.emit("joinAdminQueue",{name:name});
 			$("#connection_message").html("you are standing on the line to chat with the admin, please wait");
 		}
+		}
+	
 	 })
 	 
 	 socket.on("adminJoin",()=>{
-			$(".badge").removeClass("bg-secondary").addClass("bg-success");
+			$(".badge").removeClass("bg-secondary").addClass("bg-success").parent().css("cursor",'pointer');
+			adminOnline=true;
 	 });
 	 socket.on("adminOut",()=>{
-			$(".badge").removeClass("bg-success").addClass("bg-secondary");
+			$(".badge").removeClass("bg-success").addClass("bg-secondary").parent().css("cursor",'default');
+			adminOnline=false;
 	 });
 	 
 </script>
