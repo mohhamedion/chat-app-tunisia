@@ -166,8 +166,8 @@ io.on('connection',(socket)=>{
 
         console.log('kicking user '+data.id)
         console.log(io.sockets.sockets[data.id].handshake.address)
-        //bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-    
+        bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+        socket.to(data.id).emit('ban');
         disconnectUserFromChat(data)
     }catch(e){
         console.log("No user to kick")

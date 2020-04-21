@@ -152,6 +152,11 @@ let badwords = ['Asba',
 		})
 
 		 
+		socket.on("ban",()=>{
+			
+			location.reload(true);
+			 
+		})
 
 		$(".next").click(function(){
 			if(stranger_name!=null){

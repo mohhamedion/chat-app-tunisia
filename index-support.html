@@ -409,7 +409,7 @@ a.noStyleAtag{
 		if(adminOnline){
 			var chatWithAdmin = confirm("do you want to chat with the admin?");
 			if(chatWithAdmin){
-				$("#connection_message").html("you are standing on the line to chat with the admin, please wait");
+				$("#connection_message").html("<b class='text-danger'>you are standing on the line to chat with the admin, please wait<b>");
 				$(".tryAgain").hide();
 				$("#chat_component").html('');
 				$("#userTyping").hide();
