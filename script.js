@@ -28,9 +28,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 io.on('connection',(socket)=>{
  
      socket.join(socket.id);
-
-    console.log('clients online');
-    console.log(Object.keys(io.sockets.sockets).length);
+     socket.emit("adminStatus",Object.keys(admins).length);
+    // console.log('clients online');
+    // console.log(Object.keys(io.sockets.sockets).length);
 
         socket.on("queue",(data)=>{
  
@@ -65,13 +65,16 @@ io.on('connection',(socket)=>{
  
 
                        connectTwoUsers(socket,queue[0],data);
+                       GetUserFromQuere(queue[0].id);
                       
+
                 }
                 
             }else{
                 queue.push({name:data.name,id:socket.id});
                 console.log(`user ${data.name} standing in the queue of id of ${data.id} `);
-
+                console.log("queue now 🎁")
+                console.log(queue);
             }
            
 
@@ -96,7 +99,16 @@ io.on('connection',(socket)=>{
 
     // ADMIN SOCKET
 
-    socket.on("joinAdminQueue",(data)=>{
+    socket.on("joinAdminQueue",   (data)=>{
+          // تنضيف الاسم
+     
+        if(inChat[socket.id]){
+            console.log("In chat user joing admin")
+            console.log(inChat[socket.id].room)
+        }else{
+            console.log('not in chat user joing admin')
+        }
+
         data.name=escapeHTML(data.name);
         if(!preperingName(data.name)){
 
@@ -104,19 +116,28 @@ io.on('connection',(socket)=>{
        }
 
          if(Object.keys(admins).length>0){
-
-            disconnectUserFromChat(socket);
-
-              for (const [key, admin] of Object.entries(admins)) {
+            //في احتمال يكون بشات او بقائمة الانتظار العادية ! منطلعو منها
+              disconnectUserFromChat(socket)
            
-                 if(admin.status=='free'){
-                     connectTwoUsers(socket,admin,data);
-                     admin.status='busy';
-                       GetUserFromAdminQuere(socket.id);
-                    return false;
-                }  
+                for (const [key, admin] of Object.entries(admins)) {
+           
+                    if(admin.status=='free'){
+                        connectTwoUsers(socket,admin,data);
+                        admin.status='busy';
+                       console.log("ADMIN SPEAKING TO USER")
+           
+                        //حاليا هاد مالو لازمة 
+                       //   GetUserFromAdminQuere(socket.id);
+                        console.log("IN CHAT NOW 🔥 🔥 🔥 🔥 ")
+                        console.log(inChat);
+                       return false;
+                   }  
+   
+                 }
+          
+              
+           
 
-              }
               console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
               queueToAdmin.push({name:data.name,id:socket.id});
 
@@ -132,26 +153,26 @@ io.on('connection',(socket)=>{
 
 
  socket.on("allUsers",()=>{
-    socket.emit('allUsers',Object.entries(inChat));
+    socket.emit('allUsers',{allUsers:Object.entries(inChat),usersOnline:Object.keys(io.sockets.sockets).length});
  })
  
 
-
+  
 
 
 
  socket.on("kick",(data)=>{
-          try{
+    try{
 
-             console.log('kicking user '+data.id)
-             console.log(io.sockets.sockets[data.id].handshake.address)
-             bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-         
-               disconnectUserFromChat(data)
-         }catch(e){
-             console.log("No user to kick")
-         }
-         
+        console.log('kicking user '+data.id)
+        console.log(io.sockets.sockets[data.id].handshake.address)
+        //bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+    
+        disconnectUserFromChat(data)
+    }catch(e){
+        console.log("No user to kick")
+    }
+    
        
 
  })
@@ -167,12 +188,14 @@ io.on('connection',(socket)=>{
 //  DISCONECT SOKCET
 
  socket.on("disconnect",()=>{
-let ChatRoom;
+    console.log("[disconnect] InCHAT  ")
+
+ let ChatRoom;
   try{
       ChatRoom=inChat[socket.id].room;
 
   }catch(e){
- 
+ console.log(e);
   }
  
 
@@ -186,17 +209,19 @@ let ChatRoom;
 }
 
 
-delete inChat[socket.id];
+        delete inChat[socket.id];
          io.of('/').in(ChatRoom).clients(function(error, clients) {
             if (clients.length > 0) {
                 console.log('clients in the room: \n');
                 console.log(clients);
                 clients.forEach(function (socket_id) {
                      
-                    console.log(socket_id+"is leaving the InChat")
+                    console.log(socket_id+" is leaving the InChat")
+ 
+                  if(socket.id!==socket_id){
                     delete inChat[socket_id];
 
-                  
+                  }
             
 
                     io.sockets.sockets[socket_id].leave(ChatRoom);
@@ -218,25 +243,32 @@ delete inChat[socket.id];
 
 
 socket.on('otherPeerDisconected',()=>{
-
+    console.log("otherPeerDisconected is running")
+    console.log(socket.id)
+    console.log(inChat);
     let ChatRoom;
     try{
         ChatRoom=inChat[socket.id].room;
     }catch(e){
           
     }
- 
-  delete inChat[socket.id];
+  
+    
+     delete inChat[socket.id];
 
   io.of('/').in(ChatRoom).clients(function(error, clients) {
      if (clients.length > 0) {
          console.log('clients in the room: \n');
          console.log(clients);
          clients.forEach(function (socket_id) {
-              
-              delete inChat[socket_id];
+            console.log(socket_id + " is leaving the InChat")
+                if(socket.id!==socket_id){
+                    delete inChat[socket_id];
+                }
+                            
+              console.log("[otherPeerDisconected] InCHAT  ")
+            console.log(inChat);
 
-               
              io.sockets.sockets[socket_id].leave(ChatRoom);
          });
      }
@@ -311,38 +343,42 @@ const checkIfBanned=(ip)=>{
         }
 }
 
-const disconnectUserFromChat = (socket)=>{
-    try{
-        let ChatRoom=inChat[socket.id].room;
+const disconnectUserFromChat =     (socket)=>{
+    console.log("[disconnectUserFromChat] is runnging  ")
 
+let ChatRoom;
+    try{
+          ChatRoom=inChat[socket.id].room;
+    }catch(e){
+        console.log(e)
+}
+  delete inChat[socket.id];
   
-        delete inChat[socket.id];
+  
       
         io.of('/').in(ChatRoom).clients(function(error, clients) {
            if (clients.length > 0) {
                console.log('clients in the room: \n');
                console.log(clients);
-               clients.forEach(function (socket_id) {
-                    
-                    delete inChat[socket_id];
+                clients.forEach(function (socket_id) {
+                    console.log(socket_id+" user is leaving the chat");
+                    if(socket.id!==socket_id){
+                        delete inChat[socket_id];
+                    }
        
                    io.sockets.sockets[socket_id].leave(ChatRoom);
+                   console.log("[disconnectUserFromChat] InCHAT  ")
+                   console.log(inChat);
+       
                });
            }
        });
       
-       io.to(ChatRoom).emit("getOut");
-      
-       
-        GetUserFromQuere(socket.id);
-        GetUserFromAdminQuere(socket.id);
-        console.log('the queie now is')
-        console.log(queue);
-    }catch(e){
-            console.log(e)
-    }
+         io.to(ChatRoom).emit("getOut");
 
-
+          GetUserFromQuere(socket.id);
+          GetUserFromAdminQuere(socket.id);
+  
 }
 
 
@@ -352,7 +388,9 @@ const  GetUserFromQuere=(SocketId)=>{
     queue.forEach((Element,i) =>{
         if(Element.id==SocketId){
             queue.splice(i,1);
-            console.log(Element.name+" has left");
+             
+            console.log("the queue now is: 😍")
+            console.log(queue);
         }
     })
 }
@@ -363,7 +401,9 @@ const  GetUserFromAdminQuere=(SocketId)=>{
     queueToAdmin.forEach((Element,i) =>{
         if(Element.id==SocketId){
             queueToAdmin.splice(i,1);
-            console.log(Element.name+" has left");
+         
+            console.log("the ADMIN queue now is: 🔥")
+            console.log(queueToAdmin);
         }
     })
 }
@@ -434,13 +474,23 @@ const escapeHTML =(msg) =>{
  }
 
  const connectTwoUsers=(firstUser,secondUser,data)=>{
+
+
+    // if(inChat[firstUser.id]||inChat[secondUser.id]){
+    //     return false;
+    // }
+
      if(firstUser.id!==secondUser.id){
+  
         io.to(firstUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:secondUser.name});
         io.to(secondUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:data.name});
         inChat[firstUser.id] = {room:secondUser.id+firstUser.id,name:data.name};
         inChat[secondUser.id] = {room:secondUser.id+firstUser.id,name:secondUser.name};
-    
-       GetUserFromQuere(secondUser.id);
+    //مؤقتا شلناه
+    //    GetUserFromQuere(secondUser.id);
+
+        
+        
      }
 
 }

@@ -125,10 +125,11 @@ a.noStyleAtag{
 <section id="index_section" class="tg"  style="min-height: calc(100% - 170px);"  >
 	
 	        <div class="container">
-			
+					<h2 class="text-center">users online (almost) <span id="online" class="badge bg-success text-white" ></span></h2>
 				<table   class="table table-striped">
 					<thead>
 					  <tr>
+						<th>#</th>
 						<th>#</th>
 						<th>name</th>
 						<th>option</th>
@@ -253,16 +254,14 @@ a.noStyleAtag{
        
 
 	   
-       socket.on("allUsers",(users)=>{
-        console.log('users');
-        console.log(users)
-          
-		users.forEach(element => {
+       socket.on("allUsers",(data)=>{
+            $("#online").html(data.usersOnline);
+			data.allUsers.forEach(element => {
 	 
 			console.log(element[1].name)
 	 
 
-			$(".allUsers").append(`<tr> <td>#</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>kick</button></td> </tr>`)
+			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>#</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
 
 
 		});
@@ -278,7 +277,8 @@ a.noStyleAtag{
 		});
 
 function kickUser(user){
- 	socket.emit("kick",{id:user});
+	 socket.emit("kick",{id:user});
+	 $(`#${user}`).remove();
 }
 
  			let sendFile = document.querySelector("input#sendFile");

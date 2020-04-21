@@ -163,16 +163,10 @@ let badwords = ['Asba',
 										$("#chat_component").html('');
 										$("#userTyping").hide();
 
-								//		console.log('start again');
-										// rtcPeerConn.close();
-										// dataChannel.close();
-										// rtcPeerConn=null;
-										// dataChannel=null;
+							 
 										stranger_name=null;
 										disconnectingWebRTC();
-
-									//	console.log(name);
-									//	console.log(socket.id);
+ 
 										socket.emit("otherPeerDisconected");
 										room='';
 										socket.emit("queue",{name:name,id:socket.id});

@@ -238,7 +238,7 @@ a.noStyleAtag{
 			<div  class="col-6 text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
 				 
 			<div class="col-6 text-right"><a href="#" class="" >  
-                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;cursor:default"> <span  class="badge bg-secondary ">Admin is online</span>  </a>
+                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;cursor:default"> <span  class="badge bg-secondary ">Admin is offline</span>  </a>
                 <a class="btn primary next"> <i class="fas fa-arrow-circle-right text-light  p-1" ></i> </a> 
             </div>
 
@@ -408,20 +408,42 @@ a.noStyleAtag{
     $("#chatWithAdmin").click(function(){
 		if(adminOnline){
 			var chatWithAdmin = confirm("do you want to chat with the admin?");
-		if(chatWithAdmin){
-			socket.emit("joinAdminQueue",{name:name});
-			$("#connection_message").html("you are standing on the line to chat with the admin, please wait");
+			if(chatWithAdmin){
+				$("#connection_message").html("you are standing on the line to chat with the admin, please wait");
+				$(".tryAgain").hide();
+				$("#chat_component").html('');
+				$("#userTyping").hide();
+
+
+				disconnectingWebRTC();
+				stranger_name=null;
+				room='';
+				setSendMessageToDisable();
+				setSendFileToDisable();
+				socket.emit("joinAdminQueue",{name:name});
+
 		}
+
 		}
 	
 	 })
 	 
+	 socket.on('adminStatus',(data)=>{
+		 if(data>0){
+			$(".badge").removeClass("bg-secondary").addClass("bg-success").html('Admin is online').parent().css("cursor",'pointer');
+			adminOnline=true;
+		 }else{
+			$(".badge").removeClass("bg-success").addClass("bg-secondary").html('Admin is offline').parent().css("cursor",'default');
+			adminOnline=false;
+		 }
+	 })
+
 	 socket.on("adminJoin",()=>{
-			$(".badge").removeClass("bg-secondary").addClass("bg-success").parent().css("cursor",'pointer');
+			$(".badge").removeClass("bg-secondary").addClass("bg-success").html('Admin is online').parent().css("cursor",'pointer');
 			adminOnline=true;
 	 });
 	 socket.on("adminOut",()=>{
-			$(".badge").removeClass("bg-success").addClass("bg-secondary").parent().css("cursor",'default');
+			$(".badge").removeClass("bg-success").addClass("bg-secondary").html('Admin is offline').parent().css("cursor",'default');
 			adminOnline=false;
 	 });
 	 
