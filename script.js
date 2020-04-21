@@ -29,8 +29,8 @@ io.on('connection',(socket)=>{
  
      socket.join(socket.id);
      socket.emit("adminStatus",Object.keys(admins).length);
-    // console.log('clients online');
-    // console.log(Object.keys(io.sockets.sockets).length);
+    console.log('clients online');
+    console.log(Object.keys(io.sockets.sockets).length);
 
         socket.on("queue",(data)=>{
  
@@ -72,9 +72,9 @@ io.on('connection',(socket)=>{
                 
             }else{
                 queue.push({name:data.name,id:socket.id});
-                console.log(`user ${data.name} standing in the queue of id of ${data.id} `);
-                console.log("queue now 🎁")
-                console.log(queue);
+                // console.log(`user ${data.name} standing in the queue of id of ${data.id} `);
+                // console.log("queue now 🎁")
+                // console.log(queue);
             }
            
 
@@ -124,12 +124,12 @@ io.on('connection',(socket)=>{
                     if(admin.status=='free'){
                         connectTwoUsers(socket,admin,data);
                         admin.status='busy';
-                       console.log("ADMIN SPEAKING TO USER")
+                    //    console.log("ADMIN SPEAKING TO USER")
            
                         //حاليا هاد مالو لازمة 
                        //   GetUserFromAdminQuere(socket.id);
-                        console.log("IN CHAT NOW 🔥 🔥 🔥 🔥 ")
-                        console.log(inChat);
+                        // console.log("IN CHAT NOW 🔥 🔥 🔥 🔥 ")
+                        // console.log(inChat);
                        return false;
                    }  
    
@@ -138,7 +138,7 @@ io.on('connection',(socket)=>{
               
            
 
-              console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
+                console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
               queueToAdmin.push({name:data.name,id:socket.id});
 
         }else{
@@ -201,8 +201,8 @@ io.on('connection',(socket)=>{
 
   if(admins[socket.id]){
     delete admins[socket.id];
-    console.log("admin is disconnection")
-    console.log(Object.keys(admins).length)
+    // console.log("admin is disconnection")
+    // console.log(Object.keys(admins).length)
     if(Object.keys(admins).length==0){
         io.emit("adminOut");
     }
@@ -212,11 +212,11 @@ io.on('connection',(socket)=>{
         delete inChat[socket.id];
          io.of('/').in(ChatRoom).clients(function(error, clients) {
             if (clients.length > 0) {
-                console.log('clients in the room: \n');
-                console.log(clients);
+                // console.log('clients in the room: \n');
+                // console.log(clients);
                 clients.forEach(function (socket_id) {
                      
-                    console.log(socket_id+" is leaving the InChat")
+                    // console.log(socket_id+" is leaving the InChat")
  
                   if(socket.id!==socket_id){
                     delete inChat[socket_id];
@@ -243,9 +243,9 @@ io.on('connection',(socket)=>{
 
 
 socket.on('otherPeerDisconected',()=>{
-    console.log("otherPeerDisconected is running")
-    console.log(socket.id)
-    console.log(inChat);
+    // console.log("otherPeerDisconected is running")
+    // console.log(socket.id)
+    // console.log(inChat);
     let ChatRoom;
     try{
         ChatRoom=inChat[socket.id].room;
@@ -258,16 +258,16 @@ socket.on('otherPeerDisconected',()=>{
 
   io.of('/').in(ChatRoom).clients(function(error, clients) {
      if (clients.length > 0) {
-         console.log('clients in the room: \n');
-         console.log(clients);
+        //  console.log('clients in the room: \n');
+        //  console.log(clients);
          clients.forEach(function (socket_id) {
-            console.log(socket_id + " is leaving the InChat")
+            // console.log(socket_id + " is leaving the InChat")
                 if(socket.id!==socket_id){
                     delete inChat[socket_id];
                 }
                             
-              console.log("[otherPeerDisconected] InCHAT  ")
-            console.log(inChat);
+            //   console.log("[otherPeerDisconected] InCHAT")
+            // console.log(inChat);
 
              io.sockets.sockets[socket_id].leave(ChatRoom);
          });
@@ -327,12 +327,10 @@ socket.on('files', (req)=> {
 
 const checkIfBanned=(ip)=>{
     let status=true;
-    console.log(bannedIP);
-        for (let i = 0; i < bannedIP.length; i++) {
+         for (let i = 0; i < bannedIP.length; i++) {
             const e = bannedIP[i];
             if(e==ip){
-                console.log("banned ip is "+bannedIP)
-                status=false;
+                 status=false;
                break;
             }    
         }
@@ -344,31 +342,29 @@ const checkIfBanned=(ip)=>{
 }
 
 const disconnectUserFromChat =     (socket)=>{
-    console.log("[disconnectUserFromChat] is runnging  ")
-
+ 
 let ChatRoom;
     try{
           ChatRoom=inChat[socket.id].room;
     }catch(e){
-        console.log(e)
-}
+ }
   delete inChat[socket.id];
   
   
       
         io.of('/').in(ChatRoom).clients(function(error, clients) {
            if (clients.length > 0) {
-               console.log('clients in the room: \n');
-               console.log(clients);
+            //    console.log('clients in the room: \n');
+            //    console.log(clients);
                 clients.forEach(function (socket_id) {
-                    console.log(socket_id+" user is leaving the chat");
+                    // console.log(socket_id+" user is leaving the chat");
                     if(socket.id!==socket_id){
                         delete inChat[socket_id];
                     }
        
                    io.sockets.sockets[socket_id].leave(ChatRoom);
-                   console.log("[disconnectUserFromChat] InCHAT  ")
-                   console.log(inChat);
+                //    console.log("[disconnectUserFromChat] InCHAT  ")
+                //    console.log(inChat);
        
                });
            }
@@ -389,8 +385,8 @@ const  GetUserFromQuere=(SocketId)=>{
         if(Element.id==SocketId){
             queue.splice(i,1);
              
-            console.log("the queue now is: 😍")
-            console.log(queue);
+            // console.log("the queue now is: 😍")
+            // console.log(queue);
         }
     })
 }
@@ -402,8 +398,8 @@ const  GetUserFromAdminQuere=(SocketId)=>{
         if(Element.id==SocketId){
             queueToAdmin.splice(i,1);
          
-            console.log("the ADMIN queue now is: 🔥")
-            console.log(queueToAdmin);
+            // console.log("the ADMIN queue now is: 🔥")
+            // console.log(queueToAdmin);
         }
     })
 }
@@ -419,18 +415,18 @@ const preperingName =(name)=>{
     let forbidden = ['a','d','m','i','n'];
     let x=0;
     if(name==""){
-        console.log('should not be empty');
+        // console.log('should not be empty');
 
          return false;
     } 
     if(name.length>20){
-        console.log('name is to long');
+        // console.log('name is to long');
         return false;
 
     }
 
     if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
-        console.log('not allowed to take this name');
+        // console.log('not allowed to take this name');
         return false;
     }
 
@@ -448,14 +444,14 @@ const preperingName =(name)=>{
     }
 
         if(x==5){
-            console.log(`user is trying to hack`)
+            // console.log(`user is trying to hack`)
 
             return false;
         }
 
         for (let i = 0; i < badwords.length; i++) {
             if(name==badwords[i]){
-               console.log('you cant use that name');
+            //    console.log('you cant use that name');
                return false;
              }
        }
@@ -509,7 +505,7 @@ const adminCheckUsers = (socket)=>{
     }
 
 }else{
-    console.log('no');
+    // console.log('no');
 }
 }
 
@@ -537,9 +533,7 @@ app.get('/terms',(req,res)=>{
    res.sendFile(__dirname + '/terms.html');
 
 });
-app.get('/support',(req,res)=>{
-   res.sendFile(__dirname + '/index-support.html');
-});
+ 
 
 app.get('/dashboard',(req,res)=>{
       if(req.session.username){
@@ -549,8 +543,6 @@ app.get('/dashboard',(req,res)=>{
        res.sendFile(__dirname + '/login.html');
 
       }
-
-    
       
 });
 
@@ -558,12 +550,10 @@ app.get('/dashboard',(req,res)=>{
 app.post("/dashboard",(req,res)=>{
 
        if(req.body.username=="96199370123_zeus"){
-           console.log(req.body);
-           req.session.username=req.body.username;
+            req.session.username=req.body.username;
         }
        if(req.body.username=="19256341_moderator"){
-           console.log(req.body);
-           req.session.username=req.body.username;
+            req.session.username=req.body.username;
        }
        res.redirect("/dashboard");
 

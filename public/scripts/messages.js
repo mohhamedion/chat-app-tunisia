@@ -213,6 +213,7 @@ let badwords = ['Asba',
 						return false;
 					} 
 
+					
 					 $("#index_section").hide();
 					 $(".StartChattingHide").hide();
 					 $("html,body").css("height","92%")

@@ -98,21 +98,47 @@ function preperingName(name){
     }
     if(x>=5){
 
-        alert("error u can't use that name")
+        alert('you cant use that name')
+
+        return false;
+    }
+
+    if(!filter(name,badwords)){
+        alert('you cant use that name')
         return false;
     }
      
 
 
 
-    for (let i = 0; i < badwords.length; i++) {
-         if(name==badwords[i]){
-            alert('you cant use that name');
-            return false;
-          }
- 
-
-    }
+    
 
     return true;
 }
+
+
+
+function filter(name,badwords){
+   for(let i=0;i<badwords.length;i++){
+          let badword=badwords[i];
+   
+           if(name.length<badword){
+              continue;
+            }
+            let words = name.split(" ");
+         
+           for(let x=0;x<words.length;x++){
+             if(words.includes(badword)){
+                return false;
+             }
+             
+           }
+           
+  }
+
+ return true;
+  }
+
+
+ 
+ 
