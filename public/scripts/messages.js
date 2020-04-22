@@ -41,7 +41,8 @@ let badwords = ['Asba',
 'Ass',
 'Miboun',
 'Tahan',
-'Ta7an'
+'Ta7an',
+
 ];
 		socket.on("connected",()=>{
 		//console.log("both are connected");
@@ -199,9 +200,10 @@ let badwords = ['Asba',
 
  			 
 		})
-		socket.on("ban",()=>{
-			
-			location.reload(true);
+		socket.on("ban",(data)=>{
+			alert(data.msg);
+
+			location.replace('/not-allowed');
 			 
 		})
 

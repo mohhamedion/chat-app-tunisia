@@ -266,11 +266,10 @@ a.noStyleAtag{
 		let i=1;
             $("#online").html(data.usersOnline);
 			data.allUsers.forEach(element => {
-	 
-			console.log(element[1].name)
-	 
+				console.log(element)
+ 			 
 
-			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>${i}</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
+			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>${i}</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
 			i++;
 
 		});
@@ -285,9 +284,9 @@ a.noStyleAtag{
 
 		});
 
-function kickUser(user){
-	 socket.emit("kick",{id:user});
-	 $(`#${user}`).remove();
+function kickUser(id,name){
+	 socket.emit("kick",{id:id,name:name});
+	 $(`#${id}`).remove();
 }
 
  			let sendFile = document.querySelector("input#sendFile");

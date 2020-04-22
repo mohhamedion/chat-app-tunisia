@@ -39,15 +39,16 @@ console.log(Object.keys(io.sockets.sockets).length);
 
         socket.on("queue",(data)=>{
  
-            if(!checkIfBanned(io.sockets.sockets[socket.id].handshake.address)){
-                console.log('user trying to connect');
-                console.log('STOP');
-                socket.emit('alert',{msg:"you are banned from chat"});
-                 return;
-            }
+            // if(!checkIfBanned(io.sockets.sockets[socket.id].handshake.address)){
+            //     console.log('user trying to connect');
+            //     console.log('STOP');
+            //     socket.emit('alert',{msg:"you are banned from chat"});
+            //      return;
+            // }
  
             data.name=escapeHTML(data.name);
                  if(!preperingName(data.name)){
+                     socket.emit('ban',{msg:"please change your name"});
                     return false;
                 }
 
@@ -178,10 +179,14 @@ console.log(Object.keys(io.sockets.sockets).length);
 
         console.log('kicking user '+data.id)
         console.log(io.sockets.sockets[data.id].handshake.address)
-        bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-        io.to(data.id).emit('ban');
-        disconnectUserFromChat(data)
+        // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+       // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
         
+        io.to(data.id).emit('ban',{msg:"please change your name"});                     
+
+        disconnectUserFromChat(data)
+         badwords.push(data.name);
+         console.log(badwords)
         if(allUsers[data.id]){
             delete allUsers[data.id];
         }
@@ -352,21 +357,21 @@ socket.on('files', (req)=> {
 
 //FUNCTIONS
 
-const checkIfBanned=(ip)=>{
-    let status=true;
-         for (let i = 0; i < bannedIP.length; i++) {
-            const e = bannedIP[i];
-            if(e==ip){
-                 status=false;
-               break;
-            }    
-        }
-        if(status){
-            return true;
-        }else{
-            return false;
-        }
-}
+// const checkIfBanned=(ip)=>{
+//     let status=true;
+//          for (let i = 0; i < bannedIP.length; i++) {
+//             const e = bannedIP[i];
+//             if(e==ip){
+//                  status=false;
+//                break;
+//             }    
+//         }
+//         if(status){
+//             return true;
+//         }else{
+//             return false;
+//         }
+// }
 
 const disconnectUserFromChat = (socket)=>{
  
@@ -487,12 +492,36 @@ const preperingName =(name)=>{
             return false;
         }
 
-        for (let i = 0; i < badwords.length; i++) {
-            if(name==badwords[i]){
-            //    console.log('you cant use that name');
-               return false;
+
+
+        // for (let i = 0; i < badwords.length; i++) {
+        //     if(name==badwords[i]){
+        //       console.log('you cant use that name');
+        //        return false;
+        //      }
+
+        // }
+
+
+
+        for(let i=0;i<badwords.length;i++){
+            let badword=badwords[i];
+     
+             if(name.length<badword){
+                continue;
+              }
+              let words = name.split(" ");
+           
+             for(let x=0;x<words.length;x++){
+               if(words.includes(badword)){
+                  return false;
+               }
+               
              }
-       }
+             
+    }
+
+
 
        return true;
 }
@@ -556,16 +585,23 @@ const adminCheckUsers = (socket)=>{
 
 app.get('/',(req,res)=>{
 
-if(checkIfBanned(req.connection.remoteAddress)){
     res.sendFile(__dirname + '/index-support.html');
+// if(checkIfBanned(req.connection.remoteAddress)){
+    
 
-}else{
-    res.sendFile(__dirname + '/not-allowed.html');
+// }else{
+//     res.sendFile(__dirname + '/not-allowed.html');
 
-}
+// }
 
 });
 
+app.get('/not-allowed',(req,res)=>{
+
+     res.sendFile(__dirname + '/not-allowed.html');
+ 
+
+});
 
 
 app.get('/terms',(req,res)=>{
