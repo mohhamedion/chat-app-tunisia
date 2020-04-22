@@ -119,6 +119,7 @@ function preperingName(name){
 
 
 function filter(name,badwords){
+    name=name.toLowerCase();
    for(let i=0;i<badwords.length;i++){
           let badword=badwords[i];
    
