@@ -457,6 +457,7 @@ const  GetUserFromAdminQuere=(SocketId)=>{
 const preperingName =(name)=>{
     let forbidden = ['a','d','m','i','n'];
     let x=0;
+    name = name.toLowerCase();
     if(name==""){
         // console.log('should not be empty');
 
