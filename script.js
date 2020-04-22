@@ -506,7 +506,7 @@ const preperingName =(name)=>{
 
         for(let i=0;i<badwords.length;i++){
             let badword=badwords[i];
-     
+            badword = badword.toLowerCase();
              if(name.length<badword){
                 continue;
               }
