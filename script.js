@@ -8,15 +8,26 @@ const socketSession = require('express-socket.io-session');
 const server = app.listen(port,()=>{
     console.log('working on '+port)
 })
+// var Filter = require('bad-words');
+
 const io = require("socket.io")(server);
 let queueToAdmin=[];
 let queue = [];
 let inChat = [];
 let admins = [];
 var bannedIP = [];
-let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner'];
+let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex'];
 let allUsers = [];
 
+// filter = new Filter("fuck you porn nude Star");
+
+// console.log(true,filter)
+// if(filter.clean("asdasd")){
+//     console.log('Err')
+// }else{
+//     console.log('no prob')
+// }
+ 
 app.use(express.static(path.join(__dirname+'/public')));
 app.use(session({secret: 'ssshhhhh'}));
 app.use(bodyParser.json());      
