@@ -20,7 +20,29 @@ let badwords = ['Asba',
 'زك',
 'نيك',
 'ترمة',
-'الله'];
+'الله',
+'نشيخك',
+'واحد',
+'نعملك' ,
+'موقف' ,
+'ساكس' ,
+'ميبون',
+'طحان',
+'Owner',
+'Sex',
+'Nchaykhek',
+'We7ed',
+'Zabour',
+'Mwagef',
+'Rose' ,
+'Pussy',
+'Boobs',
+'Tits',
+'Ass',
+'Miboun',
+'Tahan',
+'Ta7an'
+];
 		socket.on("connected",()=>{
 		//console.log("both are connected");
 		$("#chat_component").html("");
@@ -63,11 +85,27 @@ let badwords = ['Asba',
 			$("#messageContent").on("input",function(){
 
 				 if(keyUp){
-				//	console.log('typing')
+				 console.log('typing')
+
 					socket.emit("typing",{room:room});
 					keyUp=false;
 				 }
 			})
+
+		 
+			$('#messageContent').keyup(function(){
+			
+				if(!keyUp){
+					if($(this).val().length==0){
+						console.log("stop typing")
+						socket.emit("stopTyping",{room:room});
+						keyUp=true;
+					}
+				}
+				
+
+		 });
+		 
 
 			$("#sendMessage").click(function(){
 				if($("#messageContent").val()!==""){
@@ -105,7 +143,7 @@ let badwords = ['Asba',
 
 		socket.on("getOut",(data)=>{
 			$(".tryAgain").show();
-
+			$("#userTyping").hide();
 			setSendFileToDisable();
 			setSendMessageToDisable();
 		 
@@ -141,17 +179,26 @@ let badwords = ['Asba',
 
 		})
 
+
+
+
+
 		socket.on("typing",()=>{
 			
 			$("#userTyping").show();
-			$("#userTyping").delay(3000).hide(0);
+			// $("#userTyping").delay(3000).hide(0);
 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
 
-		//	 console.log('he is typing');
-			 
+ 			 
 		})
 
-		 
+		socket.on("stopTyping",()=>{
+			
+			$("#userTyping").hide();
+ 			$('#chat_component_p').scrollTop($('#chat_component_p')[0].scrollHeight);
+
+ 			 
+		})
 		socket.on("ban",()=>{
 			
 			location.reload(true);

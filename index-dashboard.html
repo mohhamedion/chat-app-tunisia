@@ -14,7 +14,9 @@
 
 	<!-- FONT AWESOME -->
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-
+	<link rel="icon" 
+	type="image/png" 
+	href="/favicon.ico" />
 	<style type="text/css">
 	html, body
 {
@@ -126,6 +128,7 @@ a.noStyleAtag{
 	
 	        <div class="container">
 					<h2 class="text-center">users online (almost) <span id="online" class="badge bg-success text-white" ></span></h2>
+					<button id="refresh" type="button" class="btn btn-success"> <i class="fas fa-sync"></i></button>
 				<table   class="table table-striped">
 					<thead>
 					  <tr>
@@ -248,21 +251,27 @@ a.noStyleAtag{
             socket.emit("allUsers");
 
 
+	 $("#refresh").click(function(){
+		 $(".allUsers").html('');
+		 socket.emit("allUsers");
 
+	  })
+	   
 
        });
        
 
-	   
+
        socket.on("allUsers",(data)=>{
+		let i=1;
             $("#online").html(data.usersOnline);
 			data.allUsers.forEach(element => {
 	 
 			console.log(element[1].name)
 	 
 
-			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>#</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
-
+			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>${i}</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
+			i++;
 
 		});
  
