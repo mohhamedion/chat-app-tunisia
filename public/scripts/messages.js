@@ -200,12 +200,11 @@ let badwords = ['Asba',
 
  			 
 		})
-		socket.on("ban",(data)=>{
-			alert(data.msg)
 
-			location.replace('/not-allowed');
-			 
-		})
+		socket.on("alert",(data)=>{
+			alert(data.msg)
+		});
+
 
 		$(".next").click(function(){
 			if(stranger_name!=null){

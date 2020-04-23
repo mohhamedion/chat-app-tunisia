@@ -448,8 +448,22 @@ a.noStyleAtag{
 			adminOnline=false;
 	 });
 	 
+	 socket.on("ban",(data)=>{
 
-	 socket.on("alert",(data)=>{
-			 	alert(data.msg)
-	 });
+		banning(data.msg,()=>{location.replace('/not-allowed')})
+ 
+ 
+	})
+
+
+function banning(msg,callback){
+ 
+alert(msg)
+if(typeof callback=="function"){
+	
+	callback().delay(1000);
+}
+}
+
+	 
 </script>

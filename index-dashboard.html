@@ -134,7 +134,8 @@ a.noStyleAtag{
 					  <tr>
 						<th>#</th>
 						<th>#</th>
-						<th>name</th>
+						<th>name</th>	
+						<th>message</th>
 						<th>option</th>
 					  </tr>
 					</thead>
@@ -252,7 +253,7 @@ a.noStyleAtag{
 
 
 	 $("#refresh").click(function(){
-		 $(".allUsers").html('');
+		//  $(".allUsers").html('');
 		 socket.emit("allUsers");
 
 	  })
@@ -264,12 +265,20 @@ a.noStyleAtag{
 
        socket.on("allUsers",(data)=>{
 		let i=1;
+		$(".allUsers").html('');
             $("#online").html(data.usersOnline);
 			data.allUsers.forEach(element => {
 				console.log(element)
  			 
 
-			$(".allUsers").append(`<tr id='${element[0]}' > <td>#</td><td>${i}</td> <td>${element[1].name}</td> <td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>ban</button></td> </tr>`)
+			$(".allUsers").append(`
+			<tr id='${element[0]}' > 
+				<td>#</td><td>${i}</td> 
+				<td>${element[1].name}</td> 
+				<td><input id='${element[0]}_input' type='text'></td> 
+				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>ban</button></td> 
+				</tr>
+			`)
 			i++;
 
 		});
@@ -285,7 +294,9 @@ a.noStyleAtag{
 		});
 
 function kickUser(id,name){
-	 socket.emit("kick",{id:id,name:name});
+	let msg = $(`#${id}_input`).val();
+	console.log(msg);
+	 socket.emit("kick",{id:id,name:name,msg:msg});
 	 $(`#${id}`).remove();
 }
 

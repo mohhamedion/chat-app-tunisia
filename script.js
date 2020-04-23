@@ -187,13 +187,15 @@ console.log(Object.keys(io.sockets.sockets).length);
 
  socket.on("kick",(data)=>{
     try{
+    let msg;
 
-        console.log('kicking user '+data.id)
-        console.log(io.sockets.sockets[data.id].handshake.address)
-        // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-       // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-        
-        io.to(data.id).emit('ban',{msg:"please change your name"});                     
+    if(data.msg.length>0){
+        msg = data.msg;
+    }else{
+        msg ="please change your name" ;
+    }
+ 
+       io.to(data.id).emit('ban',{msg:msg});                     
 
         disconnectUserFromChat(data)
          badwords.push(data.name);
@@ -205,8 +207,11 @@ console.log(Object.keys(io.sockets.sockets).length);
         console.log("No user to kick")
         console.log(e);
     }
-    
-       
+     
+           // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+          // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+         //    io.to(data.id).emit('alert',{msg:"please change your name"});                     
+
 
  })
  
