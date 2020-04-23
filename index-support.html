@@ -224,6 +224,29 @@ a.noStyleAtag{
 
 
 
+	  <!-- Modal -->
+	  <div class="modal fade msgFromAdmin " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content " style="width: 97%;">
+			<div class="modal-header primary">
+			  <h5 class="modal-title" id="exampleModalLabel">Message from Admin</h5>
+			  <button type="button" class="close closeMessageFromAdmin" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body ">
+				<p id="messageFromAdmin"></p>
+				<button class="btn btn-danger closeMessageFromAdmin" data-dismiss="modal">Ok</button>
+
+			</div>
+			<div class="modal-footer">
+			  <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+ 			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <!-- MODAL -->
 
 
 
@@ -449,21 +472,26 @@ a.noStyleAtag{
 	 });
 	 
 	 socket.on("ban",(data)=>{
+		  let msg = data.msg;
+ 
+			$(".msgFromAdmin").modal()
+			$("#messageFromAdmin").html(msg);
 
-		banning(data.msg,()=>{location.replace('/not-allowed')})
+			$(".closeMessageFromAdmin").click(function(){
+						 	window.location.href='/not-allowed';
+
+			})
  
  
 	})
 
-
-function banning(msg,callback){
+	socket.on("alert",(data)=>{
+		let msg = data.msg;
  
-alert(msg)
-if(typeof callback=="function"){
-	
-	callback().delay(1000);
-}
-}
+		$(".msgFromAdmin").modal()
+		$("#messageFromAdmin").html(msg);
+
+		});
 
 	 
 </script>

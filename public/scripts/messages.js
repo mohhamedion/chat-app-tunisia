@@ -201,9 +201,6 @@ let badwords = ['Asba',
  			 
 		})
 
-		socket.on("alert",(data)=>{
-			alert(data.msg)
-		});
 
 
 		$(".next").click(function(){

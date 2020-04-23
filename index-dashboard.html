@@ -275,7 +275,10 @@ a.noStyleAtag{
 			<tr id='${element[0]}' > 
 				<td>#</td><td>${i}</td> 
 				<td>${element[1].name}</td> 
-				<td><input id='${element[0]}_input' type='text'></td> 
+				<td>
+					<input id='${element[0]}_input' type='text'>
+					 <button onClick="sendAlert('${element[0]}')" type='button' class='btn btn-success'><i class="fas fa-envelope"></i></button> 
+ 				</td> 
 				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>ban</button></td> 
 				</tr>
 			`)
@@ -293,12 +296,21 @@ a.noStyleAtag{
 
 		});
 
-function kickUser(id,name){
-	let msg = $(`#${id}_input`).val();
-	console.log(msg);
-	 socket.emit("kick",{id:id,name:name,msg:msg});
-	 $(`#${id}`).remove();
-}
+		function kickUser(id,name){
+			let msg = $(`#${id}_input`).val();
+			console.log(msg);
+			socket.emit("kick",{id:id,name:name,msg:msg});
+			$(`#${id}`).remove();
+		}
+
+
+		function sendAlert(id){
+			let msg = $(`#${id}_input`).val();
+			socket.emit("alertFromAdministration",{id:id,msg:msg});
+			$(`#${id}_input`).val('');
+		}
+
+
 
  			let sendFile = document.querySelector("input#sendFile");
 			let fileProgress = document.querySelector("progress#fileProgress");

@@ -16,7 +16,7 @@ let queue = [];
 let inChat = [];
 let admins = [];
 var bannedIP = [];
-let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex'];
+let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck'];
 let allUsers = [];
 
 // filter = new Filter("fuck you porn nude Star");
@@ -217,7 +217,11 @@ console.log(Object.keys(io.sockets.sockets).length);
  
 
 
+socket.on("alertFromAdministration",(data)=>{
 
+    io.to(data.id).emit('alert',{msg:data.msg});                     
+
+})
 
 
 
