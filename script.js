@@ -19,22 +19,14 @@ var bannedIP = [];
 let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck','horny'];
 let allUsers = [];
 
-// filter = new Filter("fuck you porn nude Star");
-
-// console.log(true,filter)
-// if(filter.clean("asdasd")){
-//     console.log('Err')
-// }else{
-//     console.log('no prob')
-// }
+ 
  
 app.use(express.static(path.join(__dirname+'/public')));
 app.use(session({secret: 'ssshhhhh'}));
 app.use(bodyParser.json());      
 app.use(bodyParser.urlencoded({extended: true}));
  
-// const {checkIfBanned} = require(__dirname+'/public/back-functions/functions.js');
-
+ 
 io.on('connection',(socket)=>{
 //joining my own socket id room
 socket.join(socket.id);
@@ -49,13 +41,13 @@ console.log(Object.keys(io.sockets.sockets).length);
 
 
         socket.on("queue",(data)=>{
- 
-            // if(!checkIfBanned(io.sockets.sockets[socket.id].handshake.address)){
-            //     console.log('user trying to connect');
-            //     console.log('STOP');
-            //     socket.emit('alert',{msg:"you are banned from chat"});
-            //      return;
-            // }
+           // console.log(data.cookie);
+            if(!checkIfBanned(data.cookie)){
+                console.log('user trying to connect');
+                console.log('STOP');
+                socket.emit('ban',{msg:"you are banned from chat"});
+                 return;
+            }
  
             data.name=escapeHTML(data.name);
                  if(!preperingName(data.name)){
@@ -83,7 +75,7 @@ console.log(Object.keys(io.sockets.sockets).length);
             ///add user 
 
             if(!allUsers[socket.id]){
-                allUsers[socket.id] = {name:data.name};
+                allUsers[socket.id] = {name:data.name,cookie:data.cookie};
 
             }
 
@@ -196,7 +188,10 @@ console.log(Object.keys(io.sockets.sockets).length);
     }
  
        io.to(data.id).emit('ban',{msg:msg});                     
-
+       if(data.ban){
+           console.log('will be banned forever');
+        bannedIP.push(allUsers[data.id].cookie);
+        }
         disconnectUserFromChat(data)
          badwords.push(data.name);
          console.log(badwords)
@@ -207,8 +202,8 @@ console.log(Object.keys(io.sockets.sockets).length);
         console.log("No user to kick")
         console.log(e);
     }
+  
      
-           // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
           // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
          //    io.to(data.id).emit('alert',{msg:"please change your name"});                     
 
@@ -377,21 +372,21 @@ socket.on('files', (req)=> {
 
 //FUNCTIONS
 
-// const checkIfBanned=(ip)=>{
-//     let status=true;
-//          for (let i = 0; i < bannedIP.length; i++) {
-//             const e = bannedIP[i];
-//             if(e==ip){
-//                  status=false;
-//                break;
-//             }    
-//         }
-//         if(status){
-//             return true;
-//         }else{
-//             return false;
-//         }
-// }
+const checkIfBanned=(ip)=>{
+    let status=true;
+         for (let i = 0; i < bannedIP.length; i++) {
+            const e = bannedIP[i];
+            if(e==ip){
+                 status=false;
+               break;
+            }    
+        }
+        if(status){
+            return true;
+        }else{
+            return false;
+        }
+}
 
 const disconnectUserFromChat = (socket)=>{
  

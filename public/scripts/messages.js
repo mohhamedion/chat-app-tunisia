@@ -264,7 +264,7 @@ let badwords = ['Asba',
 					 $("html,body").css("height","92%")
 					$("#chat_section").animate({width:'toggle'},500);
 
-					socket.emit("queue",{name:name,id:socket.id});
+					socket.emit("queue",{name:name,id:socket.id,cookie:localStorage.getItem("MyId")});
 			 
 
 				

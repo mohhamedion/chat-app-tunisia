@@ -136,7 +136,8 @@ a.noStyleAtag{
 						<th>#</th>
 						<th>name</th>	
 						<th>message</th>
-						<th>option</th>
+						<th>kick</th>
+						<th>ban</th>
 					  </tr>
 					</thead>
 					<tbody class="allUsers">
@@ -281,7 +282,8 @@ a.noStyleAtag{
 					<input id='${element[0]}_input' type='text'>
 					 <button onClick="sendAlert('${element[0]}')" type='button' class='btn btn-success'><i class="fas fa-envelope"></i></button> 
  				</td> 
-				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>ban</button></td> 
+				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>kick</button></td> 
+				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}',true)" type='button' class='btn btn-danger'>ban</button></td> 
 				</tr>
 			`)
 			i++;
@@ -298,10 +300,10 @@ a.noStyleAtag{
 
 		});
 
-		function kickUser(id,name){
+		function kickUser(id,name,ban=false){
 			let msg = $(`#${id}_input`).val();
 			console.log(msg);
-			socket.emit("kick",{id:id,name:name,msg:msg});
+			socket.emit("kick",{id:id,name:name,msg:msg,ban:ban});
 			$(`#${id}`).remove();
 		}
 
