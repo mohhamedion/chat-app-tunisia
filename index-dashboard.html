@@ -269,8 +269,10 @@ a.noStyleAtag{
             $("#online").html(data.usersOnline);
 			data.allUsers.forEach(element => {
 				console.log(element)
- 			 
-
+				// element[1].name= 	element[1].name.replace("'"," ");
+				element[1].name= 	element[1].name.replace(/"/g, "");
+				element[1].name= 	element[1].name.replace(/'/g, "");
+ 
 			$(".allUsers").append(`
 			<tr id='${element[0]}' > 
 				<td>#</td><td>${i}</td> 

@@ -16,7 +16,7 @@ let queue = [];
 let inChat = [];
 let admins = [];
 var bannedIP = [];
-let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck'];
+let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck','horny'];
 let allUsers = [];
 
 // filter = new Filter("fuck you porn nude Star");
