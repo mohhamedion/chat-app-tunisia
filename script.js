@@ -42,12 +42,12 @@ console.log(Object.keys(io.sockets.sockets).length);
 
         socket.on("queue",(data)=>{
            // console.log(data.cookie);
-            if(!checkIfBanned(data.cookie)){
-                console.log('user trying to connect');
-                console.log('STOP');
-                socket.emit('ban',{msg:"you are banned from chat"});
-                 return;
-            }
+            // if(!checkIfBanned(data.cookie)){
+            //     console.log('user trying to connect');
+            //     console.log('STOP');
+            //     socket.emit('ban',{msg:"you are banned from chat"});
+            //      return;
+            // }
  
             data.name=escapeHTML(data.name);
                  if(!preperingName(data.name)){
