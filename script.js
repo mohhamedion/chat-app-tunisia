@@ -43,14 +43,14 @@ console.log(Object.keys(io.sockets.sockets).length);
         socket.on("queue",(data)=>{
            console.log(data.cookie);
 
-        //    if(data.cookie.length>0){
-        //     if(!checkIfBanned(data.cookie)){
-        //         console.log('user trying to connect');
-        //         console.log('STOP');
-        //         socket.emit('ban',{msg:"you are banned from chat"});
-        //          return;
-        //     }
-        //    }
+           if(data.cookie){
+            if(!checkIfBanned(data.cookie)){
+                console.log('user trying to connect');
+                console.log('STOP');
+                socket.emit('ban',{msg:"you are banned from chat"});
+                 return;
+            }
+           }
       
  
             data.name=escapeHTML(data.name);
@@ -191,11 +191,16 @@ console.log(Object.keys(io.sockets.sockets).length);
         msg ="please change your name" ;
     }
  
-       io.to(data.id).emit('ban',{msg:msg});                     
+       io.to(data.id).emit('ban',{msg:msg});    
+
        if(data.ban){
            console.log('will be banned forever');
-        bannedIP.push(allUsers[data.id].cookie);
+           if(allUsers[data.id].cookie){
+            bannedIP.push(allUsers[data.id].cookie);
+
+           }
         }
+
         disconnectUserFromChat(data)
          badwords.push(data.name);
          console.log(badwords)
