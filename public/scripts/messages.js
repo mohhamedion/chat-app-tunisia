@@ -55,7 +55,21 @@ let badwords = ['Asba',
 				$("#connection_message").html(" <b style='color:green'>You are now chatting with the owner of the website... Say Hi  to  "+stranger_name+"</b>");
 
 			} else{
-				$("#connection_message").html("you are chatting now with a stranger, say hi to <b>"+stranger_name+"</b>");
+
+				let str = "you are chatting now with a ";
+					if(stranger_age){
+						 str += "<b>"+ stranger_age +"</b> years old ";
+
+					}
+
+					if(stranger_sex){
+						str += " <b>"+stranger_sex+"</b>, say hi to <b>"+stranger_name+"</b>";
+					}else{
+						str += " stranger, say hi to <b>"+stranger_name+"</b>";
+
+					}
+
+					$("#connection_message").html(str);
 
 			}
 		 
@@ -174,7 +188,7 @@ let badwords = ['Asba',
 				fileSize=0;
 			 
 				fileBuffer = [];
-				socket.emit("queue",{name:name,id:socket.id});
+				socket.emit("queue",{name:name,id:socket.id,sex:sex,age:age,cookie:localStorage.getItem("MyId")});
 			 
 		
 
@@ -219,7 +233,7 @@ let badwords = ['Asba',
  
 										socket.emit("otherPeerDisconected");
 										room='';
-										socket.emit("queue",{name:name,id:socket.id});
+										socket.emit("queue",{name:name,id:socket.id,sex:sex,age:age,cookie:localStorage.getItem("MyId")});
 										setSendMessageToDisable();
 										setSendFileToDisable();
 						}
@@ -238,33 +252,95 @@ let badwords = ['Asba',
 										//console.log(socket.id);
 										socket.emit("otherPeerDisconected");
 										room='';
-										socket.emit("queue",{name:name,id:socket.id});
+										socket.emit("queue",{name:name,id:socket.id,sex:sex,age:age,cookie:localStorage.getItem("MyId")});
 										setSendMessageToDisable();
 										setSendFileToDisable();
 			}
 		
 
-		})
+		});
+
+	 
+	   $(document).keyup(function(e) {
+			 
+		if (e.key === "Escape") {
+ 				if(stranger_name!=null){
+					var answer=confirm('are you sure you want to close this chat and start again?');
+						if(answer){
+								
+							$("#connection_message").html("<em>looking for someone to chat with</em>");
+											$(".tryAgain").hide();
+											$("#chat_component").html('');
+											$("#userTyping").hide();
+	
+								 
+											stranger_name=null;
+											disconnectingWebRTC();
+	 
+											socket.emit("otherPeerDisconected");
+											room='';
+											socket.emit("queue",{name:name,id:socket.id,sex:sex,age:age,cookie:localStorage.getItem("MyId")});
+											setSendMessageToDisable();
+											setSendFileToDisable();
+							}
+	
+				}else{
+					$("#connection_message").html("<em>looking for someone to chat with</em>");
+											$(".tryAgain").hide();
+											$("#chat_component").html('');
+											$("#userTyping").hide();
+	
+											//console.log('start again');
+										
+											disconnectingWebRTC();
+	
+										//	console.log(name);
+											//console.log(socket.id);
+											socket.emit("otherPeerDisconected");
+											room='';
+											socket.emit("queue",{name:name,id:socket.id,sex:sex,age:age});
+											setSendMessageToDisable();
+											setSendFileToDisable();
+				}
+			
+	
+			}
+		});
 
 
-
+				$("input[name=sex]").click(function(){
+					$("input[name=sex]").prop('checked',false);
+					sex = $(this).val();
+					$(this).prop('checked',true);
+				});
 
 				function startChating(){
 		
 
 					name =  $("#myName").val();
+					age  = 	$("#age").val();
+
+ 				
  
 					if(!preperingName(name)){
 						return false;
 					} 
 
-					
+					// if(age==0||age<0){
+					// 	alert('age is required');
+					// 	return;
+					//   }
+	
+					//   if(sex==null||sex==''){
+					// 	  alert('gender is required');
+					// 	  return;
+					//   }
+
 					 $("#index_section").hide();
 					 $(".StartChattingHide").hide();
-					 $("html,body").css("height","92%")
+					 $("html,body").css("height","92%");
 					$("#chat_section").animate({width:'toggle'},500);
-
-					socket.emit("queue",{name:name,id:socket.id,cookie:localStorage.getItem("MyId")});
+ 					socket.emit("queue",{name:name,id:socket.id,cookie:localStorage.getItem("MyId"),sex:sex,age:age});
 			 
 
 				
@@ -285,17 +361,17 @@ let badwords = ['Asba',
 
  
 
- function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    
-    reader.onload = function(e) {
- 	  myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
-    }
-    
-    reader.readAsDataURL(input.files[0]); // convert to base64 string
-  }
-}
+				function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					
+					reader.onload = function(e) {
+					myMessage(`<br><img style='width:250px' class='rounded img-thumbnail'  src='${e.target.result}' />`);
+					}
+					
+					reader.readAsDataURL(input.files[0]); // convert to base64 string
+				}
+				}
 
 
 

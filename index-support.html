@@ -17,98 +17,101 @@
  
  	<link rel="shortcut icon" type=" " href="favicon.png"/>
 	<link rel="shortcut icon" type=" " href="/favicon.png"/>
+	<link rel="stylesheet" href="/style/style.css">
+
+	<!-- <style type="text/css">
+		html, body
+	{
+		height: 100%;
+		background-color: #e3e3e3
+	}
 	
-	<style type="text/css">
-	html, body
-{
-    height: 100%;
-    background-color: #e3e3e3
-}
-
-.mainWeb {
-background-color: #c63f41;
-}
-
-.primary{
-	color: #fff;
-	background-color: #c63f41;
-}
-a.noStyleAtag{
-	color:white;
-}
-
-@media (min-width: 1281px) {
-  
-	#chat_component_father{
-	  height: 98%;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1280px) {
-	#chat_component_father{
-	  height: 98%;
-  }
-  
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-	#chat_component_father{
-	  height: 98%;
-  }
-  
-}
-
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-	#chat_component_father{
-	  height: 98%;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 767px) {
-	.titleAbout {
-	font-size: 20px;
- }
-  
-  #chat_component_father{
-	  height: 91%;
-  }
-}
- /* 
-##Device = Most of the Smartphones Mobiles (Portrait)
-##Screen = B/w 320px to 479px
-*/
-
-@media (min-width: 320px) and (max-width: 480px) {
-	.titleAbout {
+	.mainWeb {
+	background-color: #1090EE;
+	}
+	
+	.primary{
+		color: #fff;
+		background-color: #1090EE;
+		
+	}
+	a.noStyleAtag{
+		color:white;
+	}
+	
+	@media (min-width: 1281px) {
+	  
+		#chat_component_father{
+		  height: 98%;
+	  }
+	}
+	
+	@media (min-width: 1025px) and (max-width: 1280px) {
+		#chat_component_father{
+		  height: 98%;
+	  }
+	  
+	}
+	
+	@media (min-width: 768px) and (max-width: 1024px) {
+		#chat_component_father{
+		  height: 98%;
+	  }
+	  
+	}
+	
+	@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+		#chat_component_father{
+		  height: 98%;
+	  }
+	}
+	
+	@media (min-width: 481px) and (max-width: 767px) {
+		.titleAbout {
 		font-size: 17px;
-
- }
+	 }
+	  
+	  #chat_component_father{
+		  height: 91%;
+	  }
+	}
+	 /* 
+	##Device = Most of the Smartphones Mobiles (Portrait)
+	##Screen = B/w 320px to 479px
+	*/
+	
+	@media (min-width: 320px) and (max-width: 480px) {
+		.titleAbout {
+			font-size: 20px;
+	
+	 }
+		#chat_component_father{
+		  height: 89%;
+	  }
+	}
+	
+	
+	
+	@media   (max-height: 640px)  {
+	
 	#chat_component_father{
-	  height: 89%;
-  }
-}
-
-
-
-@media   (max-height: 640px)  {
-
-#chat_component_father{
-  height:64%;
-}
-}
-
- 
-
-
-.footer {
-   position: static; 
-   width: 100%;
-   background-color: #fff;
-   color: black;
-   text-align: center;
-}
- 
-</style>
+	  height:64%;
+	}
+	}
+	
+	 
+	
+	
+	.footer {
+	   position: static; 
+	   width: 100%;
+	   background-color: #fff;
+	   color: black;
+	   font-size: 12px;
+	   text-align: center;
+	}
+	 
+	</style> -->
 </head>
 <body>
 
@@ -118,7 +121,8 @@ a.noStyleAtag{
   <a class="navbar-brand noStyleAtag " href="">
   	<img src="/logo1.png" style="width: 50px">
   </a>
-  <a class="navbar-brand text-white noStyleAtag" ><strong> Chat with random people</strong></a>
+  <a class="navbar-brand text-white noStyleAtag" ><strong>Stay Home, Stay Safe !
+</strong></a>
 
 </nav>
 
@@ -133,16 +137,37 @@ a.noStyleAtag{
 						<div class="text-center">
 							<img src="/logo2.png" class="col-6 col-md-3" alt="">
 							</div>
-							<h3 class="text-center titleAbout">The First Tunisian Random Chat Website</h3>
+							<h3 class="text-center titleAbout">The First Tunisian Chat website
+							</h3>
 		 						<div class="text-justify text-center">
  				 
 					</div>
 				
 						<div class="text-center ">
-							<label>Enter your name :</label>
+							<label>Enter information about you :</label>
 							<div class="row justify-content-md-center">
-								<input id="myName" type="text" name="name" class="form-control col-12 col-md-6 " >
+								<input id="myName" type="text" name="name" class="form-control col-12 col-md-6 " placeholder="Name">
+							 
 							</div>
+							<label for="age">Enter your age :</label>
+							<div class="row justify-content-md-center ">
+									<input id="age" type="number" name="age" class="form-control  offset-3 offset-md-0 col-6 col-md-2 " placeholder="Age" min='10' >
+						 	</div>
+ 
+							<label for="sex">Enter your gender :</label>
+							<div class="row justify-content-md-center offset-5 offset-md-0">
+								 
+									<div class="mr-2 ">
+										<label for=""><i class="fas fa-male" style="font-size: 30px;color: blue;"></i></label>
+										<input type="checkbox" name="sex" value="male">
+									</div>
+									<div class="ml-2">
+										<label for=""><i class="fas fa-female" style="font-size: 30px;color:pink"></i></label>
+										<input type="checkbox" name="sex" value="female">
+									</div>
+									 
+ 							</div>
+
  	 					</div>
 
 	 						<div class="text-center m-2">
@@ -154,42 +179,35 @@ a.noStyleAtag{
 
 	</div>
 
-
-	<div class="text-center ">
-		<p class=" ">
-			By pressing "Start Chat" you agree with our  <br>
-			<span>
-				<a href="/terms" style="text-decoration-line: underline;">Terms of service</a> 
-			</span>
-
-		</p>
-	</div>
-	
  
 
 
    
-	<div class="footer-copyright text-center  StartChattingHide " style="bottom: 0px;position: static;"> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
-
+ 
 </section> 
 
 <!-- the OLD ONE WAS HERE -->
 <!-- 	<div class="footer-copyright text-center  StartChattingHide " style="bottom: 0px;position: static;"> <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> </div>
  -->
 <!--  -->
- 	<div  class=" mt-4 StartChattingHide ">
+<div  class=" mt-4 StartChattingHide ">
 
-		<div class="footer "  >
-			<footer class="page-footer font-small blue " >
-				<div class=" ">
-					<div class="footer-copyright text-center py-3">© 2020 all rights reserved </div>
+	<div class="footer "  >
+		<footer class="page-footer font-small blue " >
+			<div class=" ">
+				<div class="footer-copyright text-center py-3"><p class=" ">
+		By pressing "Start Chat" you agree with our  
+		<span>
+			<a href="/terms" style="text-decoration-line: underline;">Terms of service</a> - <a href="#" data-toggle="modal" data-target="#exampleModal">Contact us</a> 
+		</span>
 
-				</div>
- 
-			</footer>
-		 </div>
-	</div>
-		
+	</p> </div>
+
+			</div>
+
+		</footer>
+	 </div>
+</div>
  
 
 
@@ -251,6 +269,33 @@ a.noStyleAtag{
 
 
 
+	  <!-- Modal -->
+	  <div class="modal fade requestConnection " id="requestConnection" tabindex="-1" role="dialog" aria-labelledby="requestConnection" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content " style="width: 97%;">
+			<div class="modal-header primary">
+			  <h5 class="modal-title" id="requestConnectionTitle">request from user</h5>
+			  <button type="button" class="close closeMessageFromAdmin" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body ">
+				<p id="requestConnectionMessage"></p>
+				<i>be aware, if you accept the request, you will be disconected from this conversation </i>
+
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success closeMessageFromAdmin" data-dismiss="modal" onclick="acceptChatConnection()">accept</button>
+				<button class="btn btn-danger closeMessageFromAdmin" data-dismiss="modal" onclick="cancleChatConnection()">cancle</button>
+
+			  <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+ 			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <!-- MODAL -->
+
 
 
 
@@ -261,11 +306,12 @@ a.noStyleAtag{
 
 	<section  style="background-color: #f5f5f5;height:80%; " class="">
 		<div class="row mt-1 ">
-			<div  class="col-5 col-md-6  text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
-				 
-			<div class="col-7 col-md-6 text-right"><a href="#" class="" >  
-                <a id="chatWithAdmin" href="#" class="  text-light p-1" style="direction: unset;cursor:default"> <span  class="badge bg-secondary ">Admin is offline</span>  </a>
-                <a class="btn primary next"> <i class="fas fa-arrow-circle-right text-light  p-1" ></i> </a> 
+
+			<div  class="col-3 col-md-6  text-left "> <a href=""  class="btn primary " onclick="return confirm('Are you sure you want to leave ?')"  ><i class="fas fa-backward "></i> </a></div>
+			<div  class="col-9  col-md-6  text-right"><a href="#" class="" >  
+                <a id="chatWithAdmin" href="#" class="text-light p-1" style="direction: unset;cursor:default"> <span  class="badge bg-secondary ">Admin is offline</span>  </a>
+				<a id="volume" class="btn btn-success text-white " onclick="mute()"><i class="fas fa-volume-up"></i></a> 
+				<a class="btn primary next"> <i class="fas fa-arrow-circle-right text-light  p-1" ></i> </a> 
             </div>
 
             
@@ -363,7 +409,7 @@ a.noStyleAtag{
   </audio>
 
 
-  <audio id="newMessageSound"  class="hide">
+  <audio id="newMessageSound"  class="hide"  >
 	<source src="/sound/new-message.ogg" type="audio/ogg">
    Your browser does not support the audio element.
   </audio>
@@ -373,14 +419,20 @@ a.noStyleAtag{
 <script>
 	  var socket = io.connect();
 	  let stranger_name;
-	  let room;
+	  let stranger_sex;
+	  let stranger_age;
+ 	  let room;
 	  let name=null;
+	  let sex=null;
+	  let age = null;
 	  let timeout;
 	  socket.on('connect',()=>{
  	  })
 		socket.on("joinRoom",(data)=>{
  
 			stranger_name = data.name;
+			stranger_age = data.age;
+			stranger_sex = data.sex;
 			room = data.room;
 			socket.emit("joinChatRoom",{room:data.room});
 
@@ -427,6 +479,8 @@ a.noStyleAtag{
 
 
 <script>
+
+
     $("#chatWithAdmin").click(function(){
 		if(adminOnline){
 			var chatWithAdmin = confirm("do you want to chat with the admin?");
@@ -438,7 +492,7 @@ a.noStyleAtag{
 				room='';
 				setSendMessageToDisable();
 				setSendFileToDisable();
-				socket.emit("joinAdminQueue",{name:name});
+				socket.emit("joinAdminQueue",{name:name,age:age,sex:sex});
 				
 				$("#connection_message").html("<b class='text-danger'>you are standing on the line to chat with the admin, please wait<b>");
 				$(".tryAgain").hide();
@@ -495,9 +549,39 @@ a.noStyleAtag{
 
 
 
-		if(!localStorage.getItem('MyId')){
-	localStorage.setItem('MyId',parseInt(Math.random()*1000000000000000000));
-		} 
+if(!localStorage.getItem('MyId')){
+localStorage.setItem('MyId',parseInt(Math.random()*1000000000000000000));
+} 
 		
- 
+
+
+socket.on("requestConnection",(data)=>{
+	$(".requestConnection").modal();
+	$("#requestConnectionMessage").html(`user <b>${data.name}</b> want to chat with you`);
+
+})
+
+
+function mute(){
+
+ 	if($("#newMessageSound").prop('muted')==true){
+		 
+		$("#newMessageSound").prop('muted',false);
+		$("#volume").html('<i class="fas fa-volume-up"></i>');
+		
+	}else if($("#newMessageSound").prop('muted')==false){
+	 
+		$("#newMessageSound").prop('muted',true);
+		$("#volume").html('<i class="fas fa-volume-mute"></i>');
+	}
+  }
+
+
+ function acceptChatConnection(){
+	 socket.emit("acceptConnectionWithUser");
+ }
+
+ function cancleChatConnection(){
+	 socket.emit('cancleConnectionWithUser');
+ }
 </script>

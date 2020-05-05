@@ -136,6 +136,7 @@ a.noStyleAtag{
 						<th>#</th>
 						<th>name</th>	
 						<th>message</th>
+						<!-- <th>connect</th> -->
 						<th>kick</th>
 						<th>ban</th>
 					  </tr>
@@ -248,6 +249,7 @@ a.noStyleAtag{
 	  let room;
 	  let name=null;
 	  let timeout;
+	  let usersQueueChat=[];
 	  socket.on('connect',()=>{
 
             socket.emit("allUsers");
@@ -281,7 +283,10 @@ a.noStyleAtag{
 				<td>
 					<input id='${element[0]}_input' type='text'>
 					 <button onClick="sendAlert('${element[0]}')" type='button' class='btn btn-success'><i class="fas fa-envelope"></i></button> 
- 				</td> 
+				 </td> 
+				 
+				
+
 				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}')" type='button' class='btn btn-danger'>kick</button></td> 
 				<td>  <button onClick="kickUser('${element[0]}','${element[1].name}',true)" type='button' class='btn btn-danger'>ban</button></td> 
 				</tr>
@@ -290,7 +295,17 @@ a.noStyleAtag{
 
 		});
  
-       })
+	   })
+	   
+
+
+	//    <td>
+	// 				<button onClick="connectTwoUsers('${element[0]}')" type='button' class='btn btn-success'>connect</i></button> 
+	// 			</td> 
+
+
+
+	
 		socket.on("joinRoom",(data)=>{
  
 			stranger_name = data.name;
@@ -314,6 +329,14 @@ a.noStyleAtag{
 			$(`#${id}_input`).val('');
 		}
 
+		function connectTwoUsers(userId){
+			usersQueueChat.push(userId);
+			if(usersQueueChat.length==2){
+				console.log(usersQueueChat);
+				socket.emit("connectTwoUsers",{firstUser:usersQueueChat[0],secondUser:usersQueueChat[1]});
+				usersQueueChat=[];
+			}
+		}
 
 
  			let sendFile = document.querySelector("input#sendFile");

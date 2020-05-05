@@ -1,0 +1,93 @@
+ 
+html, body
+{
+height: 100%;
+background-color: #e3e3e3
+}
+
+.mainWeb {
+background-color: #1090EE;
+}
+
+.primary{
+color: #fff;
+background-color: #1090EE;
+
+}
+a.noStyleAtag{
+color:white;
+}
+
+@media (min-width: 1281px) {
+
+#chat_component_father{
+  height: 98%;
+}
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+#chat_component_father{
+  height: 98%;
+}
+
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+#chat_component_father{
+  height: 98%;
+}
+
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+#chat_component_father{
+  height: 98%;
+}
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+.titleAbout {
+font-size: 17px;
+}
+
+#chat_component_father{
+  height: 91%;
+}
+}
+/* 
+##Device = Most of the Smartphones Mobiles (Portrait)
+##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+.titleAbout {
+    font-size: 20px;
+
+}
+#chat_component_father{
+  height: 89%;
+}
+}
+
+
+
+@media   (max-height: 640px)  {
+
+#chat_component_father{
+height:64%;
+}
+}
+
+
+
+
+.footer {
+position: static; 
+width: 100%;
+background-color: #fff;
+color: black;
+font-size: 12px;
+text-align: center;
+}
+
+ 

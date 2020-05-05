@@ -18,7 +18,7 @@ let admins = [];
 var bannedIP = [];
 let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck','horny'];
 let allUsers = [];
-
+let twoUsersConnection = [];
  
  
 app.use(express.static(path.join(__dirname+'/public')));
@@ -33,15 +33,10 @@ socket.join(socket.id);
 //emit admin if online
 socket.emit("adminStatus",Object.keys(admins).length);
 
-
-
-console.log('clients online');
-console.log(Object.keys(io.sockets.sockets).length);
-
-
+ 
 
         socket.on("queue",(data)=>{
-           console.log(data.cookie);
+           
 
            if(data.cookie){
             if(!checkIfBanned(data.cookie)){
@@ -53,7 +48,9 @@ console.log(Object.keys(io.sockets.sockets).length);
            }
       
  
-            data.name=escapeHTML(data.name);
+            data.name= escapeHTML(data.name);
+            data.age = escapeHTML(data.age);
+            data.sex = escapeHTML(data.sex);
                  if(!preperingName(data.name)){
                      socket.emit('ban',{msg:"please change your name"});
                     return false;
@@ -79,7 +76,7 @@ console.log(Object.keys(io.sockets.sockets).length);
             ///add user 
 
             if(!allUsers[socket.id]){
-                allUsers[socket.id] = {name:data.name,cookie:data.cookie};
+                allUsers[socket.id] = {name:data.name,cookie:data.cookie,sex:data.sex,age:data.age};
 
             }
 
@@ -94,10 +91,8 @@ console.log(Object.keys(io.sockets.sockets).length);
                 }
                 
             }else{
-                queue.push({name:data.name,id:socket.id});
-                // console.log(`user ${data.name} standing in the queue of id of ${data.id} `);
-                // console.log("queue now 🎁")
-                // console.log(queue);
+                queue.push({name:data.name,id:socket.id,sex:data.sex,age:data.age});
+          
             }
            
 
@@ -114,7 +109,6 @@ console.log(Object.keys(io.sockets.sockets).length);
 
     socket.on("messageToServer",(data)=>{
          data.message = escapeHTML(data.message);
- 
          io.to(data.room).emit("messageToClient",data);
     })
 
@@ -132,9 +126,11 @@ console.log(Object.keys(io.sockets.sockets).length);
             console.log('not in chat user joing admin')
         }
 
-        data.name=escapeHTML(data.name);
-        if(!preperingName(data.name)){
+        data.name= escapeHTML(data.name);
+        data.age = escapeHTML(data.age);
+        data.sex = escapeHTML(data.sex);
 
+        if(!preperingName(data.name)){
            return false;
        }
 
@@ -145,16 +141,11 @@ console.log(Object.keys(io.sockets.sockets).length);
                 for (const [key, admin] of Object.entries(admins)) {
            
                     if(admin.status=='free'){
-                        connectTwoUsers(socket,admin,data);
                         admin.status='busy';
+                        connectTwoUsers(socket,admin,data);
                         //هون مالو بل كيو بس منكية
                        GetUserFromAdminQuere(socket.id);
-
-                    //    console.log("ADMIN SPEAKING TO USER")
-           
-                        //حاليا هاد مالو لازمة 
-                        // console.log("IN CHAT NOW 🔥 🔥 🔥 🔥 ")
-                        // console.log(inChat);
+ 
                          return false;
                    }  
                  }
@@ -201,9 +192,9 @@ console.log(Object.keys(io.sockets.sockets).length);
            }
         }
 
-        disconnectUserFromChat(data)
+        disconnectUserFromChat(data);
          badwords.push(data.name);
-         console.log(badwords)
+          
         if(allUsers[data.id]){
             delete allUsers[data.id];
         }
@@ -227,9 +218,44 @@ socket.on("alertFromAdministration",(data)=>{
 
 })
 
+// socket.on('connectTwoUsers',(data)=>{
+//     let firstUser = {...allUsers[data.firstUser],id:data.firstUser};
+//     let secondUser = {...allUsers[data.secondUser],id:data.secondUser};
+
+//       twoUsersConnection[secondUser.id] = firstUser;
+//       socket.to(data.secondUser).emit("requestConnection",{name:firstUser.name});
+ 
+// })
 
 
 
+
+// socket.on('acceptConnectionWithUser',async()=>{
+
+//     let firstUser =   twoUsersConnection[socket.id];
+//     let secondUser =   {...allUsers[socket.id],id:socket.id};
+ 
+//    await disconnectUserFromChat({id:socket.id});
+//    await disconnectUserFromChat({id:firstUser.id});
+//     if(!inChat[socket.id]){
+//         connectTwoUsers(firstUser,secondUser,firstUser);
+//         delete twoUsersConnection[socket.id];
+//     }
+  
+
+// })
+
+
+socket.on('cancleConnectionWithUser',()=>{
+
+ 
+    delete twoUsersConnection[socket.id];
+
+})
+// const initializeConnectionTwoUsers = (firstUser,secondUser)=>{
+    
+
+// }
 
 //  DISCONECT SOKCET
 
@@ -289,8 +315,7 @@ if(ChatRoom){
         
 GetUserFromQuere(socket.id);
 GetUserFromAdminQuere(socket.id);
-console.log("[disconnect] in chat now ");
-console.log(inChat)
+ 
 
 })
 
@@ -308,17 +333,12 @@ socket.on('otherPeerDisconected',()=>{
      if(ChatRoom){
         io.of('/').in(ChatRoom).clients(function(error, clients) {
             if (clients.length > 0) {
-               //  console.log('clients in the room: \n');
-               //  console.log(clients);
+           
                 clients.forEach(function (socket_id) {
-                   // console.log(socket_id + " is leaving the InChat")
-                       if(socket.id!==socket_id){
+                        if(socket.id!==socket_id){
                            delete inChat[socket_id];
                        }
-                                   
-                   //   console.log("[otherPeerDisconected] InCHAT")
-                   // console.log(inChat);
-       
+        
                     io.sockets.sockets[socket_id].leave(ChatRoom);
                 });
             }
@@ -379,6 +399,10 @@ socket.on('files', (req)=> {
 
 
 
+
+
+
+
 //FUNCTIONS
 
 const checkIfBanned=(ip)=>{
@@ -397,7 +421,7 @@ const checkIfBanned=(ip)=>{
         }
 }
 
-const disconnectUserFromChat = (socket)=>{
+const disconnectUserFromChat = async (socket)=>{
  
 let ChatRoom;
      
@@ -553,12 +577,15 @@ const preperingName =(name)=>{
 
 
 const escapeHTML =(msg) =>{
-    try{
-        return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-    }catch(e){
-            console.log(e)
+    if(msg){
+        try{
+            return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    
+        }catch(e){
+                console.log(e)
+        }
     }
+  
  }
 
  const connectTwoUsers=(firstUser,secondUser,data)=>{
@@ -570,10 +597,10 @@ const escapeHTML =(msg) =>{
 
      if(firstUser.id!==secondUser.id){
   
-        io.to(firstUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:secondUser.name});
-        io.to(secondUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:data.name});
-        inChat[firstUser.id] = {room:secondUser.id+firstUser.id,name:data.name};
-        inChat[secondUser.id] = {room:secondUser.id+firstUser.id,name:secondUser.name};
+        io.to(firstUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:secondUser.name,sex:secondUser.sex,age:secondUser.age});
+        io.to(secondUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:data.name,sex:data.sex,age:data.age});
+        inChat[firstUser.id]  = {room:secondUser.id+firstUser.id,name:data.name,sex:data.sex,age:data.age};
+        inChat[secondUser.id] = {room:secondUser.id+firstUser.id,name:secondUser.name,sex:secondUser.sex,age:secondUser.age};
     //مؤقتا شلناه
     //    GetUserFromQuere(secondUser.id);
 
