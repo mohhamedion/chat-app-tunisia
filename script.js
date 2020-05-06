@@ -151,7 +151,7 @@ socket.emit("adminStatus",Object.keys(admins).length);
                  }
           
                 console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
-              queueToAdmin.push({name:data.name,id:socket.id});
+              queueToAdmin.push({name:data.name,id:socket.id,sex:data.sex,age:data.age});
         }else{
             console.log('admin is offline')
         }

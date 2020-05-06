@@ -325,7 +325,19 @@ let badwords = ['Asba',
 					if(!preperingName(name)){
 						return false;
 					} 
+				
+					if(age){
+						if(age<16){
+							alert('You are too young to use the website')
+							return;
+						}
+						if(age>60){
+						   	alert('You are too old to use the website')
+							return;
 
+						}
+					}
+					
 					// if(age==0||age<0){
 					// 	alert('age is required');
 					// 	return;
