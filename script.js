@@ -5,6 +5,8 @@ const path = require('path')
 const session = require('express-session');
 const bodyParser  = require('body-parser');
 const socketSession = require('express-socket.io-session');
+const firstAdminPass = "@azyzaymen@123";
+const secondAdminPass = "19256341_moderator";
 const server = app.listen(port,()=>{
     console.log('working on '+port)
 })
@@ -56,7 +58,7 @@ socket.emit("adminStatus",Object.keys(admins).length);
                     return false;
                 }
 
-            if(data.name.toLowerCase()=="96199370123_zeus"){
+            if(data.name.toLowerCase()==firstAdminPass){
                 data.name = "Admin";
       
                 admins[socket.id] = {name:data.name,id:socket.id,status:'free'};
@@ -64,7 +66,7 @@ socket.emit("adminStatus",Object.keys(admins).length);
                 adminCheckUsers(socket);
                 return;
             }
-            if(data.name.toLowerCase()=="19256341_moderator"){
+            if(data.name.toLowerCase()==secondAdminPass){
                 data.name = "Moderator";
                 io.emit('adminJoin');
                 admins[socket.id] = {name:data.name,id:socket.id,status:'free'};
@@ -676,10 +678,10 @@ app.get('/dashboard',(req,res)=>{
 
 app.post("/dashboard",(req,res)=>{
 
-       if(req.body.username=="96199370123_zeus"){
+       if(req.body.username==firstAdminPass){
             req.session.username=req.body.username;
         }
-       if(req.body.username=="19256341_moderator"){
+       if(req.body.username==secondAdminPass){
             req.session.username=req.body.username;
        }
        res.redirect("/dashboard");
