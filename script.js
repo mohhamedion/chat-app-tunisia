@@ -1,224 +1,210 @@
-const express  = require("express");
-const app  = express();
-const port = process.env.PORT|| 4000 ;
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 4000;
 const path = require('path')
 const session = require('express-session');
-const bodyParser  = require('body-parser');
+const bodyParser = require('body-parser');
 const socketSession = require('express-socket.io-session');
 const firstAdminPass = "@azyzaymen@123";
 const secondAdminPass = "19256341_moderator";
-const server = app.listen(port,()=>{
-    console.log('working on '+port)
+const server = app.listen(port, () => {
+    console.log('working on ' + port)
 })
 // var Filter = require('bad-words');
 
 const io = require("socket.io")(server);
-let queueToAdmin=[];
+let queueToAdmin = [];
 let queue = [];
 let inChat = [];
 let admins = [];
 var bannedIP = [];
-let badwords = [ 'Asba', '3asba', 'Nik', 'zebi', 'Zeby' , 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة' , 'زب', 'زبي', 'زبور' , 'زك', 'نيك', 'ترمة','الله','Owner','porn','sex','fuck','horny'];
+let badwords = ['Asba', '3asba', 'Nik', 'zebi', 'Zeby', 'Zeb', 'Sorm', 'Terma', 'Zok', '3os', 'God', 'Allah', 'Labour', 'Omek', 'امك', 'عصبة', 'زب', 'زبي', 'زبور', 'زك', 'نيك', 'ترمة', 'الله', 'Owner', 'porn', 'sex', 'fuck', 'horny'];
 let allUsers = [];
 let twoUsersConnection = [];
- 
- 
-app.use(express.static(path.join(__dirname+'/public')));
+
+
+app.use(express.static(path.join(__dirname + '/public')));
 app.use(session({secret: 'ssshhhhh'}));
-app.use(bodyParser.json());      
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
- 
- 
-io.on('connection',(socket)=>{
+
+
+io.on('connection', (socket) => {
 //joining my own socket id room
-socket.join(socket.id);
+    socket.join(socket.id);
 //emit admin if online
-socket.emit("adminStatus",Object.keys(admins).length);
+    socket.emit("adminStatus", Object.keys(admins).length);
 
- 
 
-        socket.on("queue",(data)=>{
-           
+    socket.on("queue", (data) => {
 
-           if(data.cookie){
-            if(!checkIfBanned(data.cookie)){
+
+        if (data.cookie) {
+            if (!checkIfBanned(data.cookie)) {
                 console.log('user trying to connect');
                 console.log('STOP');
-                socket.emit('ban',{msg:"you are banned from chat"});
-                 return;
-            }
-           }
-      
- 
-            data.name= escapeHTML(data.name);
-            data.age = escapeHTML(data.age);
-            data.sex = escapeHTML(data.sex);
-                 if(!preperingName(data.name)){
-                     socket.emit('ban',{msg:"please change your name"});
-                    return false;
-                }
-
-            if(data.name.toLowerCase()==firstAdminPass){
-                data.name = "Admin";
-      
-                admins[socket.id] = {name:data.name,id:socket.id,status:'free'};
-                io.emit('adminJoin');
-                adminCheckUsers(socket);
+                socket.emit('ban', {msg: "you are banned from chat"});
                 return;
             }
-            if(data.name.toLowerCase()==secondAdminPass){
-                data.name = "Moderator";
-                io.emit('adminJoin');
-                admins[socket.id] = {name:data.name,id:socket.id,status:'free'};
-                adminCheckUsers(socket);
-                return;
+        }
+
+
+        data.name = escapeHTML(data.name);
+        data.age = escapeHTML(data.age);
+        data.sex = escapeHTML(data.sex);
+        if (!preperingName(data.name)) {
+            socket.emit('ban', {msg: "please change your name"});
+            return false;
+        }
+
+        if (data.name.toLowerCase() == firstAdminPass) {
+            data.name = "Admin";
+
+            admins[socket.id] = {name: data.name, id: socket.id, status: 'free'};
+            io.emit('adminJoin');
+            adminCheckUsers(socket);
+            return;
+        }
+        if (data.name.toLowerCase() == secondAdminPass) {
+            data.name = "Moderator";
+            io.emit('adminJoin');
+            admins[socket.id] = {name: data.name, id: socket.id, status: 'free'};
+            adminCheckUsers(socket);
+            return;
+        }
+
+
+        ///add user
+
+        if (!allUsers[socket.id]) {
+            allUsers[socket.id] = {name: data.name, cookie: data.cookie, sex: data.sex, age: data.age};
+
+        }
+
+        if (queue.length >= 1) {
+            if (socket.id !== queue[0].id) {
+                connectTwoUsers(socket, queue[0], data);
+                GetUserFromQuere(queue[0].id);
             }
+        } else {
+            queue.push({name: data.name, id: socket.id, sex: data.sex, age: data.age});
 
-            
-            ///add user 
-
-            if(!allUsers[socket.id]){
-                allUsers[socket.id] = {name:data.name,cookie:data.cookie,sex:data.sex,age:data.age};
-
-            }
-
-            if(queue.length>=1){
-                if(socket.id!==queue[0].id){
- 
-
-                       connectTwoUsers(socket,queue[0],data);
-                       GetUserFromQuere(queue[0].id);
-                      
-
-                }
-                
-            }else{
-                queue.push({name:data.name,id:socket.id,sex:data.sex,age:data.age});
-          
-            }
-           
-
-        })
+        }
 
 
+    })
 
-    socket.on("joinChatRoom",(data)=>{
+
+    socket.on("joinChatRoom", (data) => {
         socket.join(data.room);
         io.to(data.room).emit('connected')
     })
 
 
-
-    socket.on("messageToServer",(data)=>{
-         data.message = escapeHTML(data.message);
-         io.to(data.room).emit("messageToClient",data);
+    socket.on("messageToServer", (data) => {
+        data.message = escapeHTML(data.message);
+        io.to(data.room).emit("messageToClient", data);
     })
-
 
 
     // ADMIN SOCKET
 
-    socket.on("joinAdminQueue",   (data)=>{
-          // تنضيف الاسم
-     
-        if(inChat[socket.id]){
+    socket.on("joinAdminQueue", (data) => {
+        // تنضيف الاسم
+
+        if (inChat[socket.id]) {
             console.log("In chat user joing admin")
             console.log(inChat[socket.id].room)
-        }else{
+        } else {
             console.log('not in chat user joing admin')
         }
 
-        data.name= escapeHTML(data.name);
+        data.name = escapeHTML(data.name);
         data.age = escapeHTML(data.age);
         data.sex = escapeHTML(data.sex);
 
-        if(!preperingName(data.name)){
-           return false;
-       }
+        if (!preperingName(data.name)) {
+            return false;
+        }
 
-         if(Object.keys(admins).length>0){
+        if (Object.keys(admins).length > 0) {
             //في احتمال يكون بشات او بقائمة الانتظار العادية ! منطلعو منها
-               disconnectUserFromChat(socket)
+            disconnectUserFromChat(socket)
 
-                for (const [key, admin] of Object.entries(admins)) {
-           
-                    if(admin.status=='free'){
-                        admin.status='busy';
-                        connectTwoUsers(socket,admin,data);
-                        //هون مالو بل كيو بس منكية
-                       GetUserFromAdminQuere(socket.id);
- 
-                         return false;
-                   }  
-                 }
-          
-                console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
-              queueToAdmin.push({name:data.name,id:socket.id,sex:data.sex,age:data.age});
-        }else{
+            for (const [key, admin] of Object.entries(admins)) {
+
+                if (admin.status == 'free') {
+                    admin.status = 'busy';
+                    connectTwoUsers(socket, admin, data);
+                    //هون مالو بل كيو بس منكية
+                    GetUserFromAdminQuere(socket.id);
+
+                    return false;
+                }
+            }
+
+            console.log("ADMIN IS BUSY , PUSING TO ADMIN QUEUE");
+            queueToAdmin.push({name: data.name, id: socket.id, sex: data.sex, age: data.age});
+        } else {
             console.log('admin is offline')
         }
-               
-        
+
 
     })
 
 
+    socket.on("allUsers", () => {
+        socket.emit('allUsers', {
+            allUsers: Object.entries(allUsers),
+            usersOnline: Object.keys(io.sockets.sockets).length
+        });
+    })
 
 
- socket.on("allUsers",()=>{
-    socket.emit('allUsers',{allUsers:Object.entries(allUsers),usersOnline:Object.keys(io.sockets.sockets).length});
- })
- 
+    socket.on("kick", (data) => {
+        try {
+            let msg;
 
-  
+            if (data.msg.length > 0) {
+                msg = data.msg;
+            } else {
+                msg = "please change your name";
+            }
 
+            io.to(data.id).emit('ban', {msg: msg});
 
+            if (data.ban) {
+                console.log('will be banned forever');
+                if (allUsers[data.id].cookie) {
+                    bannedIP.push(allUsers[data.id].cookie);
 
- socket.on("kick",(data)=>{
-    try{
-    let msg;
+                }
+            }
 
-    if(data.msg.length>0){
-        msg = data.msg;
-    }else{
-        msg ="please change your name" ;
-    }
- 
-       io.to(data.id).emit('ban',{msg:msg});    
+            disconnectUserFromChat(data);
+            badwords.push(data.name);
 
-       if(data.ban){
-           console.log('will be banned forever');
-           if(allUsers[data.id].cookie){
-            bannedIP.push(allUsers[data.id].cookie);
-
-           }
+            if (allUsers[data.id]) {
+                delete allUsers[data.id];
+            }
+        } catch (e) {
+            console.log("No user to kick")
+            console.log(e);
         }
 
-        disconnectUserFromChat(data);
-         badwords.push(data.name);
-          
-        if(allUsers[data.id]){
-            delete allUsers[data.id];
-        }
-    }catch(e){
-        console.log("No user to kick")
-        console.log(e);
-    }
-  
-     
-          // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
-         //    io.to(data.id).emit('alert',{msg:"please change your name"});                     
+
+        // bannedIP.push(io.sockets.sockets[data.id].handshake.address);
+        //    io.to(data.id).emit('alert',{msg:"please change your name"});
 
 
- })
- 
+    })
 
 
-socket.on("alertFromAdministration",(data)=>{
+    socket.on("alertFromAdministration", (data) => {
 
-    io.to(data.id).emit('alert',{msg:data.msg});                     
+        io.to(data.id).emit('alert', {msg: data.msg});
 
-})
+    })
 
 // socket.on('connectTwoUsers',(data)=>{
 //     let firstUser = {...allUsers[data.firstUser],id:data.firstUser};
@@ -226,259 +212,238 @@ socket.on("alertFromAdministration",(data)=>{
 
 //       twoUsersConnection[secondUser.id] = firstUser;
 //       socket.to(data.secondUser).emit("requestConnection",{name:firstUser.name});
- 
+
 // })
-
-
 
 
 // socket.on('acceptConnectionWithUser',async()=>{
 
 //     let firstUser =   twoUsersConnection[socket.id];
 //     let secondUser =   {...allUsers[socket.id],id:socket.id};
- 
+
 //    await disconnectUserFromChat({id:socket.id});
 //    await disconnectUserFromChat({id:firstUser.id});
 //     if(!inChat[socket.id]){
 //         connectTwoUsers(firstUser,secondUser,firstUser);
 //         delete twoUsersConnection[socket.id];
 //     }
-  
+
 
 // })
 
 
-socket.on('cancleConnectionWithUser',()=>{
+    socket.on('cancleConnectionWithUser', () => {
 
- 
-    delete twoUsersConnection[socket.id];
 
-})
+        delete twoUsersConnection[socket.id];
+
+    })
 // const initializeConnectionTwoUsers = (firstUser,secondUser)=>{
-    
+
 
 // }
 
 //  DISCONECT SOKCET
 
- socket.on("disconnect",()=>{
-    console.log("[disconnect] InCHAT  ")
-    console.log(inChat)
+    socket.on("disconnect", () => {
+        console.log("[disconnect] InCHAT  ")
+        console.log(inChat)
 
- let ChatRoom;
- 
-
-
- if(allUsers[socket.id]){
-        delete  allUsers[socket.id];
-    }
+        let ChatRoom;
 
 
-  if(inChat[socket.id]){
-    
-    console.log("[disconnect] " +inChat[socket.id].name +" is disconnecting");
-
-    ChatRoom=inChat[socket.id].room;
-
-  }
-
-  if(admins[socket.id]){
-    delete admins[socket.id];
-    if(Object.keys(admins).length==0){
-        io.emit("adminOut");
-    }
-}
-delete inChat[socket.id];
-
-if(ChatRoom){
-    console.log(ChatRoom);
-     io.of('/').in(ChatRoom).clients(function(error, clients) {
-        if (clients.length > 0) {
-            // console.log('clients in the room: \n');
-            // console.log(clients);
-            clients.forEach(function (socket_id) {
-                 
-                // console.log(socket_id+" is leaving the InChat")
-
-              if(socket.id!==socket_id){
-                delete inChat[socket_id];
-
-              }
-        
-
-                io.sockets.sockets[socket_id].leave(ChatRoom);
-            });
+        if (allUsers[socket.id]) {
+            delete allUsers[socket.id];
         }
-    });
-    io.to(ChatRoom).emit("getOut");
 
-  
-}
-        
-GetUserFromQuere(socket.id);
-GetUserFromAdminQuere(socket.id);
- 
 
-})
+        if (inChat[socket.id]) {
+
+            console.log("[disconnect] " + inChat[socket.id].name + " is disconnecting");
+
+            ChatRoom = inChat[socket.id].room;
+
+        }
+
+        if (admins[socket.id]) {
+            delete admins[socket.id];
+            if (Object.keys(admins).length == 0) {
+                io.emit("adminOut");
+            }
+        }
+        delete inChat[socket.id];
+
+        if (ChatRoom) {
+            console.log(ChatRoom);
+            io.of('/').in(ChatRoom).clients(function (error, clients) {
+                if (clients.length > 0) {
+                    // console.log('clients in the room: \n');
+                    // console.log(clients);
+                    clients.forEach(function (socket_id) {
+
+                        // console.log(socket_id+" is leaving the InChat")
+
+                        if (socket.id !== socket_id) {
+                            delete inChat[socket_id];
+
+                        }
+
+
+                        io.sockets.sockets[socket_id].leave(ChatRoom);
+                    });
+                }
+            });
+            io.to(ChatRoom).emit("getOut");
+
+
+        }
+
+        GetUserFromQuere(socket.id);
+        GetUserFromAdminQuere(socket.id);
+
+
+    })
 
 
 ////when one of the users pass 
-socket.on('otherPeerDisconected',()=>{
+    socket.on('otherPeerDisconected', () => {
 
-    let ChatRoom;
- 
-    if(inChat[socket.id]){
-      console.log("[disconnect] " +inChat[socket.id].name +" is disconnecting");
-      ChatRoom=inChat[socket.id].room;
-    }
-     delete inChat[socket.id];
-     if(ChatRoom){
-        io.of('/').in(ChatRoom).clients(function(error, clients) {
-            if (clients.length > 0) {
-           
-                clients.forEach(function (socket_id) {
-                        if(socket.id!==socket_id){
-                           delete inChat[socket_id];
-                       }
-        
-                    io.sockets.sockets[socket_id].leave(ChatRoom);
-                });
-            }
-        });
-     }
+        let ChatRoom;
 
+        if (inChat[socket.id]) {
+            console.log("[disconnect] " + inChat[socket.id].name + " is disconnecting");
+            ChatRoom = inChat[socket.id].room;
+        }
+        delete inChat[socket.id];
+        if (ChatRoom) {
+            io.of('/').in(ChatRoom).clients(function (error, clients) {
+                if (clients.length > 0) {
 
-     socket.to(ChatRoom).emit("getOut");
+                    clients.forEach(function (socket_id) {
+                        if (socket.id !== socket_id) {
+                            delete inChat[socket_id];
+                        }
+
+                        io.sockets.sockets[socket_id].leave(ChatRoom);
+                    });
+                }
+            });
+        }
 
 
-  GetUserFromQuere(socket.id);
-  GetUserFromAdminQuere(socket.id);
-})
+        socket.to(ChatRoom).emit("getOut");
 
+
+        GetUserFromQuere(socket.id);
+        GetUserFromAdminQuere(socket.id);
+    })
 
 
 ////
 
-socket.on("typing",(data)=>{
-    socket.to(data.room).emit("typing");
-})
+    socket.on("typing", (data) => {
+        socket.to(data.room).emit("typing");
+    })
 
 
-
-socket.on("stopTyping",(data)=>{
-    socket.to(data.room).emit("stopTyping");
-})
+    socket.on("stopTyping", (data) => {
+        socket.to(data.room).emit("stopTyping");
+    })
 
 
 ////DATA FILE SHARE
 
- 
 
-socket.on('signal', (req)=>{
-    //Note the use of req here for emiting so only the sender doesn't receive their own messages
- 	socket.to(req.room).emit('signaling_message', {
-        type: req.type,
-		message: req.message
-    });
-})
+    socket.on('signal', (req) => {
+        //Note the use of req here for emiting so only the sender doesn't receive their own messages
+        socket.to(req.room).emit('signaling_message', {
+            type: req.type,
+            message: req.message
+        });
+    })
 
-socket.on('files', (req)=> {
+    socket.on('files', (req) => {
 
-	socket.to(req.room).emit('files', {
-		filename:req.filename ,
-		filesize: req.filesize
-	});
-})
-
-
-
-
-
+        socket.to(req.room).emit('files', {
+            filename: req.filename,
+            filesize: req.filesize
+        });
+    })
 
 
 })
-
-
-
-
-
-
 
 
 //FUNCTIONS
 
-const checkIfBanned=(ip)=>{
-    let status=true;
-         for (let i = 0; i < bannedIP.length; i++) {
-            const e = bannedIP[i];
-            if(e==ip){
-                 status=false;
-               break;
-            }    
+const checkIfBanned = (ip) => {
+    let status = true;
+    for (let i = 0; i < bannedIP.length; i++) {
+        const e = bannedIP[i];
+        if (e == ip) {
+            status = false;
+            break;
         }
-        if(status){
-            return true;
-        }else{
-            return false;
-        }
+    }
+    if (status) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-const disconnectUserFromChat = async (socket)=>{
- 
-let ChatRoom;
-     
- 
- if(inChat[socket.id]){
-      
-    console.log("[disconnectUserFromChat] " +inChat[socket.id].name +" is disconnecting");
+const disconnectUserFromChat = async (socket) => {
 
-    ChatRoom=inChat[socket.id].room;
+    let ChatRoom;
 
-  }
 
-  delete inChat[socket.id];
+    if (inChat[socket.id]) {
 
-  //we here get out the user
-  
+        console.log("[disconnectUserFromChat] " + inChat[socket.id].name + " is disconnecting");
 
-  if(ChatRoom){
-    io.of('/').in(ChatRoom).clients(function(error, clients) {
-        if (clients.length > 0) {
-         //    console.log('clients in the room: \n');
-         //    console.log(clients);
-             clients.forEach(function (socket_id) {
-                 // console.log(socket_id+" user is leaving the chat");
-                 if(socket.id!==socket_id){
-                     delete inChat[socket_id];
-                     io.to(socket_id).emit("getOut");
-                 }
-    
-                io.sockets.sockets[socket_id].leave(ChatRoom);
-             //    console.log("[disconnectUserFromChat] InCHAT  ")
-             //    console.log(inChat);
-    
-            });
-        }
-    });
-  }
-      
-   
-      
+        ChatRoom = inChat[socket.id].room;
 
-          GetUserFromQuere(socket.id);
-          GetUserFromAdminQuere(socket.id);
-  
+    }
+
+    delete inChat[socket.id];
+
+    //we here get out the user
+
+
+    if (ChatRoom) {
+        io.of('/').in(ChatRoom).clients(function (error, clients) {
+            if (clients.length > 0) {
+                //    console.log('clients in the room: \n');
+                //    console.log(clients);
+                clients.forEach(function (socket_id) {
+                    // console.log(socket_id+" user is leaving the chat");
+                    if (socket.id !== socket_id) {
+                        delete inChat[socket_id];
+                        io.to(socket_id).emit("getOut");
+                    }
+
+                    io.sockets.sockets[socket_id].leave(ChatRoom);
+                    //    console.log("[disconnectUserFromChat] InCHAT  ")
+                    //    console.log(inChat);
+
+                });
+            }
+        });
+    }
+
+
+    GetUserFromQuere(socket.id);
+    GetUserFromAdminQuere(socket.id);
+
 }
- 
 
 
+const GetUserFromQuere = (SocketId) => {
 
-const  GetUserFromQuere=(SocketId)=>{
-    
-    queue.forEach((Element,i) =>{
-        if(Element.id==SocketId){
-            queue.splice(i,1);
-             
+    queue.forEach((Element, i) => {
+        if (Element.id == SocketId) {
+            queue.splice(i, 1);
+
             // console.log("the queue now is: 😍")
             // console.log(queue);
         }
@@ -486,162 +451,160 @@ const  GetUserFromQuere=(SocketId)=>{
 }
 
 
-
-const  GetUserFromAdminQuere=(SocketId)=>{
-    queueToAdmin.forEach((Element,i) =>{
-        if(Element.id==SocketId){
-            queueToAdmin.splice(i,1);
-         
-       
+const GetUserFromAdminQuere = (SocketId) => {
+    queueToAdmin.forEach((Element, i) => {
+        if (Element.id == SocketId) {
+            queueToAdmin.splice(i, 1);
         }
     })
 }
 
 
-
-
-
-
-
-
-const preperingName =(name)=>{
-    let forbidden = ['a','d','m','i','n'];
-    let x=0;
+const preperingName = (name) => {
+    let forbidden = ['a', 'd', 'm', 'i', 'n'];
+    let x = 0;
     name = name.toLowerCase();
-    if(name==""){
+    if (name == "") {
         // console.log('should not be empty');
-
-         return false;
-    } 
-    if(name.length>20){
+        return false;
+    }
+    if (name.length > 20) {
         // console.log('name is to long');
         return false;
 
     }
 
-    if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
+    if (name.toLowerCase() == "admin" || name.toLowerCase() == "moderator") {
         // console.log('not allowed to take this name');
         return false;
     }
 
     for (let i = 0; i < name.length; i++) {
         const element = name.charAt(i).toLowerCase();
-         
-        
+
+
         for (let y = 0; y < forbidden.length; y++) {
             const forbiddenElement = forbidden[y];
-            if(element==forbiddenElement){
+            if (element == forbiddenElement) {
                 x++;
-                forbidden.splice(y,1)
+                forbidden.splice(y, 1)
             }
         }
     }
 
-        if(x==5){
-            // console.log(`user is trying to hack`)
+    if (x == 5) {
+        // console.log(`user is trying to hack`)
 
-            return false;
-        }
-
-
-
-        // for (let i = 0; i < badwords.length; i++) {
-        //     if(name==badwords[i]){
-        //       console.log('you cant use that name');
-        //        return false;
-        //      }
-
-        // }
-
-
-
-        for(let i=0;i<badwords.length;i++){
-            let badword=badwords[i];
-            badword = badword.toLowerCase();
-             if(name.length<badword){
-                continue;
-              }
-              let words = name.split(" ");
-           
-             for(let x=0;x<words.length;x++){
-               if(words.includes(badword)){
-                  return false;
-               }
-               
-             }
-             
+        return false;
     }
 
 
+    // for (let i = 0; i < badwords.length; i++) {
+    //     if(name==badwords[i]){
+    //       console.log('you cant use that name');
+    //        return false;
+    //      }
 
-       return true;
+    // }
+
+
+    for (let i = 0; i < badwords.length; i++) {
+        let badword = badwords[i];
+        badword = badword.toLowerCase();
+        if (name.length < badword) {
+            continue;
+        }
+        let words = name.split(" ");
+
+        for (let x = 0; x < words.length; x++) {
+            if (words.includes(badword)) {
+                return false;
+            }
+
+        }
+
+    }
+
+
+    return true;
 }
 
 
-const escapeHTML =(msg) =>{
-    if(msg){
-        try{
-            return msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    
-        }catch(e){
-                console.log(e)
+const escapeHTML = (msg) => {
+    if (msg) {
+        try {
+            return msg.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        } catch (e) {
+            console.log(e)
         }
     }
-  
- }
 
- const connectTwoUsers=(firstUser,secondUser,data)=>{
+}
+
+const connectTwoUsers = (firstUser, secondUser, data) => {
 
 
     // if(inChat[firstUser.id]||inChat[secondUser.id]){
     //     return false;
     // }
 
-     if(firstUser.id!==secondUser.id){
-  
-        io.to(firstUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:secondUser.name,sex:secondUser.sex,age:secondUser.age});
-        io.to(secondUser.id).emit("joinRoom",{room:secondUser.id+firstUser.id,name:data.name,sex:data.sex,age:data.age});
-        inChat[firstUser.id]  = {room:secondUser.id+firstUser.id,name:data.name,sex:data.sex,age:data.age};
-        inChat[secondUser.id] = {room:secondUser.id+firstUser.id,name:secondUser.name,sex:secondUser.sex,age:secondUser.age};
-    //مؤقتا شلناه
-    //    GetUserFromQuere(secondUser.id);
+    if (firstUser.id !== secondUser.id) {
 
-        
-        
-     }
+        io.to(firstUser.id).emit("joinRoom", {
+            room: secondUser.id + firstUser.id,
+            name: secondUser.name,
+            sex: secondUser.sex,
+            age: secondUser.age
+        });
+        io.to(secondUser.id).emit("joinRoom", {
+            room: secondUser.id + firstUser.id,
+            name: data.name,
+            sex: data.sex,
+            age: data.age
+        });
+        inChat[firstUser.id] = {room: secondUser.id + firstUser.id, name: data.name, sex: data.sex, age: data.age};
+        inChat[secondUser.id] = {
+            room: secondUser.id + firstUser.id,
+            name: secondUser.name,
+            sex: secondUser.sex,
+            age: secondUser.age
+        };
+        //مؤقتا شلناه
+        //    GetUserFromQuere(secondUser.id);
 
-}
 
-
-
-const adminCheckUsers = (socket)=>{
-    if(admins[socket.id]){
-        let admin =  admins[socket.id];
-
-    if(queueToAdmin.length>0){
-        admin.status='busy';
-        connectTwoUsers(socket,queueToAdmin[0],admin);
-        GetUserFromAdminQuere(queueToAdmin[0].id)
-    }else{
-        admin.status="free";
     }
 
-}else{
-    // console.log('no');
-}
 }
 
 
+const adminCheckUsers = (socket) => {
+    if (admins[socket.id]) {
+        let admin = admins[socket.id];
+
+        if (queueToAdmin.length > 0) {
+            admin.status = 'busy';
+            connectTwoUsers(socket, queueToAdmin[0], admin);
+            GetUserFromAdminQuere(queueToAdmin[0].id)
+        } else {
+            admin.status = "free";
+        }
+
+    } else {
+        // console.log('no');
+    }
+}
 
 
 // ROUTES
 
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
 
     res.sendFile(__dirname + '/index-support.html');
 // if(checkIfBanned(req.connection.remoteAddress)){
-    
+
 
 // }else{
 //     res.sendFile(__dirname + '/not-allowed.html');
@@ -650,41 +613,41 @@ app.get('/',(req,res)=>{
 
 });
 
-app.get('/not-allowed',(req,res)=>{
+app.get('/not-allowed', (req, res) => {
 
-     res.sendFile(__dirname + '/not-allowed.html');
- 
+    res.sendFile(__dirname + '/not-allowed.html');
+
 
 });
 
 
-app.get('/terms',(req,res)=>{
-   res.sendFile(__dirname + '/terms.html');
+app.get('/terms', (req, res) => {
+    res.sendFile(__dirname + '/terms.html');
 
 });
- 
 
-app.get('/dashboard',(req,res)=>{
-      if(req.session.username){
-       res.sendFile(__dirname + '/index-dashboard.html');
 
-      }else{
-       res.sendFile(__dirname + '/login.html');
+app.get('/dashboard', (req, res) => {
+    if (req.session.username) {
+        res.sendFile(__dirname + '/index-dashboard.html');
 
-      }
-      
+    } else {
+        res.sendFile(__dirname + '/login.html');
+
+    }
+
 });
 
 
-app.post("/dashboard",(req,res)=>{
+app.post("/dashboard", (req, res) => {
 
-       if(req.body.username==firstAdminPass){
-            req.session.username=req.body.username;
-        }
-       if(req.body.username==secondAdminPass){
-            req.session.username=req.body.username;
-       }
-       res.redirect("/dashboard");
+    if (req.body.username == firstAdminPass) {
+        req.session.username = req.body.username;
+    }
+    if (req.body.username == secondAdminPass) {
+        req.session.username = req.body.username;
+    }
+    res.redirect("/dashboard");
 
 })
 

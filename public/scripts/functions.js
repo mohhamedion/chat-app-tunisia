@@ -1,22 +1,16 @@
-function myMessage(msg){
-    $("#chat_component").append("<div><span class=''> <span style='color: red'>you</span>: "+msg+"</span></div>");
+function myMessage(msg) {
+    $("#chat_component").append("<div><span class=''> <span style='color: red'>you</span>: " + msg + "</span></div>");
 
 }
 
-function hisMessage(msg,name){
+function hisMessage(msg, name) {
     $("#newMessageSound")[0].pause();
     $("#newMessageSound")[0].play();
-     
-    if(name.toLowerCase()=='admin'||name.toLowerCase()=='moderator'){
- 
-        $("#chat_component").append("<div> <span class=''  style='color:green'> <span style='color: green'><b>"+name+"</span></b>: "+msg+"</span></div>");
-
-    }else{
-        $("#chat_component").append("<div> <span class=''  > <span style='color: blue'>"+name+"</span>: "+msg+"</span></div>");
-
+    if (name.toLowerCase() == 'admin' || name.toLowerCase() == 'moderator') {
+        $("#chat_component").append("<div> <span class=''  style='color:green'> <span style='color: green'><b>" + name + "</span></b>: " + msg + "</span></div>");
+    } else {
+        $("#chat_component").append("<div> <span class=''  > <span style='color: blue'>" + name + "</span>: " + msg + "</span></div>");
     }
-    
-
 }
 
 
@@ -25,131 +19,120 @@ function hisMessage(msg,name){
 // }
 
 
-function fileSending(x,name=null){
-$("#fileProgress").parent().parent().remove();
-    if(x==1){
+function fileSending(x, name = null) {
+    $("#fileProgress").parent().parent().remove();
+    if (x == 1) {
         myMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`);
-    }else{
-        hisMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`,name);
+    } else {
+        hisMessage(`<div><progress id='fileProgress' value='1' max='100'></progress><a id='receivedFileLink'></a></div>`, name);
     }
 }
 
-function	setSendFileToClickble(){
-
-                
-    $("#fileUpload").attr('disabled',false);
+function setSendFileToClickble() {
+    $("#fileUpload").attr('disabled', false);
 }
 
-function	setSendMessageToClickble(){
-     
-             $("#sendMessage").attr('disabled',false);
-             $("#messageContent").attr('readonly',false);
-             
+function setSendMessageToClickble() {
+    $("#sendMessage").attr('disabled', false);
+    $("#messageContent").attr('readonly', false);
 
 }
 
-function	setSendFileToDisable(){
+function setSendFileToDisable() {
 
-                
-$("#fileUpload").attr('disabled',true);
+
+    $("#fileUpload").attr('disabled', true);
 }
 
-function	setSendMessageToDisable(){
- 
-         $("#sendMessage").attr('disabled',true);
-         $("#messageContent").attr('readonly',true);
-         
+function setSendMessageToDisable() {
+
+    $("#sendMessage").attr('disabled', true);
+    $("#messageContent").attr('readonly', true);
+
 
 }
 
-function preperingName(name){
-    	
-    var x=0;
-    var forbidden = ['a','d','m','i','n'];
+function preperingName(name) {
+
+    var x = 0;
+    var forbidden = ['a', 'd', 'm', 'i', 'n'];
     name = name.trim();
-    if(name==""){
+    if (name == "") {
         alert('enter your name');
         return false;
-    } 
-    if(name.length>20){
+    }
+    if (name.length > 20) {
         alert('name is to long');
         return false;
 
     }
 
-    if(name.toLowerCase()=="admin"||name.toLowerCase()=="moderator"){
+    if (name.toLowerCase() == "admin" || name.toLowerCase() == "moderator") {
         alert('not allowed to take this name');
         return false;
     }
 
 
-
     for (let i = 0; i < name.length; i++) {
         const element = name.charAt(i).toLowerCase();
-         
-        
+
+
         for (let y = 0; y < forbidden.length; y++) {
             const forbiddenElement = forbidden[y];
-            if(element==forbiddenElement){
+            if (element == forbiddenElement) {
                 x++;
-                forbidden.splice(y,1)
+                forbidden.splice(y, 1)
             }
         }
     }
-    if(x>=5){
+    if (x >= 5) {
 
         alert('you cant use that name')
 
         return false;
     }
 
-    if(!filter(name,badwords)){
+    if (!filter(name, badwords)) {
         alert('you cant use that name')
         return false;
     }
-     
 
-
-
-    
 
     return true;
 }
 
 
+function filter(name, badwords) {
+    name = name.toLowerCase();
+    for (let i = 0; i < badwords.length; i++) {
+        let badword = badwords[i];
 
-function filter(name,badwords){
-    name=name.toLowerCase();
-   for(let i=0;i<badwords.length;i++){
-          let badword=badwords[i];
-   
-           if(name.length<badword){
-              continue;
-            }
-            let words = name.split(" ");
-         
-           for(let x=0;x<words.length;x++){
-             if(words.includes(badword)){
+        if (name.length < badword) {
+            continue;
+        }
+        let words = name.split(" ");
+
+        for (let x = 0; x < words.length; x++) {
+            if (words.includes(badword)) {
                 return false;
-             }
-             
-           }
-           
-  }
+            }
 
- return true;
-  }
+        }
+
+    }
+
+    return true;
+}
 
 
-
-  function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
- }
+}
  
  
